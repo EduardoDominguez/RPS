@@ -31,8 +31,7 @@ public class loginController {
     
     static dataBaseQuery query = new dataBaseQuery();
     
-    @RequestMapping(value = "/ingresar", method = RequestMethod.GET)
-    
+    @RequestMapping(value = "/ingresar", method = RequestMethod.POST)
     public @ResponseBody
     String ingresar(HttpServletRequest request, Model model) {
         List<Map> lista = new ArrayList<Map>();
@@ -59,7 +58,41 @@ public class loginController {
         }
         return res;
     }
-
+    
+    @RequestMapping(value = "/inserta", method = RequestMethod.POST)
+    public @ResponseBody
+    String inserta(HttpServletRequest request, Model model) {
+        String res;
+        try {
+            res= query.exQuery("insert into pekesalud_bd.prueba values(NULL,'Mario', CURDATE())");
+        } catch (Exception e) {
+            System.out.print("Ha ocurrido un error inesperado al intentar acceder " + e);
+            res = "Fail";
+        }
+        return res;
+    }
+    /*
+        DROP TABLE IF EXISTS `prueba`;
+         CREATE TABLE IF NOT EXISTS `prueba` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `Nombre` text,
+        `fecha` date DEFAULT NULL,
+        PRIMARY KEY (`id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='esta es una tabla de prueba';
+    */
+    @RequestMapping(value = "/borra", method = RequestMethod.POST)
+    public @ResponseBody
+    String borra(HttpServletRequest request, Model model) {
+        String res;
+        try {
+            res= query.delete("1", "pekesalud_bd.prueba", "id");
+        } catch (Exception e) {
+            System.out.print("Ha ocurrido un error inesperado al intentar acceder " + e);
+            res = "Fail";
+        }
+        return res;
+    }
+    
     @RequestMapping(value = "/saludo", method = RequestMethod.GET)
     public @ResponseBody
     String saludo() {

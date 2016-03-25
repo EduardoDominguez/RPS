@@ -7,7 +7,7 @@
 function login() {
     var url = "login/ingresar.htm";
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: url,
         async: false,
         data: {
@@ -15,9 +15,7 @@ function login() {
             "passwordUsuario": $("#txtPassword").val()
         },
         beforeSend: function () {
-            //            jQuery.blockUI({//Muestra mensaje de espere un momento
-            //                message: '<h1>Espere un momento...</h1>'
-            //            });
+          
         },
         success: function (data) {
             console.log(data);
@@ -40,6 +38,35 @@ function login() {
             $("#tabla").html(tabla);
         }
     });
-
-
 }
+function inserta() {
+    var url = "login/inserta.htm";
+    $.ajax({
+        type: "POST",
+        url: url,
+        async: false,
+        data: {        },
+        beforeSend: function () {
+           
+        },
+        success: function (data) {
+            alert(data);
+        }
+    });
+}
+
+function borra() {
+    var url = "login/borra.htm";
+    $.ajax({
+        type: "POST",
+        url: url,
+        async: false,
+        data: {        },
+        beforeSend: function () {
+           
+        },
+        success: function (data) {
+            alert(data);
+        }
+    });
+ }

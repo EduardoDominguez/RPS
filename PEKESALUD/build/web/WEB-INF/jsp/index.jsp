@@ -21,6 +21,8 @@
             <input type="password" placeholder ="Password " id="txtPassword"/><br/>
             <input type="button" value="Ingresar" id="btnentrar" onclick="login()" />
         </div>
+        <input type="button" value="Inserta" id="btnentrar" onclick="inserta()" /> <label>insert into pekesalud_bd.prueba values(0,'Mario', CURDATE())</label><br/>
+        <input type="button" value="Borra" id="btnentrar" onclick="borra()" />"El registro agregado antes"
         <div id="tabla"></div>
     </body>
 </html>

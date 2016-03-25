@@ -116,16 +116,21 @@ public class dataBaseQuery {
 //        }
 //        return ret;
 //    }
-    public void delete(String val, String table, String colum) throws SQLException {
-            exQuery("Delete from " + table + " where " + colum + " = " + val);
+    public String delete(String val, String table, String colum) throws SQLException {
+            return exQuery("Delete from " + table + " where " + colum + " = " + val);
     }
 
     public String exQuery(String query) {
         String ret = "";
         try {
-            sentenciaSQL = conexion.prepareStatement(query);
-            sentenciaSQL.executeUpdate(query);
-            ret = "ok";
+            conexion = con.connect(servidor);
+            if (conexion != null) {
+                sentenciaSQL = conexion.prepareStatement(query);
+                sentenciaSQL.executeUpdate(query);
+                ret = "ok";
+            }else{
+                ret = "fail con";
+            }
         } catch (SQLException e) {
             ret = "fail";
         }
