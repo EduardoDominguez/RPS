@@ -16,6 +16,7 @@ import java.util.*;
 import com.google.gson.Gson;
 import com.pekesalud.bean.Usuario;
 import com.pekesalud.persistencia.dataBaseQuery;
+import com.pekesalud.session.Sesiones;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -35,26 +36,25 @@ public class loginController {
     public @ResponseBody
     String ingresar(HttpServletRequest request, Model model) {
         List<Map> lista = new ArrayList<Map>();
-        //Injector inj = AppInjector.getInjector();
-        //dataBaseQuery dao = inj.getInstance(dataBaseQuery.class);
-        String nombreUsuario = request.getParameter("nombreUsuario");
-        String passwordUsuario = request.getParameter("passwordUsuario");
+        String nombreUsuario = request.getParameter("usr");
+        String passwordUsuario = request.getParameter("psw");
         Usuario usuario = new Usuario();
         usuario.setNombreUsuario(nombreUsuario);
         usuario.setPasswordUsuario(passwordUsuario);
         Map mapList = new HashMap();
         String res;
         try {
-            //lista = dao.obtieneListadoFaset();
-            //lista.add(usuario.getNombreUsuario());
-            //lista.add(usuario.getPasswordUsuario());
-            //res +=usuario.getNombreUsuario()+ usuario.getPasswordUsuario();
-            res= query.select("select * from pekesalud_bd.login;");
-//            mapList.put("Res", res);
-//            lista.add(mapList);
+            res= query.select("call login_peke('"+usuario.getNombreUsuario()+"', '"+usuario.getPasswordUsuario()+"')");
+            if(!res.equals("fail")){
+                Sesiones sesion= new Sesiones(request);
+                usuario.setIdUsuario(res);
+                usuario.setNombreUsuario(nombreUsuario);
+                usuario.setPasswordUsuario(passwordUsuario);
+                sesion.createSession(usuario.getNombreUsuario(), usuario.getPasswordUsuario(), usuario.getIdUsuario());
+            }
         } catch (Exception e) {
             System.out.print("Ha ocurrido un error inesperado al intentar acceder " + e);
-            res = "Fail";
+            res = "fail";
         }
         return res;
     }
@@ -71,15 +71,6 @@ public class loginController {
         }
         return res;
     }
-    /*
-        DROP TABLE IF EXISTS `prueba`;
-         CREATE TABLE IF NOT EXISTS `prueba` (
-        `id` int(11) NOT NULL AUTO_INCREMENT,
-        `Nombre` text,
-        `fecha` date DEFAULT NULL,
-        PRIMARY KEY (`id`)
-        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='esta es una tabla de prueba';
-    */
     @RequestMapping(value = "/borra", method = RequestMethod.POST)
     public @ResponseBody
     String borra(HttpServletRequest request, Model model) {

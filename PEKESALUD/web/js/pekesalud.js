@@ -3,6 +3,39 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+page('/PEKESALUD/:section', Section);
+page();
+function Section(ctx){
+    switch(ctx.params.section.toLowerCase()){
+        case'login':
+            break;
+    }
+}
+var app = angular.module('myApp', []);
+app.controller('ctrlMain', function($scope, $http) {
+    $scope.login = function() {
+        var datos=[];
+        var url = "logueo";
+        datos={usr:$scope.usr_login, psw:$scope.psw_login};
+        $http({
+            url: url, 
+            method: "POST",
+            params: datos
+        }).then(function mySucces(response) {
+             if(response.data[0]['fail']===undefined){
+                alert('Logueo correcto');
+                location.href="Home";
+             }else{
+                 alert('Usuario y/o password incorrecto');
+                 
+             }
+        }, function myError(response) {
+            alert('Ha ocurrido un error favor de intentar más tarde');
+        });
+    };
+});
+
+
 
 function login() {
     var url = "login/ingresar.htm";
