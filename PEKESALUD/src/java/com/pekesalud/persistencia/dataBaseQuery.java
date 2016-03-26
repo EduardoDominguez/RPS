@@ -67,8 +67,10 @@ public class dataBaseQuery {
                 } else {
                     ret = new String[1];
                     ret[0] = "fail";
+                    retQuery="fail";
                 }
             } else {
+                retQuery="fail";
                 return null;
             }
         } catch (SQLException e) {

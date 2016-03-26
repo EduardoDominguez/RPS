@@ -20,14 +20,24 @@ public class Sesiones {
         this.request=request;
     }
     
-    public String createSession(String name, String psw, String  id){
+    public String createSession(String name, String  id){
         String ret="";
         Usuario u= new Usuario();
         try{
             HttpSession session = request.getSession();
             session.setAttribute("UsrPeke", name);
-            session.setAttribute("PswPeke", psw);
             session.setAttribute("IdPeke", id);
+        }catch(Exception e){
+            ret="fail";
+        }
+        return ret;
+    }
+    
+    public String deleteSession(){
+        String ret="";
+        try{
+            HttpSession session = request.getSession();
+            session.invalidate();
         }catch(Exception e){
             ret="fail";
         }

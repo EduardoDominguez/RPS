@@ -22,13 +22,13 @@ app.controller('ctrlMain', function($scope, $http) {
             method: "POST",
             params: datos
         }).then(function mySucces(response) {
-             if(response.data[0]['fail']===undefined){
-                alert('Logueo correcto');
-                location.href="Home";
-             }else{
-                 alert('Usuario y/o password incorrecto');
+            if(response.data!=="fail"){
+               alert('Logueo correcto');
+               location.href="Home";
+            }else{
+                alert('Usuario y/o password incorrecto');
                  
-             }
+            }
         }, function myError(response) {
             alert('Ha ocurrido un error favor de intentar más tarde');
         });

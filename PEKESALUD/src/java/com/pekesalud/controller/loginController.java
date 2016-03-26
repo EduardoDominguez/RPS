@@ -44,13 +44,12 @@ public class loginController {
         Map mapList = new HashMap();
         String res;
         try {
-            res= query.select("call login_peke('"+usuario.getNombreUsuario()+"', '"+usuario.getPasswordUsuario()+"')");
+            res= query.select("select u.id_usuario from usuario as u, login as l where login = '"+usuario.getNombreUsuario()+"' and contrasena = '"+usuario.getPasswordUsuario()+"' and u.id_login=l.id_login");
             if(!res.equals("fail")){
                 Sesiones sesion= new Sesiones(request);
                 usuario.setIdUsuario(res);
                 usuario.setNombreUsuario(nombreUsuario);
-                usuario.setPasswordUsuario(passwordUsuario);
-                sesion.createSession(usuario.getNombreUsuario(), usuario.getPasswordUsuario(), usuario.getIdUsuario());
+                sesion.createSession(usuario.getNombreUsuario(), usuario.getIdUsuario());
             }
         } catch (Exception e) {
             System.out.print("Ha ocurrido un error inesperado al intentar acceder " + e);
