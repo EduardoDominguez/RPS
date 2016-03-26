@@ -27,7 +27,6 @@ app.controller('ctrlMain', function($scope, $http) {
                location.href="Home";
             }else{
                 alert('Usuario y/o password incorrecto');
-                 
             }
         }, function myError(response) {
             alert('Ha ocurrido un error favor de intentar más tarde');
