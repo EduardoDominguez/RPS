@@ -15,6 +15,10 @@ and open the template in the editor.
         <to>login/ingresar.htm</to>
     </rule>
     <rule>
+        <from>/Contenidos$</from>
+        <to>content.htm</to>
+    </rule>
+    <rule>
         <from>/([a-zA-z0-9]+)$</from>
         <to>index.htm</to>
     </rule>

@@ -28,29 +28,35 @@ body{
     background-color: #FFF;
 }
 /******Clases*********/
-.flex-column{
+.flex{
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
+}
+.flex-column{
     -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+    -o-flex-direction: column;
     flex-direction: column; 
 }
 
 .flex-row{
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
     -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    -moz-flex-direction: row;
+    -o-flex-direction: row;
     flex-direction: row; 
 }
 
 .flex-row div, .flex-column div{
     flex: 0 0 auto;
     -webkit-flex:0 0 auto;
+    -moz-flex:0 0 auto;
+    -ms-flex:0 0 auto;
+    -o-flex:0 0 auto;
 }
 .container-login-main{
     background-image: url(../img/bgindex.jpg);
@@ -70,6 +76,15 @@ body{
     -webkit-justify-content: center;
     -webkit-align-content:center;
     -webkit-align-items:center;
+    -moz-justify-content: center;
+    -moz-align-content:center;
+    -moz-align-items:center;
+    -ms-justify-content: center;
+    -ms-align-content:center;
+    -ms-align-items:center;
+    -o-justify-content: center;
+    -o-align-content:center;
+    -o-align-items:center;
 }
 .container-login-btn{
     width: 100%;
@@ -86,6 +101,15 @@ body{
     -webkit-justify-content: space-around;
     -webkit-align-content:space-around;
     -webkit-align-items:stretch;
+    -ms-justify-content: space-around;
+    -ms-align-content:space-around;
+    -ms-align-items:stretch;
+    -moz-justify-content: space-around;
+    -moz-align-content:space-around;
+    -moz-align-items:stretch;
+    -o-justify-content: space-around;
+    -o-align-content:space-around;
+    -o-align-items:stretch;
 }
 
 /*******ID's'*********/
@@ -101,5 +125,27 @@ body{
 }
 #btn-cancel{
     background-color: #C30454;
+}
+#menu{
+    position: relative;
+    height: 100%;
+    width: 350px;
+}
+#menu div{
+    position: fixed;
+}
+#menu div img{
+    cursor: pointer;
+}
+#menu div ul{
+    list-style: none;
+    text-transform: uppercase;
+}
+#menu div li{
+    cursor: pointer;
+    margin: 30px;
+}
+#contenido{
+    width: 100%;
 }
 

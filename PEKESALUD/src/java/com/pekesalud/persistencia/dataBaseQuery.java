@@ -23,31 +23,33 @@ public class dataBaseQuery {
     private final static Conexion con = new Conexion();
     private Connection conexion = null;
     private Statement sentenciaSQL = null, sentenciaSQLaux = null;
-    private final String servidor = "127.0.0.1:3306/pekesalud_bd&root&root";
+    private final String servidor = "127.0.0.1:3306/pekesalud_bd&root&555666";
 
     public String select(String query) throws SQLException {
-        int cont = 0, contaux = 0;
+        int contaux = 0;
         String ret[];
         Map ml = new HashMap();
         List<Map> lista = new ArrayList<Map>();
         String retQuery="[";
         ResultSet cdr = null, cdraux = null;
+        Integer cont=0;
         try {
             conexion = con.connect(servidor);
             if (conexion != null) {
-                sentenciaSQL = conexion.createStatement();
+                //sentenciaSQL = conexion.createStatement();
                 sentenciaSQLaux = conexion.createStatement();
-                cdr = sentenciaSQL.executeQuery(query);
+                //cdr = sentenciaSQL.executeQuery(query);
                 cdraux = sentenciaSQLaux.executeQuery(query);
-                while (cdr.next()) {
-                    cont++;
-                }
+                cont = cdraux.getMetaData().getColumnCount();
+//                while (cdr.next()) {
+//                    cont++;
+//                }
                 if (cont > 0) {
                     ret = new String[cont];
                     
                     while (cdraux.next()) {
                         Integer numColumnas = 0;
-                        numColumnas = cdr.getMetaData().getColumnCount();
+                        numColumnas = cdraux.getMetaData().getColumnCount();
                         ret[contaux] = "";
                         retQuery+="{";
                         for (int i = 1; i <= numColumnas; i++) {
@@ -70,8 +72,7 @@ public class dataBaseQuery {
                     retQuery="fail";
                 }
             } else {
-                retQuery="fail";
-                return null;
+                retQuery="fail.";
             }
         } catch (SQLException e) {
             ret = new String[1];
@@ -79,9 +80,9 @@ public class dataBaseQuery {
             retQuery = "fail";
         } finally {
             Conexion.close(conexion);
-            Conexion.close(cdr);
+            //Conexion.close(cdr);
             Conexion.close(cdraux);
-            Conexion.close(sentenciaSQL);
+            //Conexion.close(sentenciaSQL);
             Conexion.close(sentenciaSQLaux);
         }
         return retQuery;

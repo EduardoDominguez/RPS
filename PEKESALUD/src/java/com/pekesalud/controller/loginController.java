@@ -58,6 +58,20 @@ public class loginController {
         return res;
     }
     
+    @RequestMapping(value = "/getSeccion", method = RequestMethod.POST)
+    public @ResponseBody
+    String getSeccion(HttpServletRequest request, Model model) {
+        String sec = request.getParameter("sec");        
+        String res = sec;
+        try {
+            
+        } catch (Exception e) {
+            System.out.print("Ha ocurrido un error inesperado al intentar recuperar el contenido " + e);
+            res = "fail";
+        }
+        return res;
+    }
+    
     @RequestMapping(value = "/inserta", method = RequestMethod.POST)
     public @ResponseBody
     String inserta(HttpServletRequest request, Model model) {

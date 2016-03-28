@@ -12,7 +12,7 @@
     String user = "";
     user = (String) objsession.getAttribute("UsrPeke");
     if (!"".equals(user) && user!=null) {
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("Home");
     }
 %>
 <html>
@@ -28,14 +28,14 @@
     </head>
     <body>
         <div id="wrapper" ng-app="myApp" ng-controller="ctrlMain">
-            <div class="container-login-main flex-column center-items">
-                <div class="container-login flex-column center-items">
+            <div class="container-login-main flex flex-column center-items">
+                <div class="container-login flex flex-column center-items">
                     <picture>
                         <img srcset="img/logo02.png" width="200px" height="50px"/>
                     </picture>
                     <input type="text" id="usr-login" ng-model="usr_login" placeholder="Usuario"/>
                     <input type="password" id="psw-login" ng-model="psw_login" placeholder="Contrase&ntilde;a"/>
-                    <div class="container-login-btn flex-row around-items">
+                    <div class="container-login-btn flex flex-row around-items">
                         <button id="btn-login" ng-click="login()">Aceptar</button>
                         <button id="btn-cancel">Cancelar</button>
                     </div>

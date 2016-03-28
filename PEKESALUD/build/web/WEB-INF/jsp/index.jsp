@@ -10,7 +10,7 @@
     HttpSession objsession = request.getSession(false);
     String user = "";
     user = (String) objsession.getAttribute("UsrPeke");
-    if ("".equals(user) || user==null) {
+    if ("".equals(user) || user == null) {
         response.sendRedirect("Login");
     }
 %>
@@ -26,8 +26,23 @@
         <title>PEKESALUD</title>
     </head>
     <body>
-        <div id="wrapper">
-            <div class="flex-column container-home"></div>
+        <div id="wrapper" class="flex">
+            <div id="menu">
+                <div class="flex flex-column">
+                    <picture>
+                       <img srcset="img/logo02.png" width="200px" height="50px"/>
+                    </picture>
+                    <ul>
+                        <li onclick="location.href='Home'">Inicio</li>
+                        <li onclick="location.href='Instituciones'">Instituciones</li>
+                        <li onclick="location.href='Pacientes'">Pacientes</li>
+                        <li onclick="location.href='Usuarios'">Usuarios</li>
+                    </ul>
+                </diV>
+            </div>
+            <div id="contenido" class="flex flex-column container-home" ng-app="contenido" ng-controller="ctrContenido">
+                <%--{{contenido}}--%>
+            </div>
         </div>
     </body>
 </html>
