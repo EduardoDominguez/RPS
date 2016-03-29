@@ -26,7 +26,7 @@
         <title>PEKESALUD</title>
     </head>
     <body>
-        <div id="wrapper" class="flex">
+        <div id="wrapper" class="flex flex-row">
             <div id="menu">
                 <div class="flex flex-column">
                     <picture>
