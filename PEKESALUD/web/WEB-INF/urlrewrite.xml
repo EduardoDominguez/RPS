@@ -19,6 +19,10 @@ and open the template in the editor.
         <to>content.htm</to>
     </rule>
     <rule>
+        <from>/getInstitutions$</from>
+        <to>login/getInstitutions.htm</to>
+    </rule>
+    <rule>
         <from>/([a-zA-z0-9]+)$</from>
         <to>index.htm</to>
     </rule>

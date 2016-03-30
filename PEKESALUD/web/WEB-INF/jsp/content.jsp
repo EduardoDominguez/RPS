@@ -10,8 +10,8 @@
     }
     if (sec.equals("instituciones")) {
 %>
-<div class="container-sec">
-    <table>
+<div class="container-sec" ng-controller="ctrInstitutions">
+    <table id="tbl-institutions">
         <tr>
             <th>Id instituci&oacute;n</th>
             <th>Nombre</th>

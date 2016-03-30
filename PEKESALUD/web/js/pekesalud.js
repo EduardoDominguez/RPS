@@ -3,6 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+var contenido = angular.module('contenido', []);
 page('/PEKESALUD/:section', getSeccion);
 page();
 
@@ -13,64 +15,75 @@ $(document).ready(function () {
         $(window).trigger("orientationchange");
         if (window.innerWidth) {
             sx = window.innerWidth;
-        }
-        else {
+        } else {
             sx = document.documentElement.clientWidth;
         }
         if (window.innerHeight) {
             sy = window.innerHeight;
-        }
-        else {
+        } else {
             sy = document.documentElement.clientHeight;
         }
     } catch (error) {
         alert(error);
     }
 });
-
 function getSeccion(obj) {
     try {
         var seccion = obj.params.section.toLowerCase();
-        var contenido = angular.module('contenido', []);
         contenido.controller('ctrContenido', function ($scope, $http) {
-            var datos = [];
-            var url = "contenidos";
-            datos = {sec: seccion};
-            $http({
-                url: url,
-                method: "GET",
-                params: datos
-            }).then(function mySucces(response) {
-                //$scope.contenido = "";
-                //var datos = utf8_encode(response.data);
-                //$("#contenido").html(response.data);
-                // $('#contenido').html('');
-                $("#contenido").html("");
-                $('#contenido').append(response.data).after(function () {
-                    Section(seccion);
+            function Init() {
+                var datos = [];
+                var url = "contenidos";
+                datos = {sec: seccion};
+                $http({
+                    url: url,
+                    method: "GET",
+                    params: datos
+                }).then(function mySucces(response) {
+                    $("#contenido").html("");
+                    $('#contenido').append(response.data).after(function () {
+                        Section(seccion);
+                    });
+                }, function myError(response) {
+                    alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
                 });
-                //$scope.contenido = String(response.data);
-            }, function myError(response) {
-                alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
-            });
+            }
+            Init();
+            function Section(ctx) {
+                switch (ctx) {
+                    case 'login':
+                        break;
+                    case 'home':
+                        break;
+                    case 'usuarios':
+                        break;
+                    case 'instituciones':
+                        getInstitutions();
+                        break;
+                    case 'pacientes':
+                        break;
+                }
+            }
+            function getInstitutions() {
+                try {
+                    var url = "login/getInstitutions.htm";
+                    $http({
+                        url: url,
+                        method: "POST"
+                    }).then(function mySucces(response) {
+                        console.log(response.data);
+                        //$('#tbl-institutions').append(response.data);
+                    }, function myError(response) {
+                        alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
+                    });
+                } catch (e) {
+                    alert(e);
+                }
+            }
+
         });
     } catch (error) {
         alert(error);
-    }
-}
-
-function Section(ctx) {
-    switch (ctx) {
-        case 'login':
-            break;
-        case 'home':
-            break;
-        case 'usuarios':
-            break;
-        case 'instituciones':            
-            break;
-        case 'pacientes':            
-            break;
     }
 }
 var app = angular.module('myApp', []);
@@ -86,7 +99,7 @@ app.controller('ctrlMain', function ($scope, $http) {
         }).then(function mySucces(response) {
             if (response.data === "fail") {
                 alert('Usuario y/o password incorrecto');
-            } else if (response.data === "fail.") {
+            } else if (response.data === "fail") {
                 alert('Ha ocurrido un error al intentar acceder a la base de datos, favor de verificarlo');
             } else {
                 alert('Bienvenido');

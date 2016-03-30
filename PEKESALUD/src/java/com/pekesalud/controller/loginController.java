@@ -72,6 +72,18 @@ public class loginController {
         return res;
     }
     
+    @RequestMapping(value = "/getInstitutions", method = RequestMethod.POST)
+    public @ResponseBody
+    String getInstitutions(HttpServletRequest request, Model model) {
+        String ret = "";
+        try{
+            ret= query.select("select i.id_institucion, i.nombre, p.n_pais, c.n_ciudad  from institucion as i, paises as p, ciudades as c where i.id_pais=p.id_pais and i.id_ciudad = c.id_ciudad and c.id_pais = p.id_pais and c.id_entidad=i.id_entidad order by i.id_institucion desc");
+        }catch(Exception e){
+            ret="fail";
+        }
+        return ret;
+    }
+    
     @RequestMapping(value = "/inserta", method = RequestMethod.POST)
     public @ResponseBody
     String inserta(HttpServletRequest request, Model model) {
