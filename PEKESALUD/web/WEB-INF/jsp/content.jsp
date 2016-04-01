@@ -7,11 +7,11 @@
 <div class="container-sec">
 </div>
 <%
-    }
+    }//End if home
     if (sec.equals("instituciones")) {
 %>
 <div class="container-sec" ng-controller="ctrInstitutions">
-    <table id="tbl-institutions">
+    <%--<table id="tbl-institutions">
         <tr>
             <th>Id instituci&oacute;n</th>
             <th>Nombre</th>
@@ -19,16 +19,19 @@
             <th>Ciudad</th>
             <th>Editar</th>
         </tr>
-    </table>
+    </table>--%>
+    <table id="GridInstituciones" ></table>
+    <div id="PagerInstituciones"></div>
 </div>
 <%
-    }
+    }//End if instituciones
     if (sec.equals("pacientes")) {
-        out.print("<h1>Pacientes</h1>"
-                + "<input type='button' value='Cambiar a home' onclick='location.href = \"Home\"'></input>");
-    }
+%>
+
+<%
+    }//End if pacientes
     if (sec.equals("usuarios")) {
         out.print("<h1>Usuarios</h1>"
                 + "<input type='button' value='Cambiar a home' onclick='location.href = \"Home\"'></input>");
-    }
+    }//End if usuarios
 %>

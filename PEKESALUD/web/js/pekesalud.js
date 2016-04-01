@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-var contenido = angular.module('contenido', []);
+var menu1 = angular.module('menu', []);
+var contenido = angular.module('contenido', ["menu"]);
 page('/PEKESALUD/:section', getSeccion);
 page();
 
-var sx = 980, sy = 650;
+var sx = 980, sy = 650, seccion2;
 $(document).ready(function () {
     try {
         console.log("Cargado!");
@@ -29,12 +29,12 @@ $(document).ready(function () {
 });
 function getSeccion(obj) {
     try {
-        var seccion = obj.params.section.toLowerCase();
+        seccion2 = obj.params.section.toLowerCase();
         contenido.controller('ctrContenido', function ($scope, $http) {
             function Init() {
                 var datos = [];
                 var url = "contenidos";
-                datos = {sec: seccion};
+                datos = {sec: seccion2};
                 $http({
                     url: url,
                     method: "GET",
@@ -42,7 +42,7 @@ function getSeccion(obj) {
                 }).then(function mySucces(response) {
                     $("#contenido").html("");
                     $('#contenido').append(response.data).after(function () {
-                        Section(seccion);
+                        Section(seccion2);
                     });
                 }, function myError(response) {
                     alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
@@ -59,6 +59,7 @@ function getSeccion(obj) {
                         break;
                     case 'instituciones':
                         getInstitutions();
+                        cargaGrid();
                         break;
                     case 'pacientes':
                         break;
@@ -66,13 +67,15 @@ function getSeccion(obj) {
             }
             function getInstitutions() {
                 try {
-                    var url = "login/getInstitutions.htm";
+                    var url = "instituciones/getInstitutions.htm";
                     $http({
                         url: url,
                         method: "POST"
                     }).then(function mySucces(response) {
-                        console.log(response.data);
+                        //console.log(response.data);
+                        //var datos= JSON.stringify(response.data);
                         //$('#tbl-institutions').append(response.data);
+                        fillGrids(response.data, "GridInstituciones");
                     }, function myError(response) {
                         alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
                     });
@@ -86,6 +89,108 @@ function getSeccion(obj) {
         alert(error);
     }
 }
+
+function cargaGrid() {
+    var paginador;
+    //Creando la Tabla
+    $("#GridInstituciones").jqGrid({
+        datatype: "local",
+        height: 'auto',
+        width: 'auto',
+        rowNum: 10,
+        rowList: [10, 20, 30, 40, 100],
+        colNames: ['id_institucion', 'n_ciudad', 'n_pais', "nombre"],
+        colModel: [
+            {
+                name: 'id_institucion',
+                index: 'id_institucion',
+                width: 100,
+                align: 'center'
+            },
+            {
+                name: 'n_ciudad',
+                index: 'n_ciudad',
+                width: 300,
+                align: 'center',
+                searchoptions: {
+                    sopt: ['cn']
+                }
+            },
+            {
+                name: 'n_pais',
+                index: 'n_pais',
+                width: 100,
+                align: 'left',
+                searchoptions: {
+                    sopt: ['cn']
+                }
+            },
+            {
+                name: 'nombre',
+                index: 'nombre',
+                width: 100,
+                align: 'left',
+                searchoptions: {
+                    sopt: ['cn']
+                }
+            }
+        ],
+        pager: "#PagerInstituciones",
+        sortorder: "asc",
+        viewrecords: true,
+        hidegrid: false,
+        altRows: true,
+        pgbuttons: true,
+        caption: "Tabla Ejemplo de instituciones",
+        loadComplete: function () {
+        }
+    });
+    paginador = $("#GridInstituciones").getGridParam('pager');
+    jQuery("#GridInstituciones").navGrid(paginador, {
+        edit: false,
+        add: false,
+        del: false,
+        search: false,
+        refresh: false
+    }).jqGrid("filterToolbar");
+}
+
+function fillGrids(datos, idgrid) {
+    for (var i = 0; i <= datos.length; i++)
+        $("#" + idgrid).jqGrid('addRowData', i + 1, datos[i]);
+}
+
+/*Controlador especificamente del menu*/
+menu1.controller('ctrlMenu', function ($scope, $http, $log) {
+    $scope.cerrarSesion = function () {
+        var url = "login/salir.htm";
+        $http({
+            url: url,
+            method: "POST"
+        }).then(function mySucces(response) {
+            if (response.data === "fail") {
+                alert('Ha ocurrido un error al intentar cerrar la sesión, favor de intentarlo nuevamente');
+            } else {
+                location.href = "Login";
+            }
+        }, function myError(response) {
+            alert('Ha ocurrido un error favor de intentar más tarde');
+        });
+    };
+    /*Para la navecación entre secciones*/
+    $scope.navegacion = function (nameSec) {
+        location.href = nameSec;
+    };
+    $scope.popUp = function (ele) {
+         console.log(ele);     
+         if(ele!=seccion2){$("#popUpMenu_"+ele).fadeIn(1000);}
+    };
+    $scope.hiddepopUp = function(ele){
+        console.log(ele);     
+        $("#popUpMenu_"+ele).fadeOut(400);
+    };
+});
+
 var app = angular.module('myApp', []);
 app.controller('ctrlMain', function ($scope, $http) {
     $scope.login = function () {

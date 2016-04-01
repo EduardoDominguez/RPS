@@ -34,10 +34,11 @@ public class Sesiones {
     }
     
     public String deleteSession(){
-        String ret="";
+        String ret;
         try{
             HttpSession session = request.getSession();
             session.invalidate();
+            ret="ok";
         }catch(Exception e){
             ret="fail";
         }

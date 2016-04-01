@@ -23,7 +23,7 @@ public class dataBaseQuery {
     private final static Conexion con = new Conexion();
     private Connection conexion = null;
     private Statement sentenciaSQL = null, sentenciaSQLaux = null;
-    private final String servidor = "127.0.0.1:3306/pekesalud_bd&root&root";
+    private final String servidor = "127.0.0.1:3306/pekesalud_bd&root&root1234";
 
     public String select(String query) throws SQLException {
         int contaux = 0;
@@ -78,6 +78,7 @@ public class dataBaseQuery {
             ret = new String[1];
             ret[0] = "fail";
             retQuery = "fail";
+            lista.clear();
         } finally {
             Conexion.close(conexion);
             //Conexion.close(cdr);
