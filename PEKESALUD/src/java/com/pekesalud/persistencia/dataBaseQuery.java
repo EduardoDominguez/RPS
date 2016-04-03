@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import util.General;
 
 /**
  *
@@ -23,10 +24,11 @@ public class dataBaseQuery {
     private final static Conexion con = new Conexion();
     private Connection conexion = null;
     private Statement sentenciaSQL = null, sentenciaSQLaux = null;
-    private final String servidor = "127.0.0.1:3306/pekesalud_bd&root&root1234";
+    private final String servidor = "127.0.0.1:3306/pekesalud_bd&root&root";
 
     public String select(String query) throws SQLException {
         int contaux = 0;
+        General g= new General();
         String ret[];
         Map ml = new HashMap();
         List<Map> lista = new ArrayList<Map>();
@@ -36,14 +38,14 @@ public class dataBaseQuery {
         try {
             conexion = con.connect(servidor);
             if (conexion != null) {
-                //sentenciaSQL = conexion.createStatement();
+                sentenciaSQL = conexion.createStatement();
                 sentenciaSQLaux = conexion.createStatement();
-                //cdr = sentenciaSQL.executeQuery(query);
+                cdr = sentenciaSQL.executeQuery(query);
                 cdraux = sentenciaSQLaux.executeQuery(query);
-                cont = cdraux.getMetaData().getColumnCount();
-//                while (cdr.next()) {
-//                    cont++;
-//                }
+                //cont = cdraux.getMetaData().getColumnCount();
+                while (cdr.next()) {
+                    cont++;
+                }
                 if (cont > 0) {
                     ret = new String[cont];
                     
@@ -55,8 +57,8 @@ public class dataBaseQuery {
                         for (int i = 1; i <= numColumnas; i++) {
                             String column = cdraux.getMetaData().getColumnName(i);
                             ret[contaux] += cdraux.getString(column + "") + "# ";
-                            retQuery += "\""+column+"\": \""+cdraux.getString(column)+"\", ";
-                            ml.put(column, cdraux.getString(column));
+                            retQuery += "\""+column+"\": \""+g.convertToUTF8(cdraux.getString(column))+"\", ";
+                            ml.put(column, g.convertToUTF8(cdraux.getString(column)));
                                    //{ "NombreFruta":"Manzana" , "Cantidad":20 }
                         }
                         retQuery = retQuery.substring(0, retQuery.length()-2);
@@ -77,7 +79,7 @@ public class dataBaseQuery {
         } catch (SQLException e) {
             ret = new String[1];
             ret[0] = "fail";
-            retQuery = "fail";
+            retQuery = e.toString();
             lista.clear();
         } finally {
             Conexion.close(conexion);

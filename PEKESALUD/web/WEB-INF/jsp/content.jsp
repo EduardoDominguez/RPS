@@ -10,28 +10,59 @@
     }//End if home
     if (sec.equals("instituciones")) {
 %>
-<div class="container-sec" ng-controller="ctrInstitutions">
-    <%--<table id="tbl-institutions">
-        <tr>
-            <th>Id instituci&oacute;n</th>
-            <th>Nombre</th>
-            <th>Pa&iacute;s</th>
-            <th>Ciudad</th>
-            <th>Editar</th>
-        </tr>
-    </table>--%>
-    <table id="GridInstituciones" ></table>
-    <div id="PagerInstituciones"></div>
+<div class="container-sec container-intituciones flex">
+    <div class="container-subsec flex flex-column">
+        <div class="menu-edit-main">
+            <div class="menu-edit flex">
+                <button class="btn-main-edit" id="btn-edit">Editar</button>
+                <button class="btn-main-edit" id="btn-add">Agregar</button>
+                <button class="btn-main-edit" id="btn-stus">Cambiar Estatus</button>
+            </div>
+        </div>
+        <div class="container-grid flex center-items">
+            <table id="GridInstituciones"></table>
+            <div id="PagerInstituciones"></div>
+        </div>
+    </div>
 </div>
 <%
     }//End if instituciones
     if (sec.equals("pacientes")) {
 %>
-
+<div class="container-sec container-pacientes flex">
+    <div class="container-subsec flex flex-column">
+        <div class="menu-edit-main">
+            <div class="menu-edit flex">
+                <button class="btn-main-edit" id="btn-edit">Editar</button>
+                <button class="btn-main-edit" id="btn-add">Agregar</button>
+                <button class="btn-main-edit" id="btn-stus">Cambiar Estatus</button>
+            </div>
+        </div>
+        <div class="container-sec container-pacientes">
+            <table id="GridPacientes" ></table>
+            <div id="PagerPacientes"></div>
+        </div>
+    </div>
+</div>
 <%
     }//End if pacientes
     if (sec.equals("usuarios")) {
-        out.print("<h1>Usuarios</h1>"
-                + "<input type='button' value='Cambiar a home' onclick='location.href = \"Home\"'></input>");
+%>
+<div class="container-sec container-usuarios flex">
+    <div class="container-subsec flex flex-column">
+        <div class="menu-edit-main">
+            <div class="menu-edit flex">
+                <button class="btn-main-edit" id="btn-edit">Editar</button>
+                <button class="btn-main-edit" id="btn-add">Agregar</button>
+                <button class="btn-main-edit" id="btn-stus">Cambiar Estatus</button>
+            </div>
+        </div>
+        <div class="container-sec container-usuarios">
+            <table id="GridUsuarios" ></table>
+            <div id="PagerUsuarios"></div>
+        </div>
+    </div>
+</div>
+<%
     }//End if usuarios
 %>

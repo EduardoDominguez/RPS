@@ -56,12 +56,16 @@ function getSeccion(obj) {
                     case 'home':
                         break;
                     case 'usuarios':
+                        getUsuarios();
+                        cargaGridUsuarios();
                         break;
                     case 'instituciones':
                         getInstitutions();
-                        cargaGrid();
+                        cargaGridInstituciones();
                         break;
                     case 'pacientes':
+                        getPacientes();
+                        cargarGridPacientes();
                         break;
                 }
             }
@@ -84,13 +88,121 @@ function getSeccion(obj) {
                 }
             }
 
+            function getUsuarios() {
+                try {
+                    var url = "usuarios/getUsuarios.htm";
+                    $http({
+                        url: url,
+                        method: "POST"
+                    }).then(function mySucces(response) {
+                        console.log(response.data);
+                        fillGrids(response.data, "GridUsuarios");
+                    }, function myError(response) {
+                        alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
+                    });
+                } catch (e) {
+                    alert(e);
+                }
+            }
+
+            function getPacientes() {
+                try {
+                    var url = "pacientes/getPacientes.htm";
+                    $http({
+                        url: url,
+                        method: "POST"
+                    }).then(function mySucces(response) {
+                        console.log(response.data);
+                        fillGrids(response.data, "GridPacientes");
+                    }, function myError(response) {
+                        alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
+                    });
+                } catch (e) {
+                    alert(e);
+                }
+            }
+
         });
     } catch (error) {
         alert(error);
     }
 }
 
-function cargaGrid() {
+function cargaGridUsuarios() {
+    var paginador;
+    //Creando la Tabla
+    $("#GridUsuarios").jqGrid({
+        datatype: "local",
+        height: 'auto',
+        width: 'auto',
+        rowNum: 10,
+        rowList: [10, 20, 30, 40, 100],
+        colNames: ['id', 'usuario', 'nombre', 'apellido', "registro"],
+        colModel: [
+            {
+                name: 'id_usuario',
+                index: 'id_usuario',
+                width: 15,
+                align: 'center'
+            },
+            {
+                name: 'login',
+                index: 'login',
+                width: 150,
+                align: 'center',
+                searchoptions: {
+                    sopt: ['cn']
+                }
+            },
+            {
+                name: 'nombre',
+                index: 'nombre',
+                width: 100,
+                align: 'center',
+                searchoptions: {
+                    sopt: ['cn']
+                }
+            },
+            {
+                name: 'apellido1',
+                index: 'apellido1',
+                width: 100,
+                align: 'center',
+                searchoptions: {
+                    sopt: ['cn']
+                }
+            },
+            {
+                name: 'fecha_registro',
+                index: 'fecha_registro',
+                width: 100,
+                align: 'center',
+                searchoptions: {
+                    sopt: ['cn']
+                }
+            }
+        ],
+        pager: "#PagerUsuarios",
+        sortorder: "asc",
+        viewrecords: true,
+        hidegrid: false,
+        altRows: true,
+        pgbuttons: true,
+        caption: "Tabla de usuarios",
+        loadComplete: function () {
+        }
+    });
+    paginador = $("#GridInstituciones").getGridParam('pager');
+    jQuery("#GridInstituciones").navGrid(paginador, {
+        edit: false,
+        add: false,
+        del: false,
+        search: false,
+        refresh: false
+    }).jqGrid("filterToolbar");
+}
+
+function cargaGridInstituciones() {
     var paginador;
     //Creando la Tabla
     $("#GridInstituciones").jqGrid({
@@ -99,7 +211,7 @@ function cargaGrid() {
         width: 'auto',
         rowNum: 10,
         rowList: [10, 20, 30, 40, 100],
-        colNames: ['id_institucion', 'n_ciudad', 'n_pais', "nombre"],
+        colNames: ['id', 'Nombre', 'País', "Comisión"],
         colModel: [
             {
                 name: 'id_institucion',
@@ -141,12 +253,95 @@ function cargaGrid() {
         hidegrid: false,
         altRows: true,
         pgbuttons: true,
-        caption: "Tabla Ejemplo de instituciones",
+        caption: "Tabla de instituciones",
         loadComplete: function () {
         }
     });
     paginador = $("#GridInstituciones").getGridParam('pager');
     jQuery("#GridInstituciones").navGrid(paginador, {
+        edit: false,
+        add: false,
+        del: false,
+        search: false,
+        refresh: false
+    }).jqGrid("filterToolbar");
+}
+
+function cargarGridPacientes() {
+    var paginador;
+    //Creando la Tabla
+    $("#GridPacientes").jqGrid({
+        datatype: "local",
+        height: 'auto',
+        width: 'auto',
+        rowNum: 10,
+        rowList: [10, 20, 30, 40, 100],
+        colNames: ['id', 'nombre', 'correo', 'comisión', 'ciudad', "entidad"],
+        colModel: [
+            {
+                name: 'id_paciente',
+                index: 'id_paciente',
+                width: 100,
+                align: 'center'
+            },
+            {
+                name: 'n_paciente',
+                index: 'n_paciente',
+                width: 200,
+                align: 'center',
+                searchoptions: {
+                    sopt: ['cn']
+                }
+            },
+            {
+                name: 'correo',
+                index: 'correo',
+                width: 150,
+                align: 'center',
+                searchoptions: {
+                    sopt: ['cn']
+                }
+            },
+            {
+                name: 'nombre',
+                index: 'nombre',
+                width: 250,
+                align: 'center',
+                searchoptions: {
+                    sopt: ['cn']
+                }
+            },
+            {
+                name: 'n_ciudad',
+                index: 'n_ciudad',
+                width: 80,
+                align: 'left',
+                searchoptions: {
+                    sopt: ['cn']
+                }
+            },
+            {
+                name: 'n_entidad',
+                index: 'n_entidad',
+                width: 80,
+                align: 'left',
+                searchoptions: {
+                    sopt: ['cn']
+                }
+            }
+        ],
+        pager: "#PagerPacientes",
+        sortorder: "asc",
+        viewrecords: true,
+        hidegrid: false,
+        altRows: true,
+        pgbuttons: true,
+        caption: "Tabla de Pacientes",
+        loadComplete: function () {
+        }
+    });
+    paginador = $("#GridPacientes").getGridParam('pager');
+    jQuery("#GridPacientes").navGrid(paginador, {
         edit: false,
         add: false,
         del: false,
@@ -182,12 +377,14 @@ menu1.controller('ctrlMenu', function ($scope, $http, $log) {
         location.href = nameSec;
     };
     $scope.popUp = function (ele) {
-         console.log(ele);     
-         if(ele!=seccion2){$("#popUpMenu_"+ele).fadeIn(1000);}
+        console.log(ele);
+        if (ele != seccion2) {
+            $("#popUpMenu_" + ele).fadeIn(1000);
+        }
     };
-    $scope.hiddepopUp = function(ele){
-        console.log(ele);     
-        $("#popUpMenu_"+ele).fadeOut(400);
+    $scope.hiddepopUp = function (ele) {
+        console.log(ele);
+        $("#popUpMenu_" + ele).fadeOut(400);
     };
 });
 

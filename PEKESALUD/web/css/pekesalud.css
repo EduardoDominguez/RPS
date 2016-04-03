@@ -149,6 +149,21 @@ body{
 .container-login input[type=text], .container-login input[type=password]{
     width: 270px;
 }
+.center-top-items1{
+    justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -ms-justify-content: center;
+    -o-justify-content: center;
+}
+.center-top-items2{
+    align-items: center;
+    -webkit-align-items:center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    -o-align-items: center;
+}
+
 .center-items{
     justify-content: center;
     align-content: center;
@@ -202,11 +217,33 @@ body{
     position: absolute !important;
     opacity: 0.7;
     display: none;
+    z-index: 999;
 }
 .container-sec{
     position: relative;
     margin: 0 auto;
 }
+.container-sec{
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.container-subsec{
+    width: 100%;
+}
+.menu-edit-main{
+    width: 100%;
+}
+.menu-edit button{
+    margin: 20px;
+    width: 110px;
+    height: 30px;
+    boder: 1px #0066cc;
+    background: url(../img/boton1.png) center no-repeat;
+    color: white;
+}
+
 /*******ID's'*********/
 #wrapper{
     position: absolute;
@@ -224,7 +261,7 @@ body{
 #menu{
     position: relative;
     height: 100%;
-    width: 350px;
+    width: 220px;
 }
 #menu div{
     position: fixed;
@@ -242,7 +279,7 @@ body{
     margin: 80px 10px;
 }
 #contenido{
-    width: calc(100% - 350px);
+    width: calc(100% - 220px);
 }
 #popUpMenu_instituciones{
     top: 190px;
