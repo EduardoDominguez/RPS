@@ -14,7 +14,7 @@
         response.sendRedirect("Login");
     }
 %>
-<html ng-app="contenido" ng-controller="ctrContenido">
+<html ng-app="contenido" ng-controller="ctrContenido" >
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="<c:url value='/css/pekesalud.css'/>"/>
@@ -33,20 +33,22 @@
     </head>
     <body>
         <div id="wrapper" class="flex flex-row">
-            <div id="menu" ng-app="menu" ng-controller="ctrlMenu">
+            <div id="menu" ng-app="menu" ng-controller="ctrlMenu" ng-init="modulos()">
                 <div class="flex flex-column">
                     <picture>
                        <img srcset="img/logo02.png" width="200px" height="50px"/>
                     </picture>
-                    <ul >
-                        <li ng-mouseover="popUp('home')" ng-mouseleave="hiddepopUp('home')" ng-click="navegacion('Home')">Inicio</li>
-                        <%--<div class="popUpMenu" id="popUpMenu_home"><p>Para volver al inicio</p></div>--%>
+                    <ul class = "flex flex-column justify-space-around align-content-flex-start">
+                        <li ng-repeat="m in menu" ng-click="navegacion('{{ m.nombre_modulo }}')">{{ m.nombre_modulo }}</li>                        
+                        <%--<li ng-mouseover="popUp('home')" ng-mouseleave="hiddepopUp('home')" ng-click="navegacion('Home')">Inicio</li>
+                        <%--<div class="popUpMenu" id="popUpMenu_home"><p>Para volver al inicio</p></div>
                         <li ng-mouseover="popUp('instituciones')" ng-mouseleave="hiddepopUp('instituciones')" ng-click="navegacion('Instituciones')">Instituciones</li>
                         <div class="popUpMenu" id="popUpMenu_instituciones"><p>En esta sección se mostrarán los detalles de la Institución en la que se encuentra el usuario actual.</p></div>
                         <li ng-mouseover="popUp('pacientes')" ng-mouseleave="hiddepopUp('pacientes')" ng-click="navegacion('Pacientes')">Pacientes</li>
                         <div class="popUpMenu" id="popUpMenu_pacientes"><p>En esta sección se le mostrarán los usuarios registrados en la institución actual.</p></div>
                         <li ng-mouseover="popUp('usuarios')" ng-mouseleave="hiddepopUp('usuarios')" ng-click="navegacion('Usuarios')">Usuarios</li>
                         <div class="popUpMenu" id="popUpMenu_usuarios"><p>En esta sección se le mostrarán los usuarios registrados en la institución actual.</p></div>
+                        --%>
                         <li ng-click="cerrarSesion()">Cerrar sesi&oacute;n</li>
                     </ul>
                 </diV>

@@ -206,6 +206,20 @@ body{
     -o-align-content:space-around;
     -o-align-items:stretch;
 }
+.justify-space-around{
+    justify-content: space-around;
+    -ms-justify-content: space-around;
+    -o-justify-content: space-around;
+    -webkit-justify-content: space-around;
+    -moz-justify-content: space-around;
+}
+.align-content-flex-start{
+    align-content: flex-start;
+    -ms-align-content: flex-start;
+    -webkit-align-content: flex-start;
+    -moz-align-content: flex-start;
+    -o-align-content: flex-start;
+}
 .popUpMenu{
     padding: 10px;
     width: 225px;
@@ -265,6 +279,7 @@ body{
 }
 #menu div{
     position: fixed;
+    height: 100%;
 }
 #menu div img{
     cursor: pointer;
@@ -272,11 +287,17 @@ body{
 #menu div ul{
     list-style: none;
     text-transform: uppercase;
+    height: calc(100% - 90px);
+    flex: 1 0 auto;
+    -webkit-flex: 1 0 auto;
+    -moz-flex: 1 0 auto;
+    -ms-flex: 1 0 auto;
+    -o-flex: 1 0 auto;
 }
 #menu div li{
     cursor: pointer;
     /*padding: 30px;*/
-    margin: 80px 10px;
+    /*margin: 80px 10px;*/
 }
 #contenido{
     width: calc(100% - 220px);

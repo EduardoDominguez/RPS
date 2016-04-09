@@ -4,8 +4,7 @@
     String sec = request.getParameter("sec").toString().toLowerCase();
     if (sec.equals("home")) {
 %>
-<div class="container-sec">
-</div>
+    <div class="container-sec"></div>
 <%
     }//End if home
     if (sec.equals("instituciones")) {

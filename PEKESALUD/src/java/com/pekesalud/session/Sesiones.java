@@ -20,7 +20,7 @@ public class Sesiones {
         this.request=request;
     }
     
-    public String createSession(String name, String  id){
+    public String createSession(String name, int  id){
         String ret="";
         Usuario u= new Usuario();
         try{

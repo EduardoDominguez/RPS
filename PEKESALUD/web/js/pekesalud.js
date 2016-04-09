@@ -374,17 +374,29 @@ menu1.controller('ctrlMenu', function ($scope, $http, $log) {
     };
     /*Para la navecación entre secciones*/
     $scope.navegacion = function (nameSec) {
+        alert(nameSec);
         location.href = nameSec;
     };
     $scope.popUp = function (ele) {
-        console.log(ele);
-        if (ele != seccion2) {
+        if (ele !== seccion2) {
             $("#popUpMenu_" + ele).fadeIn(1000);
         }
     };
     $scope.hiddepopUp = function (ele) {
         console.log(ele);
         $("#popUpMenu_" + ele).fadeOut(400);
+    };
+    $scope.modulos = function () {
+        var url = "login/modulos.htm";
+        $http({
+            url: url,
+            method: "POST"
+        }).then(function mySucces(response) {
+            $scope.menu = response.data;
+        }, function myError(response) {
+            alert('Ha ocurrido un error inesperado');
+        });
+
     };
 });
 
@@ -399,13 +411,20 @@ app.controller('ctrlMain', function ($scope, $http) {
             method: "POST",
             params: datos
         }).then(function mySucces(response) {
-            if (response.data === "fail") {
-                alert('Usuario y/o password incorrecto');
-            } else if (response.data === "fail") {
-                alert('Ha ocurrido un error al intentar acceder a la base de datos, favor de verificarlo');
-            } else {
-                alert('Bienvenido');
-                location.href = "Home";
+            switch (response.data) {
+                case "fail" :
+                    alert('Usuario y/o password incorrecto');
+                    break;
+                case "fail." :
+                    alert('Ha ocurrido un error al intentar acceder a la base de datos, favor de verificarlo');
+                    break;
+                case "fail.." :
+                    alert('Ha ocurrido un error inesperado al intentar iniciar sesión, por favor pongase en contacto con el administrador del sistema');
+                    break;
+                default :
+                    alert('Bienvenido');
+                    location.href = "Home";
+                    break;
             }
         }, function myError(response) {
             alert('Ha ocurrido un error favor de intentar más tarde');
