@@ -23,31 +23,27 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  *
- * @author Eduardo Dominguez
+ * @author ROGEPC
  */
 @Controller
 @EnableWebMvc
-@RequestMapping(value = "/instituciones")
-public class InstitucionesController {
+@RequestMapping(value = "/ainstituciones")
+public class AInstitucionController {
 
     static dataBaseQuery query = new dataBaseQuery();
 
-    @RequestMapping(value = "/getInstitutions", method = RequestMethod.POST)
+    @RequestMapping(value = "/getAInstitutions", method = RequestMethod.POST)
     public @ResponseBody
-    String getInstitutions(HttpServletRequest request, Model model) {
+    String getAInstitutions(HttpServletRequest request, Model model) {
         String ret = "";
         try {
             HttpSession session = request.getSession(true);
             String login_id = session.getAttribute("IdPeke").toString();
             String tipo_user = session.getAttribute("tipoPeke").toString();
             if(tipo_user.equals("s")){
-                ret = query.select("select id_institucion, nombre, telefono, email, fecha_alta, estado from tbl_institucion");
-            }else if(tipo_user.equals("i")){
-                ret = query.select("select i.id_institucion, i.nombre, i.telefono, i.email, i.fecha_alta, i.estado from tbl_institucion as i, tbl_admin_institucion as ai where ai.id_institucion=i.id_institucion and ai.id_login= '"+login_id+"'");
-            }else if(tipo_user.equals("n")){
-                ret = query.select("select i.id_institucion, i.nombre, i.telefono, i.email, i.fecha_alta, i.estado from tbl_institucion as i,  tbl_nutriologos as n where n.id_institucion= i.id_institucion and n.id_login= '"+login_id+"'");
+                ret = query.select("select ai.id_admin_institucion, concat(ai.nombre) as persona, ai.telefono, ai.email, ai.fecha_alta, i.nombre, ai.estado from tbl_admin_institucion as ai, tbl_institucion as i where ai.id_institucion=i.id_institucion");
             }else{
-                ret = query.select("select i.id_institucion, i.nombre, i.telefono, i.email, i.fecha_alta, i.estado from tbl_institucion as i, tbl_tutor as t where t.id_institucion= i.id_institucion and t.id_login== '"+login_id+"'");
+                ret = query.select("select ai.id_admin_institucion, concat(ai.nombre) as persona, ai.telefono, ai.email, ai.fecha_alta, i.nombre, ai.estado from tbl_admin_institucion as ai, tbl_institucion as i where ai.id_institucion=i.id_institucion and ai.id_login='"+login_id+"'");
             }
         } catch (Exception e) {
             ret = "fail";

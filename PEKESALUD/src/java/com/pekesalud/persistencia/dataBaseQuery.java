@@ -24,7 +24,7 @@ public class dataBaseQuery {
     private final static Conexion con = new Conexion();
     private Connection conexion = null;
     private Statement sentenciaSQL = null, sentenciaSQLaux = null;
-    private final String servidor = "127.0.0.1:3306/pekesalud_bd&root&root1234";
+    private final String servidor = "127.0.0.1:3306/pekesalud_bd&root&root";
 
     public String select(String query) throws SQLException {
         String retQuery="[";
@@ -44,7 +44,6 @@ public class dataBaseQuery {
                         for (int i = 1; i <= numColumnas; i++) {
                             String column = cdraux.getMetaData().getColumnName(i);
                             retQuery += "\""+column+"\": \""+General.convertToUTF8(cdraux.getString(column))+"\", ";
-                            
                         }
                         retQuery = retQuery.substring(0, retQuery.length()-2);
                         retQuery+="}, ";

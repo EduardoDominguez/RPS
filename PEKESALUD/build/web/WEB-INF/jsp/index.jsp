@@ -39,7 +39,7 @@
                        <img srcset="img/logo02.png" width="200px" height="50px"/>
                     </picture>
                     <ul class = "flex flex-column justify-space-around align-content-flex-start">
-                        <li ng-repeat="m in menu" ng-click="navegacion('{{ m.nombre_modulo }}')">{{ m.nombre_modulo }}</li>                        
+                        <li ng-repeat="m in menu" ng-click="navegacion(m.nombre_modulo)">{{ m.nombre_modulo }}</li>                        
                         <%--<li ng-mouseover="popUp('home')" ng-mouseleave="hiddepopUp('home')" ng-click="navegacion('Home')">Inicio</li>
                         <%--<div class="popUpMenu" id="popUpMenu_home"><p>Para volver al inicio</p></div>
                         <li ng-mouseover="popUp('instituciones')" ng-mouseleave="hiddepopUp('instituciones')" ng-click="navegacion('Instituciones')">Instituciones</li>

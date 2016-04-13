@@ -5,6 +5,7 @@
  */
 package com.pekesalud.controller;
 
+import com.pekesalud.bean.Admin_Institucion;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.pekesalud.bean.Admin_Sistema;
 import com.pekesalud.bean.Login;
 import com.pekesalud.bean.Modulos;
+import com.pekesalud.bean.Nutriologo;
+import com.pekesalud.bean.Tutor;
 import com.pekesalud.util.General;
 import java.sql.SQLException;
 
@@ -35,6 +38,9 @@ public class loginController {
 
     static dataBaseQuery query = new dataBaseQuery();
     Admin_Sistema as = new Admin_Sistema();
+    Admin_Institucion ai=new Admin_Institucion();
+    Nutriologo n = new Nutriologo();
+    Tutor t= new Tutor();
     Login l = new Login();
     Modulos m = new Modulos();
     General g = new General();
@@ -125,19 +131,81 @@ public class loginController {
                 as.setFecha_alta(sql.get(0).get("fecha_alta").toString());
                 as.setEstado(sql.get(0).get("estado").toString());
                 as.setClave(sql.get(0).get("clave").toString());
-                sesion.createSession(as.getNombre(), as.getId_login());
+                sesion.createSession(as.getNombre(), as.getId_login(), as.getTipo_usuario());
                 tabla = "tbl_admin_sistema";
                 break;
             case "i":
                 sql = query.select("select * from pekesalud_bd.tbl_admin_institucion where id_login = " + l.getId_login() + " and estado = 1 limit 1;", true);
+                ai.setId_institucion(g.toInt(sql.get(0).get("id_admin_institucion").toString()));
+                ai.setId_login(g.toInt(sql.get(0).get("id_login").toString()));
+                ai.setTipo_usuario(sql.get(0).get("tipo_usuario").toString());
+                ai.setId_institucion(g.toInt(sql.get(0).get("id_institucion").toString()));
+                ai.setId_rol(g.toInt(sql.get(0).get("id_rol").toString()));
+                ai.setNombre(sql.get(0).get("nombre").toString());
+                ai.setCurp(sql.get(0).get("CURP").toString());
+                ai.setClave(sql.get(0).get("clave").toString());
+                ai.setId_pais(g.toInt(sql.get(0).get("id_pais").toString()));
+                ai.setId_entidad(g.toInt(sql.get(0).get("id_entidad").toString()));
+                ai.setId_ciudad(g.toInt(sql.get(0).get("id_ciudad").toString()));
+                ai.setId_delegacion(g.toInt(sql.get(0).get("id_delegacion").toString()));
+                ai.setId_colonia(g.toInt(sql.get(0).get("id_colonia").toString()));
+                ai.setCodigo_postal(g.toInt(sql.get(0).get("codigo_postal").toString()));
+                ai.setDireccion(sql.get(0).get("direccion").toString());
+                ai.setTelefono(g.toInt(sql.get(0).get("telefono").toString()));
+                ai.setEmail(sql.get(0).get("email").toString());
+                ai.setFacebook(sql.get(0).get("facebook").toString());
+                ai.setFecha_alta(sql.get(0).get("fecha_alta").toString());
+                ai.setFecha_baja(sql.get(0).get("fecha_baja").toString());
+                ai.setEstado(sql.get(0).get("estado").toString());
+                sesion.createSession(ai.getNombre(), ai.getId_login(), ai.getTipo_usuario());
                 tabla = "tbl_admin_institucion";
                 break;
             case "n":
                 sql = query.select("select * from pekesalud_bd.tbl_nutriologos where id_login = " + l.getId_login() + " and estado = 1 limit 1;", true);
+                n.setId_nutriologo(g.toInt(sql.get(0).get("id_nutriologo").toString()));
+                n.setId_login(g.toInt(sql.get(0).get("id_login").toString()));
+                n.setTipo_usuario(sql.get(0).get("tipo_usuario").toString());
+                n.setId_institucion(g.toInt(sql.get(0).get("id_institucion").toString()));
+                n.setId_consultorio(g.toInt(sql.get(0).get("id_consultorio").toString()));
+                n.setId_rol(g.toInt(sql.get(0).get("id_rol").toString()));
+                n.setNombre(sql.get(0).get("nombre").toString());
+                n.setCurp(sql.get(0).get("CURP").toString());
+                n.setClave(sql.get(0).get("clave").toString());
+                n.setId_pais(g.toInt(sql.get(0).get("id_pais").toString()));
+                n.setId_entidad(g.toInt(sql.get(0).get("id_entidad").toString()));
+                n.setId_ciudad(g.toInt(sql.get(0).get("id_ciudad").toString()));
+                n.setId_delegacion(g.toInt(sql.get(0).get("id_delegacion").toString()));
+                n.setId_colonia(g.toInt(sql.get(0).get("id_colonia").toString()));
+                n.setCodigo_postal(g.toInt(sql.get(0).get("codigo_postal").toString()));
+                n.setDireccion(sql.get(0).get("direccion").toString());
+                n.setTelefono(g.toInt(sql.get(0).get("telefono").toString()));
+                n.setEmail(sql.get(0).get("email").toString());
+                n.setFacebook(sql.get(0).get("facebook").toString());
+                n.setFecha_alta(sql.get(0).get("fecha_alta").toString());
+                n.setFecha_baja(sql.get(0).get("fecha_baja").toString());
+                n.setEstado(sql.get(0).get("estado").toString());
+                sesion.createSession(n.getNombre(), n.getId_login(), n.getTipo_usuario());
+                sesion.createSession(ai.getNombre(), ai.getId_login(), ai.getTipo_usuario());
                 tabla = "tbl_nutriologos";
                 break;
             case "t":
                 sql = query.select("select * from pekesalud_bd.tbl_tutor where id_login = " + l.getId_login() + " and estado = 1 limit 1;", true);
+                t.setId_tutor(g.toInt(sql.get(0).get("id_tutor").toString()));
+                t.setId_login(g.toInt(sql.get(0).get("id_login").toString()));
+                t.setId_institucion(g.toInt(sql.get(0).get("id_institucion").toString()));
+                t.setId_consultorio(g.toInt(sql.get(0).get("id_consultorio").toString()));
+                t.setNombre(sql.get(0).get("nombre").toString());
+                t.setGenero(sql.get(0).get("genero").toString());
+                t.setFecha_nacimiento(sql.get(0).get("fecha_nacimiento").toString());
+                t.setId_relacion(g.toInt(sql.get(0).get("id_ralacion").toString()));
+                t.setId_ocupacion(g.toInt(sql.get(0).get("id_ocupacion").toString()));
+                t.setId_estado_civil(g.toInt(sql.get(0).get("id_estado_civil").toString()));
+                t.setCodigo_postal(g.toInt(sql.get(0).get("codigo_postal").toString()));
+                t.setTelefono(g.toInt(sql.get(0).get("telefono").toString()));
+                t.setFacebook(sql.get(0).get("facebook").toString());
+                t.setEstado(sql.get(0).get("estado").toString());
+                t.setTipo_usuario("t");
+                sesion.createSession(t.getNombre(), t.getId_login(), t.getTipo_usuario());
                 tabla = "tbl_tutor";
                 break;
         }

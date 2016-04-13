@@ -5,7 +5,13 @@
  */
 package com.pekesalud.controller;
 
+import com.pekesalud.bean.Menu;
+import static com.pekesalud.controller.PacientesController.query;
 import com.pekesalud.persistencia.dataBaseQuery;
+import com.pekesalud.util.General;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -19,32 +25,39 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  *
  * @author ROGEPC
  */
+
 @Controller
 @EnableWebMvc
-@RequestMapping(value = "/pacientes")
-public class PacientesController {
+@RequestMapping(value = "/menu")
+public class MenuController {
+    String ret = "";
     static dataBaseQuery query = new dataBaseQuery();
-
-    @RequestMapping(value = "/getPacientes", method = RequestMethod.POST)
+    Menu m= new Menu();
+    General g = new General();
+    
+    @RequestMapping(value = "/getMenu", method = RequestMethod.POST)
     public @ResponseBody
     String getPacientes(HttpServletRequest request, Model model) {
-       String ret = "";
         try {
+            String id_modulo = request.getParameter("id_modulo");
             HttpSession session = request.getSession(true);
             String login_id = session.getAttribute("IdPeke").toString();
             String tipo_user = session.getAttribute("tipoPeke").toString();
+            String id_rol="";
             if(tipo_user.equals("s")){
-                ret = query.select("select p.id_paciente, p.nombre, p.genero, p.fecha_nacimiento, p.estatura_actual, p.peso_actual, p.estado from tbl_paciente as p");
+                id_rol="1";
             }else if(tipo_user.equals("i")){
-                ret = query.select("select p.id_paciente, p.nombre, p.genero, p.fecha_nacimiento, p.estatura_actual, p.peso_actual, p.estado from tbl_paciente as p, tbl_admin_institucion as ai, tbl_institucion as i where p.id_institucion=i.id_institucion and ai.id_institucion= i.id_institucion and ai.id_login='"+login_id+"'");
+                id_rol="2";
             }else if(tipo_user.equals("n")){
-                ret = query.select("select p.id_paciente, p.nombre, p.genero, p.fecha_nacimiento, p.estatura_actual, p.peso_actual, p.estado from tbl_paciente as p, tbl_nutriologos as n, tbl_institucion as i where p.id_institucion=i.id_institucion and n.id_institucion=i.id_institucion and n.id_login='"+login_id+"'");
+                id_rol="3";
             }else{
-                ret = query.select("select p.id_paciente, p.nombre, p.genero, p.fecha_nacimiento, p.estatura_actual, p.peso_actual, p.estado from tbl_paciente as p, tbl_tutor as t where p.id_tutor= t.id_tutor and t.id_login='"+login_id+"'");
+                id_rol="4";
             }
+            ret=query.select("select ps.id_permiso, p.nombre  from tbl_permisos_secciones as ps, clt_permisos as p  where ps.id_rol = '"+id_rol+"' and ps.id_modulo = '"+id_modulo+"' and ps.id_permiso=p.id");
+            m.setPermisos(ret);
         } catch (Exception e) {
             ret = e.toString();
         }
-        return ret;
+        return m.getPermisos();
     }
 }
