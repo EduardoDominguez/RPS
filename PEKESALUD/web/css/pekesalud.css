@@ -93,11 +93,12 @@ and open the template in the editor.
     margin: 0;
 }
 input[type=text], input[type=password]{
-    height: 30px;
-    border-radius: 15px;
+    height: 35px;
+    border-radius: 17px;
     border: none;
     margin: 10px;
     padding-left: 10px;
+    outline: none;
 }
 button{
     cursor: pointer;
@@ -268,9 +269,11 @@ body{
 }
 #btn-login{
     background-color: #1B78B2;
+    color: #FFF;
 }
 #btn-cancel{
     background-color: #C30454;
+    color: #FFF;   
 }
 #menu{
     position: relative;

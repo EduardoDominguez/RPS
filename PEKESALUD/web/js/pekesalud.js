@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+//var acciones = angular.module('acciones', []);
 var menu1 = angular.module('menu', []);
 var contenido = angular.module('contenido', ["menu"]);
 page('/PEKESALUD/:section', getSeccion);
 page();
 
-var sx = 980, sy = 650, seccion2;
+var sx = 980, sy = 650, seccion2, llamar_modulos = true;
 $(document).ready(function () {
     try {
         console.log("Cargado!");
@@ -114,22 +115,24 @@ function getSeccion(obj) {
             }
 
             function getMenu(id_modulo) {
+                console.log(id_modulo);
                 try {
-                    $scope.buttons1 = function () {
-                        var datos = [];
-                        datos = {'id_modulo': id_modulo};
-                        var url = "menu/getMenu.htm";
-                        $http({
-                            url: url,
-                            method: "POST",
-                            params: datos
-                        }).then(function mySucces(response) {
-                            $scope.buttons = response.data;
-                        }, function myError(response) {
-                            alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
-                        });
+                    //$scope.buttons1 = function () {
+                    var datos = [];
+                    datos = {'id_modulo': id_modulo};
+                    var url = "menu/getMenu.htm";
+                    $http({
+                        url: url,
+                        method: "POST",
+                        params: datos
+                    }).then(function mySucces(response) {
+                        console.log(response.data);
+                        $scope.buttons = response.data;
+                    }, function myError(response) {
+                        alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
+                    });
 
-                    };
+                    //};
                 } catch (e) {
                     alert(e);
                 }
@@ -891,14 +894,13 @@ menu1.controller('ctrlMenu', function ($scope, $http, $log) {
         val = val.replace('Í', 'I');
         val = val.replace('Ó', 'O');
         val = val.replace('Ú', 'U');
-        val = val.replace(' ', '_')
+        val = val.replace(' ', '_');
         return val;
     }
 
     /*Para la navecación entre secciones*/
     $scope.navegacion = function (nameSec) {
         nameSec = createUrl(nameSec);
-
         location.href = nameSec;
     };
     $scope.popUp = function (ele) {
@@ -911,48 +913,65 @@ menu1.controller('ctrlMenu', function ($scope, $http, $log) {
         $("#popUpMenu_" + ele).fadeOut(400);
     };
     $scope.modulos = function () {
-        var url = "login/modulos.htm";
-        $http({
-            url: url,
-            method: "POST"
-        }).then(function mySucces(response) {
-            $scope.menu = response.data;
-        }, function myError(response) {
-            alert('Ha ocurrido un error inesperado');
-        });
-
+        console.log(llamar_modulos);
+        if (llamar_modulos === true) {
+            var url = "login/modulos.htm";
+            $http({
+                url: url,
+                method: "POST"
+            }).then(function mySucces(response) {
+                $scope.menu = response.data;
+            }, function myError(response) {
+                alert('Ha ocurrido un error inesperado');
+            });
+            llamar_modulos = false;
+            console.log("entro");
+            console.log(llamar_modulos);
+        }
     };
 });
 
 var app = angular.module('myApp', []);
 app.controller('ctrlMain', function ($scope, $http) {
+    $scope.limpiar = function () {
+        $scope.usr_login = "";
+        $scope.psw_login = "";
+    };
     $scope.login = function () {
-        var datos = [];
-        var url = "logueo";
-        datos = {usr: $scope.usr_login, psw: $scope.psw_login};
-        $http({
-            url: url,
-            method: "POST",
-            params: datos
-        }).then(function mySucces(response) {
-            switch (response.data) {
-                case "fail" :
-                    alert('Usuario y/o password incorrecto');
-                    break;
-                case "fail." :
-                    alert('Ha ocurrido un error al intentar acceder a la base de datos, favor de verificarlo');
-                    break;
-                case "fail.." :
-                    alert('Ha ocurrido un error inesperado al intentar iniciar sesión, por favor pongase en contacto con el administrador del sistema');
-                    break;
-                default :
-                    alert('Bienvenido');
-                    location.href = "Home";
-                    break;
+        var usuario = $scope.usr_login.trim();
+        var pass = $scope.psw_login.trim();
+        if (usuario === "") {
+            alert("Debes ingresar tu nombre de usuario");
+            if (pass === "") {
+                alert("Debes ingresar tu contraseña");
             }
-        }, function myError(response) {
-            alert('Ha ocurrido un error favor de intentar más tarde');
-        });
+        } else {
+            var datos = [];
+            var url = "logueo";
+            datos = {usr: usuario, psw: pass};
+            $http({
+                url: url,
+                method: "POST",
+                params: datos
+            }).then(function mySucces(response) {
+                //console.log(response.data);
+                switch (response.data) {
+                    case "ok" :
+                        alert('Bienvenido');
+                        location.href = "Home";
+                        break;
+                    case "caduco" :
+                        alert('Su password ha caducado, favor de cambiarlo');
+                        break;
+                    default :
+                        alert(response.data);
+                        break;
+                }
+            }, function myError(response) {
+                alert('Ha ocurrido un error favor de intentar más tarde');
+            });
+        }
+
     };
 });
 

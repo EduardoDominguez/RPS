@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.*;
-import com.pekesalud.bean.Usuario;
 import com.pekesalud.persistencia.dataBaseQuery;
 import com.pekesalud.session.Sesiones;
 import org.springframework.http.HttpStatus;
@@ -38,13 +37,12 @@ public class loginController {
 
     static dataBaseQuery query = new dataBaseQuery();
     Admin_Sistema as = new Admin_Sistema();
-    Admin_Institucion ai=new Admin_Institucion();
+    Admin_Institucion ai = new Admin_Institucion();
     Nutriologo n = new Nutriologo();
-    Tutor t= new Tutor();
-    Login l = new Login();
+    Tutor t = new Tutor();
     Modulos m = new Modulos();
     General g = new General();
-    Sesiones sesion ;
+    Sesiones sesion;
 
     @RequestMapping(value = "/ingresar", method = RequestMethod.POST)
     public @ResponseBody
@@ -53,18 +51,19 @@ public class loginController {
         String nombreUsuario = request.getParameter("usr");
         String passwordUsuario = request.getParameter("psw");
         Map mapList = new HashMap();
-        String res ="";
+        String res = "";
         try {
             lista = query.select("select * from pekesalud_bd.tbl_login where login = '" + nombreUsuario + "' and password = '" + passwordUsuario + "' and estado = 1 limit 1;", true);
             if (!lista.isEmpty()) {
                 switch (g.estatusConsulta(lista)) {
                     case "fail":
-                        return "fail";
+                        return "Usuario y/o password incorrectos";
                     case "fail.":
-                        return "fail.";
+                        return "Falló la conexión con la base de datos";
                     case "fail..":
-                        return "fail";
+                        return "Ha ocurrido un error inesperado";
                     case "ok":
+                        Login l = new Login();
                         l.setId_login(g.toInt(lista.get(0).get("id_login").toString()));
                         l.setLogin(lista.get(0).get("login").toString());
                         l.setEmail(lista.get(0).get("email").toString());
@@ -72,16 +71,15 @@ public class loginController {
                         l.setTipo_usuario(lista.get(0).get("tipo_usuario").toString());
                         l.setEstado(g.toInt(lista.get(0).get("estado").toString()));
                         l.setFacebook(lista.get(0).get("facebook").toString());
-
-                        if (!verificaCaducidadPassword()) {
+                        if (!verificaCaducidadPassword(l)) {
                             sesion = new Sesiones(request);
-                            String tabla_conoce_modulos = conoceTipoUsuario();
-                            conoceModulos(tabla_conoce_modulos);
-                            return insertaBitacora();
+                            String tabla_conoce_modulos = conoceTipoUsuario(l);
+                            conoceModulos(tabla_conoce_modulos, l);
+                            return insertaBitacora(l);
                         } else {
+                            return "caduco";
                             //Hacer un pedo para que pida cambiar la contraseña cuando ya venció 
                         }
-                        break;
                 }
             }
 
@@ -97,8 +95,8 @@ public class loginController {
     String salir(HttpServletRequest request, Model model) {
         String res = "ok";
         try {
-            Sesiones sesion = new Sesiones(request);
-            sesion.deleteSession();
+            Sesiones sesion1 = new Sesiones(request);
+            sesion1.deleteSession();
         } catch (Exception e) {
             System.out.print("Ha ocurrido un error inesperado al intentar acceder " + e);
             res = "fail";
@@ -106,7 +104,7 @@ public class loginController {
         return res;
     }
 
-    public String conoceTipoUsuario() throws SQLException {
+    public String conoceTipoUsuario(Login l) throws SQLException {
         String tabla = "";
         List<Map> sql;
         switch (l.getTipo_usuario()) {
@@ -155,7 +153,7 @@ public class loginController {
                 ai.setEmail(sql.get(0).get("email").toString());
                 ai.setFacebook(sql.get(0).get("facebook").toString());
                 ai.setFecha_alta(sql.get(0).get("fecha_alta").toString());
-                ai.setFecha_baja(sql.get(0).get("fecha_baja").toString());
+                //ai.setFecha_baja(sql.get(0).get("fecha_baja").toString());
                 ai.setEstado(sql.get(0).get("estado").toString());
                 sesion.createSession(ai.getNombre(), ai.getId_login(), ai.getTipo_usuario());
                 tabla = "tbl_admin_institucion";
@@ -182,14 +180,13 @@ public class loginController {
                 n.setEmail(sql.get(0).get("email").toString());
                 n.setFacebook(sql.get(0).get("facebook").toString());
                 n.setFecha_alta(sql.get(0).get("fecha_alta").toString());
-                n.setFecha_baja(sql.get(0).get("fecha_baja").toString());
+                //n.setFecha_baja(sql.get(0).get("fecha_baja").toString());
                 n.setEstado(sql.get(0).get("estado").toString());
                 sesion.createSession(n.getNombre(), n.getId_login(), n.getTipo_usuario());
-                sesion.createSession(ai.getNombre(), ai.getId_login(), ai.getTipo_usuario());
                 tabla = "tbl_nutriologos";
                 break;
             case "t":
-                sql = query.select("select * from pekesalud_bd.tbl_tutor where id_login = " + l.getId_login() + " and estado = 1 limit 1;", true);
+                sql = query.select("select * from pekesalud_bd.tbl_tutor where id_login = " + l.getId_login() + "  limit 1;", true);
                 t.setId_tutor(g.toInt(sql.get(0).get("id_tutor").toString()));
                 t.setId_login(g.toInt(sql.get(0).get("id_login").toString()));
                 t.setId_institucion(g.toInt(sql.get(0).get("id_institucion").toString()));
@@ -212,32 +209,35 @@ public class loginController {
         return tabla;
     }
 
-    public boolean verificaCaducidadPassword() throws SQLException {
+    public boolean verificaCaducidadPassword(Login l) throws SQLException {
         boolean debe_cambiar_password;
         List<Map> res = query.select("select if(fecha_vigencia < CURRENT_TIMESTAMP(), true , false) as cambiar from pekesalud_bd.tbl_bit_password where  id_login = " + l.getId_login() + " order by fecha_vigencia Desc limit 1;", true);
         debe_cambiar_password = (g.toInt(res.get(0).get("cambiar").toString()) == 1) ? true : false;
         return debe_cambiar_password;
     }
 
-    public String conoceModulos(String tabla) throws SQLException {
-        String modulos;
-        modulos = query.select("select m.id_modulo, m.nombre_modulo from pekesalud_bd." + tabla + " t "
+    public String conoceModulos(String tabla, Login l) throws SQLException {
+        String modulos, sql;
+        sql = "select m.id_modulo, m.nombre_modulo from pekesalud_bd." + tabla + " t "
                 + "inner join pekesalud_bd.tbl_rol r on t.id_rol = r.id_rol "
-                + "inner join pekesalud_bd.tbl_modulos m on r.id_modulo = m.id_modulo and m.estado = 1;");
+                + "inner join pekesalud_bd.tbl_modulos m on r.id_modulo = m.id_modulo and  m.estado = 1 "
+                + "and id_login =" + l.getId_login();
+        modulos = query.select(sql);
         m.setModulos(modulos);
         return modulos;
     }
-    
-    public String insertaBitacora() throws SQLException {
-        return query.exQuery("insert into pekesalud_bd.tbl_bit_acceso_login values ("+l.getId_login()+", CURRENT_TIMESTAMP());");
+
+    public String insertaBitacora(Login l) throws SQLException {
+        String res;
+            res =  query.exQuery("insert into pekesalud_bd.tbl_bit_acceso_login values (" + l.getId_login() + ", CURRENT_TIMESTAMP());");
+            if(!res.equals("ok")) return "Ha ocurrido un error al intentar insertar en bitacora";
+            else  return res;
     }
 
-   
-        
     @RequestMapping(value = "/modulos", method = RequestMethod.POST)
     public @ResponseBody
     String modulos(HttpServletRequest request, Model model) {
-        String res ;
+        String res;
         try {
             res = m.getModulos();
         } catch (Exception e) {

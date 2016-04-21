@@ -11,7 +11,7 @@
     HttpSession objsession = request.getSession(false);
     String user = "";
     user = (String) objsession.getAttribute("UsrPeke");
-    if (!"".equals(user) && user!=null) {
+    if (!"".equals(user) && user != null) {
         response.sendRedirect("Home");
     }
 %>
@@ -35,9 +35,9 @@
                     </picture>
                     <input type="text" id="usr-login" ng-model="usr_login" placeholder="Usuario"/>
                     <input type="password" id="psw-login" ng-model="psw_login" placeholder="Contrase&ntilde;a"/>
-                    <div class="container-login-btn flex flex-row around-items">
+                    <div class="container-login-btn flex flex-row around-items" id="contenedor-login">
                         <button id="btn-login" ng-click="login()">Aceptar</button>
-                        <button id="btn-cancel">Cancelar</button>
+                        <button id="btn-cancel" ng-click="limpiar()">Cancelar</button>
                     </div>
                 </div>
             </div>

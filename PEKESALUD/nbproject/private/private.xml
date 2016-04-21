@@ -3,15 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/src/java/com/pekesalud/controller/PacientesController.java</file>
-            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/src/java/com/pekesalud/controller/AInstitucionController.java</file>
-            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/src/java/com/pekesalud/session/Sesiones.java</file>
-            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/web/js/pekesalud.js</file>
-            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/src/java/com/pekesalud/controller/NutriologosController.java</file>
-            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/src/java/com/pekesalud/controller/InstitucionesController.java</file>
-            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/src/java/com/pekesalud/controller/TutorController.java</file>
-            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/src/java/com/pekesalud/controller/ConsultoriosController.java</file>
-            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/web/WEB-INF/jsp/content.jsp</file>
+            <file>file:/C:/Users/Eduardo%20Dominguez/Desktop/RPS/PEKESALUD/web/js/pekesalud.js</file>
+            <file>file:/C:/Users/Eduardo%20Dominguez/Desktop/RPS/PEKESALUD/web/WEB-INF/jsp/index.jsp</file>
+            <file>file:/C:/Users/Eduardo%20Dominguez/Desktop/RPS/PEKESALUD/web/WEB-INF/jsp/login.jsp</file>
+            <file>file:/C:/Users/Eduardo%20Dominguez/Desktop/RPS/PEKESALUD/web/WEB-INF/jsp/content.jsp</file>
+            <file>file:/C:/Users/Eduardo%20Dominguez/Desktop/RPS/PEKESALUD/src/java/com/pekesalud/controller/loginController.java</file>
         </group>
     </open-files>
 </project-private>
