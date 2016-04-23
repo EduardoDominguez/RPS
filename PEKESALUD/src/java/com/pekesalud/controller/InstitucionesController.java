@@ -77,4 +77,17 @@ public class InstitucionesController {
         return ret;
     }
     
+    @RequestMapping(value = "/obtiene_datos", method = RequestMethod.POST)
+    public @ResponseBody
+    String obtieneDatos(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int id) {
+        String ret ;
+        try {
+            ret = query.select("select * from pekesalud_bd.tbl_institucion where id_institucion = "+id);
+            return ret;
+        } catch (Exception e) {
+            ret = e.toString();
+        }
+        return ret;
+    }
+    
 }

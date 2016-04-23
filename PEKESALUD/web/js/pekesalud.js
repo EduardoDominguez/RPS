@@ -1175,7 +1175,7 @@ function actualizaDatos(id_grid, id_tabla) {
 function obtieneDatosActualizar(id, id_grid) {
     switch (id_grid) {
         case "GridAInstitucion":
-            getUrlEditar(id, id_grid);
+            getUrlEditar(id, id_grid, "Edita_Admin_Institucion");
             break;
         case "GridASistema":
             navegacion("Edita_Admin_Sistema");
@@ -1185,7 +1185,7 @@ function obtieneDatosActualizar(id, id_grid) {
         case "GrigPacientes":
             break;
         case "GridInstituciones":
-            getUrlEditar();
+            getUrlEditar(id, id_grid);
             break;
         case "GridTutor":
             break;
@@ -1233,7 +1233,7 @@ function getUrlEditar(id, id_grid){
             editarDatos(id, "ainstituciones/obtiene_datos.htm");
             break;
         case'GridInstituciones':
-            bajarDatos(id, "instituciones/cambia_estado.htm", "Instituciones");
+            bajarDatos(id, "instituciones/obtiene_datos.htm");
             break;
     }
 }
@@ -1269,7 +1269,7 @@ function bajarDatos(id, grid, url, sections) {
         }
     }
 }
-function editarDatos(id, url) {
+function editarDatos(id, url, sectcall) {
     try {
         $.ajax({
             type: "POST",
@@ -1281,7 +1281,7 @@ function editarDatos(id, url) {
             },
             complete: function () {
                 closeLoading();
-                navegacion("Edita_Admin_Institucion");
+                navegacion(sectcall);
             },
             error: function (ex) {
                 alert('Ha ocurrido un error favor de intentar más tarde' + ex);
