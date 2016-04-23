@@ -1185,7 +1185,7 @@ function obtieneDatosActualizar(id, id_grid) {
         case "GrigPacientes":
             break;
         case "GridInstituciones":
-            getUrlEditar(id, id_grid);
+            getUrlEditar(id, id_grid, "Edita_Institucion");
             break;
         case "GridTutor":
             break;
@@ -1219,10 +1219,10 @@ function bajaDatos(id, id_grid) {
 function getUrlBaja(id, id_grid){
     switch (id_grid){
         case'GridAInstitucion':
-            bajarDatos(id, id_grid, "ainstituciones/cambia_estado.htm", "Administrador_Institucion");
+            bajarDatos(id, id_grid, "ainstituciones/cambia_estado.htm");
             break;
         case'GridInstituciones':
-            bajarDatos(id, id_grid, "instituciones/cambia_estado.htm", "Instituciones");
+            bajarDatos(id, id_grid, "instituciones/cambia_estado.htm");
             break;
     }
 }
@@ -1230,10 +1230,10 @@ function getUrlBaja(id, id_grid){
 function getUrlEditar(id, id_grid){
     switch (id_grid){
         case'GridAInstitucion':
-            editarDatos(id, "ainstituciones/obtiene_datos.htm");
+            editarDatos(id, "ainstituciones/obtiene_datos.htm", "Administrador_Institucion");
             break;
         case'GridInstituciones':
-            bajarDatos(id, "instituciones/obtiene_datos.htm");
+            bajarDatos(id, "instituciones/obtiene_datos.htm", "Instituciones");
             break;
     }
 }
