@@ -1175,7 +1175,7 @@ function actualizaDatos(id_grid, id_tabla) {
 function obtieneDatosActualizar(id, id_grid) {
     switch (id_grid) {
         case "GridAInstitucion":
-            datosAInstitucion(id);
+            getUrlEditar(id, id_grid);
             break;
         case "GridASistema":
             navegacion("Edita_Admin_Sistema");
@@ -1185,6 +1185,7 @@ function obtieneDatosActualizar(id, id_grid) {
         case "GrigPacientes":
             break;
         case "GridInstituciones":
+            getUrlEditar();
             break;
         case "GridTutor":
             break;
@@ -1196,7 +1197,7 @@ function obtieneDatosActualizar(id, id_grid) {
 function bajaDatos(id, id_grid) {
     switch (id_grid) {
         case "GridAInstitucion":
-            getUrl(id, id_grid);
+            getUrlBaja(id, id_grid);
             break;
         case "GridASistema":
             navegacion("Edita_Admin_Sistema");
@@ -1206,7 +1207,7 @@ function bajaDatos(id, id_grid) {
         case "GrigPacientes":
             break;
         case "GridInstituciones":
-            getUrl(id, id_grid);
+            getUrlBaja(id, id_grid);
             break;
         case "GridTutor":
             break;
@@ -1215,10 +1216,24 @@ function bajaDatos(id, id_grid) {
     }
 }
 
-function getUrl(id, id_grid){
+function getUrlBaja(id, id_grid){
     switch (id_grid){
         case'GridAInstitucion':
             bajarDatos(id, id_grid, "ainstituciones/cambia_estado.htm", "Administrador_Institucion");
+            break;
+        case'GridInstituciones':
+            bajarDatos(id, id_grid, "instituciones/cambia_estado.htm", "Instituciones");
+            break;
+    }
+}
+
+function getUrlEditar(id, id_grid){
+    switch (id_grid){
+        case'GridAInstitucion':
+            editarDatos(id, "ainstituciones/obtiene_datos.htm");
+            break;
+        case'GridInstituciones':
+            bajarDatos(id, "instituciones/cambia_estado.htm", "Instituciones");
             break;
     }
 }
@@ -1243,7 +1258,7 @@ function bajarDatos(id, grid, url, sections) {
                 success: function (data) {
                     if (data === "ok") {
                         alert("El registro ha cambiado de estado correctamente");
-                        navegacion(sections);
+                        location.href=sections;
                     } else {
                         alert("No se ha podido dar de baja, intente más tarde");
                     }
@@ -1254,9 +1269,8 @@ function bajarDatos(id, grid, url, sections) {
         }
     }
 }
-function datosAInstitucion(id) {
+function editarDatos(id, url) {
     try {
-        var url = "ainstituciones/obtiene_datos.htm";
         $.ajax({
             type: "POST",
             url: url,

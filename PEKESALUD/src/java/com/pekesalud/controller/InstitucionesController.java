@@ -6,6 +6,7 @@
 package com.pekesalud.controller;
 
 import com.pekesalud.bean.Usuario;
+import static com.pekesalud.controller.AInstitucionController.query;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import com.pekesalud.persistencia.dataBaseQuery;
 import com.pekesalud.session.Sesiones;
 import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -54,4 +56,25 @@ public class InstitucionesController {
         }
         return ret;
     }
+    
+    @RequestMapping(value = "/cambia_estado", method = RequestMethod.POST)
+    public @ResponseBody
+    String cambia_estado(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int id) {
+        String ret, estado ;
+        List<Map> res = new ArrayList<Map>();
+        try {
+            res =query.select("select estado from pekesalud_bd.tbl_institucion where id_institucion = "+id , true);
+            if(res.get(0).get("estado").toString().equals("B")){
+                estado = "A";
+            }else{
+                estado = "B";
+            }
+            ret = query.exQuery("update pekesalud_bd.tbl_institucion set estado = '"+estado+"' where id_institucion = "+id);
+                return ret;
+        } catch (Exception e) {
+            ret = e.toString();
+        }
+        return ret;
+    }
+    
 }
