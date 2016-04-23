@@ -1288,9 +1288,9 @@ function editarDatos(id, url, sectcall) {
             success: function (data) {
                 var datos = $.parseJSON(data);
                 PRUEBA=20;
-                $.when(navegacion(sectcall).then(function (){
+                $.when(navegacion(sectcall)).then(function (){
                     eval(sectcall+'_fill('+data+')');
-                }));
+                });
             }
         });
     } catch (e) {
