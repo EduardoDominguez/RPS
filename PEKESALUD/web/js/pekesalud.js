@@ -1301,6 +1301,9 @@ function editarDatos(id, url, sectcall) {
 function Edita_Institucion_fill(datos){
     $('#edita-nombre-institucion').val('hgsdja');
 }
+function Edita_Admin_Institucion_fill(datos){
+    console.log(datos);
+}
 
 History.Adapter.bind(window, 'statechange', function () {
     var State = History.getState();
