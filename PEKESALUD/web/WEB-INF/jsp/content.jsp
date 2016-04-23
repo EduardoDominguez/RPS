@@ -40,6 +40,30 @@
             </div>
         </div>
     </c:when>
+    <c:when test="${sec eq 'edita_institucion'}">
+        <div class="container-sec container-intituciones-edit flex">
+            <div class="container-subsec flex flex-column">
+                <div id="contenedor-edita-institucion">
+                    Nombre: <input type ="text" id="edita-nombre-institucion"/>
+                    RFC: <input type ="text" id="edita-rfc-institucion"/>
+                    Clave: <input type ="text" id="edita-clave-institucion"/>
+                    Pa&iacute;s: <input type ="text" id="edita-pais-institucion"/>
+                    Entidad: <input type ="text" id="edita-entidad-institucion"/>
+                    Ciudad: <input type ="text" id="edita-ciudad-institucion"/>
+                    Delegacion:  <input type ="text" id="edita-delegacion-institucion"/>
+                    Colonia  <input type ="text" id="edita-colonia-institucion"/>
+                    C&oacute;digo postal:  <input type ="text" id="edita-cp-institucion"/>
+                    Direcci&oacute;n:  <input type ="text" id="edita-direccion-institucion"/>
+                    Tel&eacute;fono:  <input type ="text" id="edita-telefono-institucion"/>
+                    email:  <input type ="text" id="edita-email-institucion"/>
+                    Web  <input type ="text" id="edita-web-institucion"/>
+                    Facebook:  <input type ="text" id="edita-facebook-institucion"/>
+                    Consultorios máximos:  <input type ="text" id="edita-lconsult-institucion"/>
+                    Pacientes máximos:  <input type ="text" id="edita-lpatien-institucion"/>
+                </div>
+            </div>
+        </div>
+    </c:when>
     <c:when test="${sec eq 'pacientes'}">
         <div class="container-sec container-pacientes flex">
             <div class="container-subsec flex flex-column">

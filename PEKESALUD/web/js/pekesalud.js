@@ -1289,11 +1289,7 @@ function editarDatos(id, url, sectcall) {
             success: function (data) {
                 var datos = $.parseJSON(data);
                 PRUEBA=20;
-                $.each(datos, function (i, v) {
-                    $("#edita-nombre-admin-institucion").val(v["nombre"]);
-                    $("#edita-curp-admin-institucion").val("lkslkdsldklskd");
-                    $("#contenedor-edita-ainstitucion").append(v);
-                });
+                eval(sectcall+'_fill(data)');
             }
         });
     } catch (e) {
