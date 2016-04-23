@@ -1230,10 +1230,10 @@ function getUrlBaja(id, id_grid){
 function getUrlEditar(id, id_grid){
     switch (id_grid){
         case'GridAInstitucion':
-            editarDatos(id, "ainstituciones/obtiene_datos.htm", "Administrador_Institucion");
+            editarDatos(id, "ainstituciones/obtiene_datos.htm", "Edita_Admin_Institucion");
             break;
         case'GridInstituciones':
-            bajarDatos(id, "instituciones/obtiene_datos.htm", "Instituciones");
+            editarDatos(id, "instituciones/obtiene_datos.htm", "Edita_Institucion");
             break;
     }
 }
@@ -1288,7 +1288,6 @@ function editarDatos(id, url, sectcall) {
             },
             success: function (data) {
                 var datos = $.parseJSON(data);
-                console.log(datos);
                 PRUEBA=20;
                 $.each(datos, function (i, v) {
                     $("#edita-nombre-admin-institucion").val(v["nombre"]);
