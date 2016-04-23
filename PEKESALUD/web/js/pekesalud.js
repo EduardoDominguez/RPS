@@ -1281,7 +1281,6 @@ function editarDatos(id, url, sectcall) {
             },
             complete: function () {
                 closeLoading();
-                navegacion(sectcall);
             },
             error: function (ex) {
                 alert('Ha ocurrido un error favor de intentar más tarde' + ex);
@@ -1289,12 +1288,18 @@ function editarDatos(id, url, sectcall) {
             success: function (data) {
                 var datos = $.parseJSON(data);
                 PRUEBA=20;
-                eval(sectcall+'_fill('+data+')');
+                $.when(navegacion(sectcall).then(function (){
+                    eval(sectcall+'_fill('+data+')');
+                }));
             }
         });
     } catch (e) {
         alert(e + "datosAInstitucion");
     }
+}
+
+function Edita_Institucion_fill(datos){
+    $('#edita-nombre-institucion').val('hgsdja');
 }
 
 History.Adapter.bind(window, 'statechange', function () {
