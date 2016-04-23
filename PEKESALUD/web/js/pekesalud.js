@@ -1216,8 +1216,10 @@ function bajaDatos(id, id_grid) {
 }
 
 function getUrl(id, id_grid){
-    if(id_grid==='GridAInstitucion'){
-        bajarDatos(id, id_grid, "ainstituciones/cambia_estado.htm", "Administrador_Institucion");
+    switch (id_grid){
+        case'GridAInstitucion':
+            bajarDatos(id, id_grid, "ainstituciones/cambia_estado.htm", "Administrador_Institucion");
+            break;
     }
 }
 
