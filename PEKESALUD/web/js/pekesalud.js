@@ -1289,7 +1289,7 @@ function editarDatos(id, url, sectcall) {
             success: function (data) {
                 var datos = $.parseJSON(data);
                 PRUEBA=20;
-                eval(sectcall+'_fill(data)');
+                eval(sectcall+'_fill('+data+')');
             }
         });
     } catch (e) {
