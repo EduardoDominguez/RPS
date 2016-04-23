@@ -28,6 +28,7 @@
         <script type="text/javascript" src="<c:url value='/js/jqgrid/jquery.jqGrid.min.js'/>"></script>
         <script type="text/javascript" src="<c:url value='/js/jqgrid/i18n/grid.locale-es.js'/>"></script>
         <script type="text/javascript" src="<c:url value='/js/page.js'/>"></script>
+        <script type="text/javascript" src="<c:url value='/js/jquery.history.js'/>"></script>
         <script type="text/javascript" src="<c:url value='/js/pekesalud.js'/>"></script>
         <title>PEKESALUD</title>
     </head>

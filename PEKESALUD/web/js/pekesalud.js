@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-page('/PEKESALUD/:section', getSeccion);
+page('/PEKESALUD/:section', getSeccions);
+page();
 var sx = 980, sy = 650, seccion2, PRUEBA="";
 $(document).ready(function () {
     try {
-        console.log("Cargado!");
-        page();
         $(window).trigger("orientationchange");
         if (window.innerWidth) {
             sx = window.innerWidth;
@@ -20,13 +19,19 @@ $(document).ready(function () {
         } else {
             sy = document.documentElement.clientHeight;
         }
+        getSeccion();
     } catch (error) {
         alert(error);
     }
 });
-function getSeccion(obj) {
+
+function getSeccions(obj){
+    seccion2=obj.params.section.toLowerCase();
+    getSeccion();
+}
+
+function getSeccion() {
     try {
-        seccion2 = obj.params.section.toLowerCase();
         var url = "contenidos";
         $.ajax({
             type: "GET",
@@ -47,8 +52,6 @@ function getSeccion(obj) {
                 $('#contenido').append(data).after(function () {
                     Section(seccion2);
                 });
-//                $('#contenido').append(data);
-//                Section(seccion2);
             }
         });
     } catch (ex) {
@@ -57,7 +60,7 @@ function getSeccion(obj) {
 
 }
 function Section(ctx) {
-    switch (ctx) {
+    switch (ctx.toLowerCase()) {
         case 'login':
             break;
         case 'home':
@@ -158,7 +161,6 @@ function getInstitutions() {
             success: function (data) {
                 var datos = $.parseJSON(data);
                 fillGrids(datos, "GridInstituciones");
-                //Crear ul con estructura del menu $scope.buttons = response.data;
             }
         });
     } catch (e) {
@@ -167,6 +169,7 @@ function getInstitutions() {
 }
 
 function getMenu(id_modulo, id_grid, nombre_id) {
+    //alert(id_modulo+" "+id_grid+" "+nombre_id);
     try {
         var url = "menu/getMenu.htm";
         $.ajax({
@@ -890,7 +893,7 @@ function cargaGridInstituciones() {
         altRows: true,
         pgbuttons: true,
         ignoreCase: true,
-        width: sx,
+        width: 700,
         caption: "Tabla de instituciones",
         loadComplete: function () {
         }
@@ -1084,9 +1087,11 @@ function modulos() {
     }
 }
 
-function navegacion(nameSec) {
-    nameSec = createUrl(nameSec);
-    location.href = nameSec;
+function navegacion(ele) {
+    ele = createUrl(ele);
+    if (ele !== seccion2) {
+        seccion2 = ele; History.pushState({ seccion2: ele }, 'PEKESALUD', ele); 
+    }
 }
 
 function limpiar() {
@@ -1151,7 +1156,7 @@ function bajaRegistro(id_grid, id_tabla) {
     var fila = grid.jqGrid('getGridParam', "selrow");
     if (fila) {
         var id = grid.jqGrid('getCell', fila, id_tabla);
-        bajaAInstitucion(id, id_grid);
+        bajaDatos(id, id_grid);
     } else {
         alert("Debes seleccionar una fila para poder darla de baja");
     }
@@ -1188,10 +1193,10 @@ function obtieneDatosActualizar(id, id_grid) {
     }
 }
 
-function bajaAInstitucion(id, id_grid) {
+function bajaDatos(id, id_grid) {
     switch (id_grid) {
         case "GridAInstitucion":
-            bajaAInstitucion(id, id_grid);
+            getUrl(id, id_grid);
             break;
         case "GridASistema":
             navegacion("Edita_Admin_Sistema");
@@ -1201,6 +1206,7 @@ function bajaAInstitucion(id, id_grid) {
         case "GrigPacientes":
             break;
         case "GridInstituciones":
+            getUrl(id, id_grid);
             break;
         case "GridTutor":
             break;
@@ -1209,10 +1215,15 @@ function bajaAInstitucion(id, id_grid) {
     }
 }
 
-function bajaAInstitucion(id, grid) {
+function getUrl(id, id_grid){
+    if(id_grid==='GridAInstitucion'){
+        bajarDatos(id, id_grid, "ainstituciones/cambia_estado.htm", "Administrador_Institucion");
+    }
+}
+
+function bajarDatos(id, grid, url, sections) {
     if (confirm("¿Desea el estado de este registro?")) {
         try {
-            var url = "ainstituciones/cambia_estado.htm";
             $.ajax({
                 type: "POST",
                 url: url,
@@ -1229,8 +1240,8 @@ function bajaAInstitucion(id, grid) {
                 },
                 success: function (data) {
                     if (data === "ok") {
-                        alert("El registro se ha dado de baja correctamente");
-                        navegacion("Administrador_Institucion");
+                        alert("El registro ha cambiado de estado correctamente");
+                        navegacion(sections);
                     } else {
                         alert("No se ha podido dar de baja, intente más tarde");
                     }
@@ -1275,3 +1286,10 @@ function datosAInstitucion(id) {
     }
 }
 
+History.Adapter.bind(window, 'statechange', function () {
+    var State = History.getState();
+    seccion2 = State.url.substring(State.url.lastIndexOf('/') + 1, State.url.length);
+    if(seccion2!=''){
+        getSeccion();
+    }
+});
