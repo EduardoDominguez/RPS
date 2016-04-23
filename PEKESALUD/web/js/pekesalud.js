@@ -3,16 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-//var acciones = angular.module('acciones', []);
-var menu1 = angular.module('menu', []);
-var contenido = angular.module('contenido', ["menu"]);
 page('/PEKESALUD/:section', getSeccion);
-page();
-
-var sx = 980, sy = 650, seccion2, llamar_modulos = true;
+var sx = 980, sy = 650, seccion2, PRUEBA="";
 $(document).ready(function () {
     try {
         console.log("Cargado!");
+        page();
         $(window).trigger("orientationchange");
         if (window.innerWidth) {
             sx = window.innerWidth;
@@ -31,234 +27,353 @@ $(document).ready(function () {
 function getSeccion(obj) {
     try {
         seccion2 = obj.params.section.toLowerCase();
-        contenido.controller('ctrContenido', function ($scope, $http) {
-            function Init() {
-                var datos = [];
-                var url = "contenidos";
-                datos = {sec: seccion2};
-                $http({
-                    url: url,
-                    method: "GET",
-                    params: datos
-                }).then(function mySucces(response) {
-                    $("#contenido").html("");
-                    $('#contenido').append(response.data).after(function () {
-                        Section(seccion2);
-                    });
-                }, function myError(response) {
-                    alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
+        var url = "contenidos";
+        $.ajax({
+            type: "GET",
+            url: url,
+            async: false,
+            data: {sec: seccion2},
+            beforeSend: function () {
+                load();
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            complete: function () {
+                $("#load").remove();
+            },
+            success: function (data) {
+                $("#contenido").html("");
+                $('#contenido').append(data).after(function () {
+                    Section(seccion2);
                 });
+//                $('#contenido').append(data);
+//                Section(seccion2);
             }
-            Init();
-            function Section(ctx) {
-                switch (ctx) {
-                    case 'login':
-                        break;
-                    case 'home':
-                        break;
-                    case 'usuarios':
-                        getUsuarios();
-                        cargaGridUsuarios();
-                        break;
-                    case 'instituciones':
-                        getInstitutions();
-                        cargaGridInstituciones();
-                        getMenu('1');
-                        break;
-                    case 'pacientes':
-                        getPacientes();
-                        cargarGridPacientes();
-                        getMenu('7');
-                        break;
-                    case'administrador_sistema':
-                        getASistema();
-                        cargarGridASistema();
-                        getMenu('5');
-                        break;
-                    case'administrador_institucion':
-                        getAInstitucion();
-                        cargarGridAInstitucion();
-                        getMenu('6');
-                        break;
-                    case'nutriologos':
-                        getNutriologos();
-                        cargarGridNutriologo();
-                        getMenu('3');
-                        break;
-                    case'consultorios':
-                        getConsultorios();
-                        cargarGridConsultorio();
-                        getMenu('2');
-                        break;
-                    case'tutores':
-                        getTutores();
-                        cargarGridTutor();
-                        getMenu('4');
-                        break;
-                }
-            }
-
-            function getTutores() {
-                try {
-                    var url = "tutores/getTutor.htm";
-                    $http({
-                        url: url,
-                        method: "POST"
-                    }).then(function mySucces(response) {
-                        fillGrids(response.data, "GridTutor");
-                    }, function myError(response) {
-                        alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
-                    });
-                } catch (e) {
-                    alert(e);
-                }
-            }
-
-            function getMenu(id_modulo) {
-                console.log(id_modulo);
-                try {
-                    //$scope.buttons1 = function () {
-                    var datos = [];
-                    datos = {'id_modulo': id_modulo};
-                    var url = "menu/getMenu.htm";
-                    $http({
-                        url: url,
-                        method: "POST",
-                        params: datos
-                    }).then(function mySucces(response) {
-                        console.log(response.data);
-                        $scope.buttons = response.data;
-                    }, function myError(response) {
-                        alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
-                    });
-
-                    //};
-                } catch (e) {
-                    alert(e);
-                }
-            }
-
-            function getConsultorios() {
-                try {
-                    var url = "consultorios/getConsultorios.htm";
-                    $http({
-                        url: url,
-                        method: "POST"
-                    }).then(function mySucces(response) {
-                        fillGrids(response.data, "GridConsultorio");
-                    }, function myError(response) {
-                        alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
-                    });
-                } catch (e) {
-                    alert(e);
-                }
-            }
-
-            function getNutriologos() {
-                try {
-                    var url = "nutriologos/getNutriologo.htm";
-                    $http({
-                        url: url,
-                        method: "POST"
-                    }).then(function mySucces(response) {
-                        fillGrids(response.data, "GridNutriologo");
-                    }, function myError(response) {
-                        alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
-                    });
-                } catch (e) {
-                    alert(e);
-                }
-            }
-
-            function getAInstitucion() {
-                try {
-                    var url = "ainstituciones/getAInstitutions.htm";
-                    $http({
-                        url: url,
-                        method: "POST"
-                    }).then(function mySucces(response) {
-                        fillGrids(response.data, "GridAInstitucion");
-                    }, function myError(response) {
-                        alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
-                    });
-                } catch (e) {
-                    alert(e);
-                }
-            }
-
-            function getInstitutions() {
-                try {
-                    var url = "instituciones/getInstitutions.htm";
-                    $http({
-                        url: url,
-                        method: "POST"
-                    }).then(function mySucces(response) {
-                        fillGrids(response.data, "GridInstituciones");
-                    }, function myError(response) {
-                        alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
-                    });
-                } catch (e) {
-                    alert(e);
-                }
-            }
-
-            function getASistema() {
-                try {
-                    var url = "sistema/getAdminSistema.htm";
-                    $http({
-                        url: url,
-                        method: "POST"
-                    }).then(function mySucces(response) {
-                        fillGrids(response.data, "GridASistema");
-                    }, function myError(response) {
-                        alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
-                    });
-                } catch (e) {
-                    alert(e);
-                }
-            }
-
-            function getUsuarios() {
-                try {
-                    var url = "usuarios/getUsuarios.htm";
-                    $http({
-                        url: url,
-                        method: "POST"
-                    }).then(function mySucces(response) {
-                        console.log(response.data);
-                        fillGrids(response.data, "GridUsuarios");
-                    }, function myError(response) {
-                        alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
-                    });
-                } catch (e) {
-                    alert(e);
-                }
-            }
-
-            function getPacientes() {
-                try {
-                    var url = "pacientes/getPacientes.htm";
-                    $http({
-                        url: url,
-                        method: "POST"
-                    }).then(function mySucces(response) {
-                        console.log(response.data);
-                        fillGrids(response.data, "GridPacientes");
-                    }, function myError(response) {
-                        alert('Ha ocurrido un error favor de intentar más tarde' + response.data);
-                    });
-                } catch (e) {
-                    alert(e);
-                }
-            }
-
         });
-    } catch (error) {
-        alert(error);
+    } catch (ex) {
+        alert(ex);
+    }
+
+}
+function Section(ctx) {
+    switch (ctx) {
+        case 'login':
+            break;
+        case 'home':
+            break;
+        case 'usuarios':
+            getUsuarios();
+            cargaGridUsuarios();
+            break;
+        case 'instituciones':
+            cargaGridInstituciones();
+            getInstitutions();
+            getMenu('1', "GridInstituciones", "id_institucion");
+            break;
+        case 'pacientes':
+            cargarGridPacientes();
+            getPacientes();
+            getMenu('7', "GrigPacientes", "id_paciente");
+            break;
+        case'administrador_sistema':
+            cargarGridASistema();
+            getASistema();
+            getMenu('5', "GridASistema", "id_admin_sistema");
+            break;
+        case'administrador_institucion':
+            cargarGridAInstitucion();
+            getAInstitucion();
+            getMenu('6', "GridAInstitucion", "id_admin_institucion");
+            break;
+        case'nutriologos':
+            cargarGridNutriologo();
+            getNutriologos();
+            getMenu('3', "GridNutriologo", "id_nutriologo");
+            break;
+        case'consultorios':
+            cargarGridConsultorio();
+            getConsultorios();
+            getMenu('2', "GridConsultorio", "id_consultorio");
+            break;
+        case'tutores':
+            cargarGridTutor();
+            getTutores();
+            getMenu('4', "GridTutor", "id_tutor");
+            break;
     }
 }
 
+function getTutores() {
+    try {
+        var url = "tutores/getTutor.htm";
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: {},
+            beforeSend: function () {
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            complete: function (jqXHR, textStatus) {
+                $("#load").remove();
+            },
+            success: function (data) {
+                var datos = $.parseJSON(data);
+                fillGrids(datos, "GridTutor");
+            }
+        });
+    } catch (e) {
+        alert(e);
+    }
+}
 
+function load() {
+    $("#contenido").append("<img id='load' src=img/loading.gif>");
+}
+
+function closeLoading() {
+    $("#load").remove();
+}
+
+function getInstitutions() {
+    try {
+        var url = "instituciones/getInstitutions.htm";
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: {},
+            beforeSend: function () {
+
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            complete: function (ex, e) {
+
+            },
+            success: function (data) {
+                var datos = $.parseJSON(data);
+                fillGrids(datos, "GridInstituciones");
+                //Crear ul con estructura del menu $scope.buttons = response.data;
+            }
+        });
+    } catch (e) {
+        alert(e + "33");
+    }
+}
+
+function getMenu(id_modulo, id_grid, nombre_id) {
+    try {
+        var url = "menu/getMenu.htm";
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: {'id_modulo': id_modulo},
+            beforeSend: function () {
+
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            complete: function (ex, e) {
+
+            },
+            success: function (data) {
+                var datos = $.parseJSON(data);
+                var botones = "";
+                var funcion;
+                $.each(datos, function (i, v) {
+                    switch (v["nombre"].toLowerCase()) {
+                        case "editar":
+                            funcion = "actualizaDatos";
+                            break;
+                        case "alta":
+                            funcion = "nuevoRegistro";
+                            break;
+                        case "estado":
+                            funcion = "bajaRegistro";
+                            break;
+                    }
+                    botones += "<button onclick='" + funcion + "(\"" + id_grid + "\", \"" + nombre_id + "\");' class='btn-main-edit'>" + v["nombre"] + "</button>";
+                });
+                $(".menu-edit").html(botones);
+                //Crear ul con estructura del menu $scope.buttons = response.data;
+            }
+        });
+    } catch (e) {
+        alert(e + "ddd");
+    }
+}
+
+function getConsultorios() {
+    try {
+        var url = "consultorios/getConsultorios.htm";
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: {},
+            beforeSend: function () {
+
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            success: function (data) {
+                var datos = $.parseJSON(data);
+                fillGrids(datos, "GridConsultorio");
+                //Crear ul con estructura del menu $scope.buttons = response.data;
+            }
+        });
+    } catch (e) {
+        alert(e);
+    }
+}
+
+function getNutriologos() {
+    try {
+        var url = "nutriologos/getNutriologo.htm";
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: {},
+            beforeSend: function () {
+
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            complete: function (ex, e) {
+
+            },
+            success: function (data) {
+                var datos = $.parseJSON(data);
+                fillGrids(datos, "GridNutriologo");
+                //Crear ul con estructura del menu $scope.buttons = response.data;
+            }
+        });
+    } catch (e) {
+        alert(e);
+    }
+}
+
+function getAInstitucion() {
+    try {
+        var url = "ainstituciones/getAInstitutions.htm";
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: {},
+            beforeSend: function () {
+
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            complete: function (ex, e) {
+
+            },
+            success: function (data) {
+                var datos = $.parseJSON(data);
+                fillGrids(datos, "GridAInstitucion");
+                //Crear ul con estructura del menu $scope.buttons = response.data;
+            }
+        });
+    } catch (e) {
+        alert(e);
+    }
+}
+
+function getASistema() {
+    try {
+        var url = "sistema/getAdminSistema.htm";
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: {},
+            beforeSend: function () {
+
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            complete: function (ex, e) {
+
+            },
+            success: function (data) {
+                var datos = $.parseJSON(data);
+                fillGrids(datos, "GridASistema");
+                //Crear ul con estructura del menu $scope.buttons = response.data;
+            }
+        });
+    } catch (e) {
+        alert(e);
+    }
+}
+
+function getUsuarios() {
+    try {
+        var url = "usuarios/getUsuarios.htm";
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: {},
+            beforeSend: function () {
+
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            complete: function (ex, e) {
+
+            },
+            success: function (data) {
+                var datos = $.parseJSON(data);
+                fillGrids(datos, "GridUsuarios");
+            }
+        });
+    } catch (e) {
+        alert(e);
+    }
+}
+
+function getPacientes() {
+    try {
+        var url = "pacientes/getPacientes.htm";
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: {},
+            beforeSend: function () {
+
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            complete: function (ex, e) {
+
+            },
+            success: function (data) {
+                console.log(data);
+                var datos = $.parseJSON(data);
+                fillGrids(datos, "GridPacientes");
+                //Crear ul con estructura del menu $scope.buttons = response.data;
+            }
+        });
+    } catch (e) {
+        alert(e);
+    }
+}
 
 function cargarGridTutor() {
     var paginador;
@@ -266,7 +381,6 @@ function cargarGridTutor() {
     $("#GridTutor").jqGrid({
         datatype: "local",
         height: 'auto',
-        width: 'auto',
         rowNum: 10,
         rowList: [10, 20, 30, 40, 100],
         colNames: ['id', 'nombre', 'teléfono', 'relación', "estado"],
@@ -274,14 +388,15 @@ function cargarGridTutor() {
             {
                 name: 'id_tutor',
                 index: 'id_tutor',
-                width: 20,
-                align: 'center'
+                width: 5,
+                formatter: 'int',
+                align: 'right'
             },
             {
                 name: 'nombre',
                 index: 'nombre',
-                width: 150,
-                align: 'center',
+                width: 30,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -289,8 +404,9 @@ function cargarGridTutor() {
             {
                 name: 'telefono',
                 index: 'telefono',
-                width: 100,
-                align: 'center',
+                width: 20,
+                align: 'right',
+                formatter: 'int',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -298,8 +414,8 @@ function cargarGridTutor() {
             {
                 name: 'relacion',
                 index: 'relacion',
-                width: 100,
-                align: 'center',
+                width: 20,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -307,8 +423,8 @@ function cargarGridTutor() {
             {
                 name: 'estado',
                 index: 'estado',
-                width: 100,
-                align: 'center',
+                width: 5,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -320,6 +436,7 @@ function cargarGridTutor() {
         hidegrid: false,
         altRows: true,
         pgbuttons: true,
+        width: sx,
         caption: "Administrador de sistema",
         loadComplete: function () {
         }
@@ -340,7 +457,6 @@ function cargarGridASistema() {
     $("#GridASistema").jqGrid({
         datatype: "local",
         height: 'auto',
-        width: 'auto',
         rowNum: 10,
         rowList: [10, 20, 30, 40, 100],
         colNames: ['id', 'nombre', 'teléfono', 'email', "Fecha Alta", "Estado"],
@@ -348,14 +464,15 @@ function cargarGridASistema() {
             {
                 name: 'id_admin_sistema',
                 index: 'id_admin_sistema',
-                width: 20,
-                align: 'center'
+                width: 5,
+                formatter: 'int',
+                align: 'right'
             },
             {
                 name: 'nombre',
                 index: 'nombre',
-                width: 150,
-                align: 'center',
+                width: 20,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -363,8 +480,9 @@ function cargarGridASistema() {
             {
                 name: 'telefono',
                 index: 'telefono',
-                width: 100,
-                align: 'center',
+                width: 20,
+                align: 'right',
+                formatter: 'int',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -372,8 +490,8 @@ function cargarGridASistema() {
             {
                 name: 'email',
                 index: 'email',
-                width: 100,
-                align: 'center',
+                width: 20,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -381,8 +499,10 @@ function cargarGridASistema() {
             {
                 name: 'fecha_alta',
                 index: 'fecha_alta',
-                width: 100,
-                align: 'center',
+                width: 20,
+                align: 'left',
+                formatter: 'date',
+                formatoptions: {newformat: 'd/m/Y'},
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -390,8 +510,8 @@ function cargarGridASistema() {
             {
                 name: 'estado',
                 index: 'estado',
-                width: 100,
-                align: 'center',
+                width: 5,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -403,6 +523,7 @@ function cargarGridASistema() {
         hidegrid: false,
         altRows: true,
         pgbuttons: true,
+        width: sx,
         caption: "Administrador de sistema",
         loadComplete: function () {
         }
@@ -423,7 +544,6 @@ function cargarGridConsultorio() {
     $("#GridConsultorio").jqGrid({
         datatype: "local",
         height: 'auto',
-        width: 'auto',
         rowNum: 10,
         rowList: [10, 20, 30, 40, 100],
         colNames: ['id', 'institución', 'nombre', 'email', "Fecha Alta", "Estado"],
@@ -431,14 +551,15 @@ function cargarGridConsultorio() {
             {
                 name: 'id_consultorio',
                 index: 'id_consultorio',
-                width: 20,
-                align: 'center'
+                width: 5,
+                formatter: 'int',
+                align: 'right'
             },
             {
                 name: 'institucion',
                 index: 'institucion',
-                width: 150,
-                align: 'center',
+                width: 20,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -446,8 +567,8 @@ function cargarGridConsultorio() {
             {
                 name: 'nombre',
                 index: 'nombre',
-                width: 100,
-                align: 'center',
+                width: 30,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -455,8 +576,8 @@ function cargarGridConsultorio() {
             {
                 name: 'email',
                 index: 'email',
-                width: 100,
-                align: 'center',
+                width: 20,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -464,8 +585,10 @@ function cargarGridConsultorio() {
             {
                 name: 'fecha_alta',
                 index: 'fecha_alta',
-                width: 100,
-                align: 'center',
+                width: 20,
+                align: 'left',
+                formatter: 'date',
+                formatoptions: {newformat: 'd/m/Y'},
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -473,8 +596,8 @@ function cargarGridConsultorio() {
             {
                 name: 'estado',
                 index: 'estado',
-                width: 100,
-                align: 'center',
+                width: 5,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -485,6 +608,7 @@ function cargarGridConsultorio() {
         viewrecords: true,
         hidegrid: false,
         altRows: true,
+        width: sx,
         pgbuttons: true,
         caption: "Consultorios",
         loadComplete: function () {
@@ -506,7 +630,6 @@ function cargarGridNutriologo() {
     $("#GridNutriologo").jqGrid({
         datatype: "local",
         height: 'auto',
-        width: 'auto',
         rowNum: 10,
         rowList: [10, 20, 30, 40, 100],
         colNames: ['id', 'nombre', 'consultorio', 'teléfono', "email", 'fecha alta', 'estado'],
@@ -514,14 +637,15 @@ function cargarGridNutriologo() {
             {
                 name: 'id_nutriologo',
                 index: 'id_nutriologo',
-                width: 15,
-                align: 'center'
+                width: 5,
+                formatter: 'right',
+                align: 'right'
             },
             {
                 name: 'nutriologo',
                 index: 'nutriologo',
-                width: 150,
-                align: 'center',
+                width: 20,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -529,8 +653,8 @@ function cargarGridNutriologo() {
             {
                 name: 'nombre',
                 index: 'nombre',
-                width: 100,
-                align: 'center',
+                width: 20,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -538,8 +662,8 @@ function cargarGridNutriologo() {
             {
                 name: 'telefono',
                 index: 'telefono',
-                width: 100,
-                align: 'center',
+                width: 10,
+                align: 'right',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -547,8 +671,8 @@ function cargarGridNutriologo() {
             {
                 name: 'email',
                 index: 'email',
-                width: 100,
-                align: 'center',
+                width: 20,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -556,8 +680,10 @@ function cargarGridNutriologo() {
             {
                 name: 'fecha_alta',
                 index: 'fecha_alta',
-                width: 100,
-                align: 'center',
+                width: 10,
+                formatter: 'date',
+                formatoptions: {newformat: 'd/m/Y'},
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -565,8 +691,8 @@ function cargarGridNutriologo() {
             {
                 name: 'estado',
                 index: 'estado',
-                width: 100,
-                align: 'center',
+                width: 5,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -578,6 +704,7 @@ function cargarGridNutriologo() {
         hidegrid: false,
         altRows: true,
         pgbuttons: true,
+        width: sx,
         caption: "Administrador de institución",
         loadComplete: function () {
         }
@@ -598,7 +725,6 @@ function cargarGridAInstitucion() {
     $("#GridAInstitucion").jqGrid({
         datatype: "local",
         height: 'auto',
-        width: 'auto',
         rowNum: 10,
         rowList: [10, 20, 30, 40, 100],
         colNames: ['id', 'nombre', 'teléfono', 'email', "fecha_alta", 'institución', 'estado'],
@@ -606,14 +732,15 @@ function cargarGridAInstitucion() {
             {
                 name: 'id_admin_institucion',
                 index: 'id_admin_institucion',
-                width: 15,
-                align: 'center'
+                width: 5,
+                formatter: 'int',
+                align: 'right'
             },
             {
                 name: 'persona',
                 index: 'persona',
-                width: 150,
-                align: 'center',
+                width: 20,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -621,8 +748,9 @@ function cargarGridAInstitucion() {
             {
                 name: 'telefono',
                 index: 'telefono',
-                width: 100,
-                align: 'center',
+                width: 20,
+                formatter: 'int',
+                align: 'right',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -630,8 +758,9 @@ function cargarGridAInstitucion() {
             {
                 name: 'email',
                 index: 'email',
-                width: 100,
-                align: 'center',
+                width: 20,
+                align: 'left',
+                formatter: 'text',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -639,8 +768,10 @@ function cargarGridAInstitucion() {
             {
                 name: 'fecha_alta',
                 index: 'fecha_alta',
-                width: 100,
-                align: 'center',
+                width: 20,
+                align: 'left',
+                formatter: 'date',
+                formatoptions: {newformat: 'd/m/Y'},
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -648,8 +779,8 @@ function cargarGridAInstitucion() {
             {
                 name: 'nombre',
                 index: 'nombre',
-                width: 100,
-                align: 'center',
+                width: 20,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -657,8 +788,8 @@ function cargarGridAInstitucion() {
             {
                 name: 'estado',
                 index: 'estado',
-                width: 100,
-                align: 'center',
+                width: 5,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -670,6 +801,7 @@ function cargarGridAInstitucion() {
         hidegrid: false,
         altRows: true,
         pgbuttons: true,
+        width: sx,
         caption: "Administrador de institución",
         loadComplete: function () {
         }
@@ -690,7 +822,6 @@ function cargaGridInstituciones() {
     $("#GridInstituciones").jqGrid({
         datatype: "local",
         height: 'auto',
-        width: 'auto',
         rowNum: 10,
         rowList: [10, 20, 30, 40, 100],
         colNames: ['id', 'nombre', 'teléfono', "email", "fecha_alta", "Estado"],
@@ -698,14 +829,16 @@ function cargaGridInstituciones() {
             {
                 name: 'id_institucion',
                 index: 'id_institucion',
-                width: 50,
-                align: 'center'
+                width: 5,
+                formatter: 'int',
+                formatoptions: {newformat: 'd/m/Y'},
+                align: 'right'
             },
             {
                 name: 'nombre',
                 index: 'nombre',
-                width: 300,
-                align: 'center',
+                width: 30,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -713,8 +846,8 @@ function cargaGridInstituciones() {
             {
                 name: 'telefono',
                 index: 'telefono',
-                width: 100,
-                align: 'left',
+                width: 20,
+                align: 'right',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -722,7 +855,7 @@ function cargaGridInstituciones() {
             {
                 name: 'email',
                 index: 'email',
-                width: 100,
+                width: 20,
                 align: 'left',
                 searchoptions: {
                     sopt: ['cn']
@@ -732,8 +865,10 @@ function cargaGridInstituciones() {
             {
                 name: 'fecha_alta',
                 index: 'fecha_alta',
-                width: 100,
+                width: 20,
                 align: 'left',
+                formatter: 'date',
+                formatoptions: {newformat: 'd/m/Y'},
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -741,8 +876,8 @@ function cargaGridInstituciones() {
             {
                 name: 'estado',
                 index: 'estado',
-                width: 50,
-                align: 'center',
+                width: 5,
+                align: 'left',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -754,6 +889,8 @@ function cargaGridInstituciones() {
         hidegrid: false,
         altRows: true,
         pgbuttons: true,
+        ignoreCase: true,
+        width: sx,
         caption: "Tabla de instituciones",
         loadComplete: function () {
         }
@@ -774,7 +911,6 @@ function cargarGridPacientes() {
     $("#GridPacientes").jqGrid({
         datatype: "local",
         height: 'auto',
-        width: 'auto',
         rowNum: 10,
         rowList: [10, 20, 30, 40, 100],
         colNames: ['id', 'nombre', 'genero', 'fecha de nacimiento', 'estatura', "peso", 'Estado'],
@@ -782,14 +918,16 @@ function cargarGridPacientes() {
             {
                 name: 'id_paciente',
                 index: 'id_paciente',
-                width: 100,
-                align: 'center'
+                width: 5,
+                formatter: 'int',
+                align: 'right'
             },
             {
                 name: 'nombre',
                 index: 'nombre',
-                width: 200,
-                align: 'center',
+                width: 30,
+                align: 'left',
+                formatter: 'text',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -797,8 +935,9 @@ function cargarGridPacientes() {
             {
                 name: 'genero',
                 index: 'genero',
-                width: 150,
-                align: 'center',
+                width: 20,
+                align: 'left',
+                formatter: 'text',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -806,8 +945,10 @@ function cargarGridPacientes() {
             {
                 name: 'fecha_nacimiento',
                 index: 'fecha_nacimiento',
-                width: 250,
-                align: 'center',
+                width: 20,
+                align: 'left',
+                formatter: 'date',
+                formatoptions: {newformat: 'd/m/Y'},
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -815,8 +956,9 @@ function cargarGridPacientes() {
             {
                 name: 'estatura_actual',
                 index: 'estatura_actual',
-                width: 80,
-                align: 'left',
+                width: 10,
+                align: 'right',
+                formatter: 'int',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -824,8 +966,9 @@ function cargarGridPacientes() {
             {
                 name: 'peso_actual',
                 index: 'peso_actual',
-                width: 80,
-                align: 'left',
+                width: 10,
+                align: 'right',
+                formatter: 'int',
                 searchoptions: {
                     sopt: ['cn']
                 }
@@ -833,7 +976,7 @@ function cargarGridPacientes() {
             {
                 name: 'estado',
                 index: 'estado',
-                width: 80,
+                width: 5,
                 align: 'left',
                 searchoptions: {
                     sopt: ['cn']
@@ -846,6 +989,7 @@ function cargarGridPacientes() {
         hidegrid: false,
         altRows: true,
         pgbuttons: true,
+        width: sx,
         caption: "Tabla de Pacientes",
         loadComplete: function () {
         }
@@ -861,183 +1005,273 @@ function cargarGridPacientes() {
 }
 
 function fillGrids(datos, idgrid) {
-    for (var i = 0; i <= datos.length; i++)
+    for (var i = 0; i <= datos.length; i++) {
         $("#" + idgrid).jqGrid('addRowData', i + 1, datos[i]);
+    }
 }
 
-/*Controlador especificamente del menu*/
-menu1.controller('ctrlMenu', function ($scope, $http, $log) {
-    $scope.cerrarSesion = function () {
-        var url = "login/salir.htm";
-        $http({
-            url: url,
-            method: "POST"
-        }).then(function mySucces(response) {
-            if (response.data === "fail") {
+function cerrarSesion() {
+    var url = "login/salir.htm";
+    $.ajax({
+        type: "POST",
+        url: url,
+        async: false,
+        data: {},
+        beforeSend: function () {
+            load();
+        },
+        complete: function () {
+            closeLoading()
+        },
+        error: function (ex) {
+            alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+        },
+        success: function (data) {
+            if (data === "fail") {
                 alert('Ha ocurrido un error al intentar cerrar la sesión, favor de intentarlo nuevamente');
             } else {
                 location.href = "Login";
             }
-        }, function myError(response) {
-            alert('Ha ocurrido un error favor de intentar más tarde');
-        });
-    };
 
-    function createUrl(val) {
-        val = val.replace('á', 'a');
-        val = val.replace('é', 'e');
-        val = val.replace('í', 'i');
-        val = val.replace('ó', 'o');
-        val = val.replace('ú', 'u');
-        val = val.replace('Á', 'A');
-        val = val.replace('É', 'E');
-        val = val.replace('Í', 'I');
-        val = val.replace('Ó', 'O');
-        val = val.replace('Ú', 'U');
-        val = val.replace(' ', '_');
-        return val;
-    }
-
-    /*Para la navecación entre secciones*/
-    $scope.navegacion = function (nameSec) {
-        nameSec = createUrl(nameSec);
-        location.href = nameSec;
-    };
-    $scope.popUp = function (ele) {
-        if (ele !== seccion2) {
-            $("#popUpMenu_" + ele).fadeIn(1000);
         }
-    };
-    $scope.hiddepopUp = function (ele) {
-        console.log(ele);
-        $("#popUpMenu_" + ele).fadeOut(400);
-    };
-    $scope.modulos = function () {
-        console.log(llamar_modulos);
-        if (llamar_modulos === true) {
-            var url = "login/modulos.htm";
-            $http({
-                url: url,
-                method: "POST"
-            }).then(function mySucces(response) {
-                $scope.menu = response.data;
-            }, function myError(response) {
-                alert('Ha ocurrido un error inesperado');
-            });
-            llamar_modulos = false;
-            console.log("entro");
-            console.log(llamar_modulos);
-        }
-    };
-});
+    });
+}
 
-var app = angular.module('myApp', []);
-app.controller('ctrlMain', function ($scope, $http) {
-    $scope.limpiar = function () {
-        $scope.usr_login = "";
-        $scope.psw_login = "";
-    };
-    $scope.login = function () {
-        var usuario = $scope.usr_login.trim();
-        var pass = $scope.psw_login.trim();
-        if (usuario === "") {
-            alert("Debes ingresar tu nombre de usuario");
-            if (pass === "") {
-                alert("Debes ingresar tu contraseña");
+function createUrl(val) {
+    val = val.replace('á', 'a');
+    val = val.replace('é', 'e');
+    val = val.replace('í', 'i');
+    val = val.replace('ó', 'o');
+    val = val.replace('ú', 'u');
+    val = val.replace('Á', 'A');
+    val = val.replace('É', 'E');
+    val = val.replace('Í', 'I');
+    val = val.replace('Ó', 'O');
+    val = val.replace('Ú', 'U');
+    val = val.replace(' ', '_');
+    return val;
+}
+
+function modulos() {
+    try {
+        var url = "login/modulos.htm";
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: {},
+            beforeSend: function () {
+
+            },
+            complete: function () {
+
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            success: function (data) {
+                var datos = $.parseJSON(data);
+                var menu = "";
+                $.each(datos, function (i, v) {
+                    menu += "<li id ='" + v["nombre_modulo"] + "' onclick='navegacion(this.id)'>" + v["nombre_modulo"] + "</li>";
+                });
+                menu += "<li onclick='cerrarSesion()'>Cerrar sesi&oacute;n</li>";
+                $("#lista-menu").html(menu);
             }
-        } else {
-            var datos = [];
-            var url = "logueo";
-            datos = {usr: usuario, psw: pass};
-            $http({
-                url: url,
-                method: "POST",
-                params: datos
-            }).then(function mySucces(response) {
-                //console.log(response.data);
-                switch (response.data) {
+        });
+    } catch (e) {
+        alert(e);
+    }
+}
+
+function navegacion(nameSec) {
+    nameSec = createUrl(nameSec);
+    location.href = nameSec;
+}
+
+function limpiar() {
+    $("#usr-login").val("");
+    $("#psw-login").val("");
+}
+
+function login() {
+    var usuario = $("#usr-login").val().trim();
+    var pass = $("#psw-login").val().trim();
+    if (usuario === "") {
+        alert("Debes ingresar tu nombre de usuario");
+        if (pass === "") {
+            alert("Debes ingresar tu contraseña");
+        }
+    } else {
+        var url = "login/ingresar.htm";
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: {
+                "usr": usuario,
+                "psw": pass
+            },
+            beforeSend: function () {
+                $(".container-login").append("<img id='load' src=img/loading.gif>");
+            },
+            complete: function () {
+                closeLoading();
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            success: function (data) {
+
+                //var datos = $.parseJSON(data);
+                //console.log(datos);
+                switch (data) {
                     case "ok" :
-                        alert('Bienvenido');
+                        //alert('Bienvenido');
                         location.href = "Home";
+                        //modulos();
                         break;
                     case "caduco" :
                         alert('Su password ha caducado, favor de cambiarlo');
                         break;
                     default :
-                        alert(response.data);
+                        alert(data);
                         break;
                 }
-            }, function myError(response) {
-                alert('Ha ocurrido un error favor de intentar más tarde');
+
+            }
+        });
+    }
+}
+function nuevoRegistro(id_grid, id_tabla) {
+
+}
+function bajaRegistro(id_grid, id_tabla) {
+    var grid = $("#" + id_grid);
+    var fila = grid.jqGrid('getGridParam', "selrow");
+    if (fila) {
+        var id = grid.jqGrid('getCell', fila, id_tabla);
+        bajaAInstitucion(id, id_grid);
+    } else {
+        alert("Debes seleccionar una fila para poder darla de baja");
+    }
+}
+function actualizaDatos(id_grid, id_tabla) {
+    var grid = $("#" + id_grid);
+    var fila = grid.jqGrid('getGridParam', "selrow");
+
+    if (fila) {
+        var id = grid.jqGrid('getCell', fila, id_tabla);
+        obtieneDatosActualizar(id, id_grid);
+    } else {
+        alert("Debes seleccionar una fila para poder editar");
+    }
+}
+function obtieneDatosActualizar(id, id_grid) {
+    switch (id_grid) {
+        case "GridAInstitucion":
+            datosAInstitucion(id);
+            break;
+        case "GridASistema":
+            navegacion("Edita_Admin_Sistema");
+            break;
+        case "GridNutriologo":
+            break;
+        case "GrigPacientes":
+            break;
+        case "GridInstituciones":
+            break;
+        case "GridTutor":
+            break;
+        case "GridConsultorio":
+            break;
+    }
+}
+
+function bajaAInstitucion(id, id_grid) {
+    switch (id_grid) {
+        case "GridAInstitucion":
+            bajaAInstitucion(id, id_grid);
+            break;
+        case "GridASistema":
+            navegacion("Edita_Admin_Sistema");
+            break;
+        case "GridNutriologo":
+            break;
+        case "GrigPacientes":
+            break;
+        case "GridInstituciones":
+            break;
+        case "GridTutor":
+            break;
+        case "GridConsultorio":
+            break;
+    }
+}
+
+function bajaAInstitucion(id, grid) {
+    if (confirm("¿Desea el estado de este registro?")) {
+        try {
+            var url = "ainstituciones/cambia_estado.htm";
+            $.ajax({
+                type: "POST",
+                url: url,
+                async: false,
+                data: {"id": id},
+                beforeSend: function () {
+                    load();
+                },
+                complete: function () {
+                    closeLoading();
+                },
+                error: function (ex) {
+                    alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+                },
+                success: function (data) {
+                    if (data === "ok") {
+                        alert("El registro se ha dado de baja correctamente");
+                        navegacion("Administrador_Institucion");
+                    } else {
+                        alert("No se ha podido dar de baja, intente más tarde");
+                    }
+                }
             });
+        } catch (e) {
+            alert(e + "bajaAinstitucion");
         }
-
-    };
-});
-
-function login() {
-    var url = "login/ingresar.htm";
-    $.ajax({
-        type: "POST",
-        url: url,
-        async: false,
-        data: {
-            "nombreUsuario": $("#txtUsuario").val(),
-            "passwordUsuario": $("#txtPassword").val()
-        },
-        beforeSend: function () {
-
-        },
-        success: function (data) {
-            console.log(data);
-            var datos = $.parseJSON(data);
-            console.log(datos);
-            var tabla = "<table border = 1><tr><td>id</td><td>login</td><td>Contraseña</td><td>e_mail</td><td>Estado</td><td>fecha_alta<td>fecha_baja</td><td>fecha_vig_login</td><td>pregunta</td><td>tipo_usuario</td></tr>";
-            $.each(datos, function (i, v) {
-                tabla += "<tr><td>" + v["id_login"] + "</td>";
-                tabla += "<td>" + v["login"] + "</td>";
-                tabla += "<td>" + v["contrasena"] + "</td>";
-                tabla += "<td>" + v["e_mail"] + "</td>";
-                tabla += "<td>" + v["estado"] + "</td>";
-                tabla += "<td>" + v["fecha_alta"] + "</td>";
-                tabla += "<td>" + v["fecha_baja"] + "</td>";
-                tabla += "<td>" + v["fecha_vigencia_login"] + "</td>";
-                tabla += "<td>" + v["pregunta"] + "</td>";
-                tabla += "<td>" + v["tipo_usuario"] + "</td></tr>";
-            });
-            tabla += "</table>";
-            $("#tabla").html(tabla);
-        }
-    });
+    }
 }
-function inserta() {
-    var url = "login/inserta.htm";
-    $.ajax({
-        type: "POST",
-        url: url,
-        async: false,
-        data: {},
-        beforeSend: function () {
-
-        },
-        success: function (data) {
-            alert(data);
-        }
-    });
+function datosAInstitucion(id) {
+    try {
+        var url = "ainstituciones/obtiene_datos.htm";
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: {"id": id},
+            beforeSend: function () {
+                load();
+            },
+            complete: function () {
+                closeLoading();
+                navegacion("Edita_Admin_Institucion");
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            success: function (data) {
+                var datos = $.parseJSON(data);
+                console.log(datos);
+                PRUEBA=20;
+                $.each(datos, function (i, v) {
+                    $("#edita-nombre-admin-institucion").val(v["nombre"]);
+                    $("#edita-curp-admin-institucion").val("lkslkdsldklskd");
+                    $("#contenedor-edita-ainstitucion").append(v);
+                });
+            }
+        });
+    } catch (e) {
+        alert(e + "datosAInstitucion");
+    }
 }
 
-function borra() {
-    var url = "login/borra.htm";
-    $.ajax({
-        type: "POST",
-        url: url,
-        async: false,
-        data: {},
-        beforeSend: function () {
-
-        },
-        success: function (data) {
-            alert(data);
-        }
-    });
-}

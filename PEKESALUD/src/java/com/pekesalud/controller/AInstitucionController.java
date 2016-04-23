@@ -18,12 +18,13 @@ import com.pekesalud.persistencia.dataBaseQuery;
 import com.pekesalud.session.Sesiones;
 import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  *
- * @author ROGEPC
+ * @author Eduardo Dominguez
  */
 @Controller
 @EnableWebMvc
@@ -46,8 +47,42 @@ public class AInstitucionController {
                 ret = query.select("select ai.id_admin_institucion, concat(ai.nombre) as persona, ai.telefono, ai.email, ai.fecha_alta, i.nombre, ai.estado from tbl_admin_institucion as ai, tbl_institucion as i where ai.id_institucion=i.id_institucion and ai.id_login='"+login_id+"'");
             }
         } catch (Exception e) {
-            ret = "fail";
+            ret = e.toString();
         }
         return ret;
     }
+    
+    @RequestMapping(value = "/obtiene_datos", method = RequestMethod.POST)
+    public @ResponseBody
+    String obtieneDatos(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int id) {
+        String ret ;
+        try {
+            ret = query.select("select * from pekesalud_bd.tbl_admin_institucion where id_admin_institucion = "+id);
+            return ret;
+        } catch (Exception e) {
+            ret = e.toString();
+        }
+        return ret;
+    }
+    
+    @RequestMapping(value = "/cambia_estado", method = RequestMethod.POST)
+    public @ResponseBody
+    String cambia_estado(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int id) {
+        String ret, estado ;
+        List<Map> res = new ArrayList<Map>();
+        try {
+            res =query.select("select estado from pekesalud_bd.tbl_admin_institucion where id_admin_institucion = "+id , true);
+            if(res.get(0).get("estado").toString().equals("B")){
+                estado = "A";
+            }else{
+                estado = "B";
+            }
+            ret = query.exQuery("update pekesalud_bd.tbl_admin_institucion set estado = '"+estado+"' where id_admin_institucion = "+id);
+                return ret;
+        } catch (Exception e) {
+            ret = e.toString();
+        }
+        return ret;
+    }
+    
 }

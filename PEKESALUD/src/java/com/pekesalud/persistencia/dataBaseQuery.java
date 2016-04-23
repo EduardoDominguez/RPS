@@ -27,9 +27,9 @@ public class dataBaseQuery {
     private final String servidor = "127.0.0.1:3306/pekesalud_bd&root&root1234";
 
     public String select(String query) throws SQLException {
-        String retQuery="[";
+        String retQuery = "[";
         ResultSet cdraux = null;
-        Integer cont=0;
+        Integer cont = 0;
         try {
             conexion = con.connect(servidor);
             if (conexion != null) {
@@ -40,21 +40,27 @@ public class dataBaseQuery {
                     while (cdraux.next()) {
                         Integer numColumnas = 0;
                         numColumnas = cdraux.getMetaData().getColumnCount();
-                        retQuery+="{";
+                        retQuery += "{";
                         for (int i = 1; i <= numColumnas; i++) {
                             String column = cdraux.getMetaData().getColumnName(i);
-                            retQuery += "\""+column+"\": \""+General.convertToUTF8(cdraux.getString(column))+"\", ";
+                            String  contenido_columna;
+                            if (cdraux.getString(column) == null) {
+                                contenido_columna = "";
+                            } else {
+                                contenido_columna = cdraux.getString(column);
+                            }
+                            retQuery += "\"" + column + "\": \"" + General.convertToUTF8(contenido_columna) + "\", ";
                         }
-                        retQuery = retQuery.substring(0, retQuery.length()-2);
-                        retQuery+="}, ";
+                        retQuery = retQuery.substring(0, retQuery.length() - 2);
+                        retQuery += "}, ";
                     }
-                    retQuery = retQuery.substring(0, retQuery.length()-2);
-                    retQuery+="]";
+                    retQuery = retQuery.substring(0, retQuery.length() - 2);
+                    retQuery += "]";
                 } else {
-                    retQuery="fail";//La consulta no tiene datos
+                    retQuery = "fail";//La consulta no tiene datos
                 }
             } else {
-                retQuery="fail.";//Falló la conexión 
+                retQuery = "fail.";//Falló la conexión 
             }
         } catch (SQLException e) {
             System.out.print("Ha ocurrido un error inesperado al intentar consultar " + e);
@@ -69,7 +75,7 @@ public class dataBaseQuery {
         return retQuery;
     }
 
-  public List<Map> select(String query, boolean select2) throws SQLException {
+    public List<Map> select(String query, boolean select2) throws SQLException {
         Map ml = new HashMap();
         List<Map> lista = new ArrayList<Map>();
         ResultSet cdraux = null;
@@ -112,9 +118,9 @@ public class dataBaseQuery {
         }
         return lista;
     }
-    
+
     public String delete(String val, String table, String colum) throws SQLException {
-            return exQuery("Delete from " + table + " where " + colum + " = " + val);
+        return exQuery("Delete from " + table + " where " + colum + " = " + val);
     }
 
     public String exQuery(String query) {
@@ -128,8 +134,7 @@ public class dataBaseQuery {
             }
         } catch (SQLException e) {
             ret = "fail.";
-        }
-        finally {
+        } finally {
             Conexion.close(conexion);
             Conexion.close(sentenciaSQL);
         }

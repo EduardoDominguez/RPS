@@ -53,7 +53,7 @@ public class loginController {
         Map mapList = new HashMap();
         String res = "";
         try {
-            lista = query.select("select * from pekesalud_bd.tbl_login where login = '" + nombreUsuario + "' and password = '" + passwordUsuario + "' and estado = 1 limit 1;", true);
+            lista = query.select("select * from pekesalud_bd.tbl_login where login = '" + nombreUsuario + "' and password = '" + passwordUsuario + "' and estado = 'A' limit 1;", true);
             if (!lista.isEmpty()) {
                 switch (g.estatusConsulta(lista)) {
                     case "fail":
@@ -74,8 +74,15 @@ public class loginController {
                         if (!verificaCaducidadPassword(l)) {
                             sesion = new Sesiones(request);
                             String tabla_conoce_modulos = conoceTipoUsuario(l);
-                            conoceModulos(tabla_conoce_modulos, l);
-                            return insertaBitacora(l);
+                            if("noaut".equals(tabla_conoce_modulos)){
+                                return "Este tipo de usuario no esta autorizado a usar este sistema";
+                            }
+                            String resmodulos = conoceModulos(tabla_conoce_modulos, l);
+                            if("fail".equals(resmodulos)){
+                                return "Solo pueden ingresar las personas que tengan al menos permiso para ver una seccion. Comuniquede con el administrador de sustema.";
+                            }else{
+                                return insertaBitacora(l);
+                            }
                         } else {
                             return "caduco";
                             //Hacer un pedo para que pida cambiar la contraseña cuando ya venció 
@@ -105,11 +112,11 @@ public class loginController {
     }
 
     public String conoceTipoUsuario(Login l) throws SQLException {
-        String tabla = "";
+        String tabla = "baja";
         List<Map> sql;
         switch (l.getTipo_usuario()) {
             case "s":
-                sql = query.select("select * from pekesalud_bd.tbl_admin_sistema where id_login = " + l.getId_login() + " and estado = 1 limit 1;", true);
+                sql = query.select("select * from pekesalud_bd.tbl_admin_sistema where id_login = " + l.getId_login() + " and estado = 'A' limit 1;", true);
                 as.setId_admin_sistema(g.toInt(sql.get(0).get("id_admin_sistema").toString()));
                 as.setId_login(g.toInt(sql.get(0).get("id_login").toString()));
                 as.setTipo_usuario(sql.get(0).get("tipo_usuario").toString());
@@ -133,7 +140,7 @@ public class loginController {
                 tabla = "tbl_admin_sistema";
                 break;
             case "i":
-                sql = query.select("select * from pekesalud_bd.tbl_admin_institucion where id_login = " + l.getId_login() + " and estado = 1 limit 1;", true);
+                sql = query.select("select * from pekesalud_bd.tbl_admin_institucion where id_login = " + l.getId_login() + " and estado = 'A' limit 1;", true);
                 ai.setId_institucion(g.toInt(sql.get(0).get("id_admin_institucion").toString()));
                 ai.setId_login(g.toInt(sql.get(0).get("id_login").toString()));
                 ai.setTipo_usuario(sql.get(0).get("tipo_usuario").toString());
@@ -159,7 +166,7 @@ public class loginController {
                 tabla = "tbl_admin_institucion";
                 break;
             case "n":
-                sql = query.select("select * from pekesalud_bd.tbl_nutriologos where id_login = " + l.getId_login() + " and estado = 1 limit 1;", true);
+                sql = query.select("select * from pekesalud_bd.tbl_nutriologos where id_login = " + l.getId_login() + " and estado = 'A' limit 1;", true);
                 n.setId_nutriologo(g.toInt(sql.get(0).get("id_nutriologo").toString()));
                 n.setId_login(g.toInt(sql.get(0).get("id_login").toString()));
                 n.setTipo_usuario(sql.get(0).get("tipo_usuario").toString());
@@ -186,7 +193,7 @@ public class loginController {
                 tabla = "tbl_nutriologos";
                 break;
             case "t":
-                sql = query.select("select * from pekesalud_bd.tbl_tutor where id_login = " + l.getId_login() + "  limit 1;", true);
+                /*sql = query.select("select * from pekesalud_bd.tbl_tutor where id_login = " + l.getId_login() + "  limit 1;", true);
                 t.setId_tutor(g.toInt(sql.get(0).get("id_tutor").toString()));
                 t.setId_login(g.toInt(sql.get(0).get("id_login").toString()));
                 t.setId_institucion(g.toInt(sql.get(0).get("id_institucion").toString()));
@@ -202,9 +209,8 @@ public class loginController {
                 t.setFacebook(sql.get(0).get("facebook").toString());
                 t.setEstado(sql.get(0).get("estado").toString());
                 t.setTipo_usuario("t");
-                sesion.createSession(t.getNombre(), t.getId_login(), t.getTipo_usuario());
-                tabla = "tbl_tutor";
-                break;
+                sesion.createSession(t.getNombre(), t.getId_login(), t.getTipo_usuario());*/
+                tabla = "noaut";
         }
         return tabla;
     }
@@ -220,7 +226,7 @@ public class loginController {
         String modulos, sql;
         sql = "select m.id_modulo, m.nombre_modulo from pekesalud_bd." + tabla + " t "
                 + "inner join pekesalud_bd.tbl_rol r on t.id_rol = r.id_rol "
-                + "inner join pekesalud_bd.tbl_modulos m on r.id_modulo = m.id_modulo and  m.estado = 1 "
+                + "inner join pekesalud_bd.tbl_modulos m on r.id_modulo = m.id_modulo and  m.estado = 'A' "
                 + "and id_login =" + l.getId_login();
         modulos = query.select(sql);
         m.setModulos(modulos);

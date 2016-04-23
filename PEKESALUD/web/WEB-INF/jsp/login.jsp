@@ -20,24 +20,23 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="<c:url value='/css/pekesalud.css'/>"/>
         <script type="text/javascript" src="<c:url value='/js/jquery-1.11.1.min.js'/>"></script>
-        <script type="text/javascript" src="<c:url value='/js/angular.min.js'/>"></script>
         <script type="text/javascript" src="<c:url value='/js/jquery-2-1-4.js'/>"></script> 
         <script type="text/javascript" src="<c:url value='/js/page.js'/>"></script>
         <script type="text/javascript" src="<c:url value='/js/pekesalud.js'/>"></script>
         <title>PEKESALUD</title>
     </head>
     <body>
-        <div id="wrapper" ng-app="myApp" ng-controller="ctrlMain">
+        <div id="wrapper">
             <div class="container-login-main flex flex-column center-items">
                 <div class="container-login flex flex-column center-items">
                     <picture>
                         <img srcset="img/logo02.png" width="200px" height="50px"/>
                     </picture>
-                    <input type="text" id="usr-login" ng-model="usr_login" placeholder="Usuario"/>
-                    <input type="password" id="psw-login" ng-model="psw_login" placeholder="Contrase&ntilde;a"/>
+                    <input type="text" id="usr-login" required="" placeholder="Usuario"/>
+                    <input type="password" id="psw-login" required placeholder="Contrase&ntilde;a"/>
                     <div class="container-login-btn flex flex-row around-items" id="contenedor-login">
-                        <button id="btn-login" ng-click="login()">Aceptar</button>
-                        <button id="btn-cancel" ng-click="limpiar()">Cancelar</button>
+                        <button id="btn-login" onclick="login()">Aceptar</button>
+                        <button id="btn-cancel" onclick="limpiar()">Cancelar</button>
                     </div>
                 </div>
             </div>
