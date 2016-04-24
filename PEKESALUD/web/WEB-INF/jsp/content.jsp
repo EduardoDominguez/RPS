@@ -23,19 +23,110 @@
     <c:when test="${sec eq 'edita_admin_institucion'}">
         <div class="container-sec container-intituciones flex">
             <div class="container-subsec flex flex-column">
-                <div id="contenedor-edita-ainstitucion">
-                    Nombre: <input type ="text" id="edita-nombre-admin-institucion"/>
-                    CURP: <input type ="text" id="edita-curp-admin-institucion"/>
-                    Clave: <input type ="text" id="edita-clave-admin-institucion"/>
-                    Pa&iacute;s: <input type ="text" id="edita-pais-admin-institucion"/>
-                    Entidad: <input type ="text" id="edita-entidad-admin-institucion"/>
-                    Ciudad: <input type ="text" id="edita-ciudad-admin-institucion"/>
-                    Delegacion:  <input type ="text" id="edita-delegacion-admin-institucion"/>
-                    Colonia  <input type ="text" id="edita-colonia-admin-institucion"/>
-                    C&oacute;digo postal:  <input type ="text" id="edita-cp-admin-institucion"/>
-                    Direcci&oacute;n:  <input type ="text" id="edita-direccion-admin-institucion"/>
-                    Tel&eacute;fono:  <input type ="text" id="edita-telefono-admin-institucion"/>
-                    email:  <input type ="text" id="edita-email-admin-institucion"/>
+                <div id="contenedor-edita-ainstitucion" class="flex flex-column">
+                    <div class="container-tbl-main flex flex-row">
+                        <div class="container-tbl flex flex-column">
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Nombre:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-nombre-admin-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>CURP:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-curp-admin-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Clave:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-clave-admin-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Pa&iacute;s:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-pais-admin-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Entidad:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-entidad-admin-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Ciudad:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-ciudad-admin-institucion"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-tbl flex flex-column">
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Delegacion:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-delegacion-admin-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Colonia:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-colonia-admin-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>C&oacute;digo postal:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-cp-admin-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Direcci&oacute;n:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-direccion-admin-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Tel&eacute;fono:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-telefono-admin-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>email:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-email-admin-institucion"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-edit btn-edit-admin-institucion">Guardar</button>
                 </div>
             </div>
         </div>

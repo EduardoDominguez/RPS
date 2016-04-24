@@ -1299,7 +1299,26 @@ function editarDatos(id, url, sectcall) {
 }
 
 function Edita_Institucion_fill(datos){
-    $('#edita-nombre-institucion').val('hgsdja');
+    try{
+        $('#edita-nombre-institucion').val(datos[0]['nombre']);
+        $('#edita-rfc-institucion').val(datos[0]['rfc']);
+        $('#edita-clave-institucion').val(datos[0]['clave']);
+        $('#edita-pais-institucion').val(datos[0]['id_pais']);
+        $('#edita-entidad-institucion').val(datos[0]['id_entidad']);
+        $('#edita-ciudad-institucion').val(datos[0]['id_ciudad']);
+        $('#edita-delegacion-institucion').val(datos[0]['id_delegacion']);
+        $('#edita-colonia-institucion').val(datos[0]['id_colonia']);
+        $('#edita-cp-institucion').val(datos[0]['codigo_postal']);
+        $('#edita-direccion-institucion').val(datos[0]['direccion']);
+        $('#edita-telefono-institucion').val(datos[0]['telefono']);
+        $('#edita-email-institucion').val(datos[0]['email']);
+        $('#edita-web-institucion').val(datos[0]['web']);
+        $('#edita-facebook-institucion').val(datos[0]['facebook']);
+        $('#edita-lconsult-institucion').val(datos[0]['limite_consultorios']);
+        $('#edita-lpatien-institucion').val(datos[0]['limite_pacientes']);
+    }catch (e){
+        alert(e);
+    }
 }
 function Edita_Admin_Institucion_fill(datos){
     console.log(datos);

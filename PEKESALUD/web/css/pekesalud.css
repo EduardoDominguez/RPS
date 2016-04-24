@@ -93,7 +93,7 @@ and open the template in the editor.
     margin: 0;
 }
 input[type=text], input[type=password]{
-
+    padding-left: 10px;
 }
 button{
     cursor: pointer;
@@ -251,6 +251,31 @@ body{
     height: 30px;
     boder: 1px #0066cc;
     background: url(../img/boton1.png) center no-repeat;
+    color: white;
+}
+.tbl-row{
+    margin: 20px;
+}
+.tbl-row-left{
+    margin-right: 20px;
+    width: 150px;
+}
+.tbl-row-right{
+    width: 300px;
+}
+.tbl-row-right input[type=text]{
+    width: 190px;
+    height: 25px;
+    border-radius: 15px;
+    border:1px solid #CCC;
+}
+.btn-edit{
+    width: 200px;
+    align-self: flex-end;
+    height: 35px;
+    border-radius: 15px;
+    margin-right: 100px;
+    background-color: #1B78B2;
     color: white;
 }
 
