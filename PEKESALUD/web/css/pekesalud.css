@@ -269,7 +269,7 @@ body{
     border-radius: 15px;
     border:1px solid #CCC;
 }
-.btn-edit{
+.btn-edit, .btn-alta{
     width: 200px;
     align-self: flex-end;
     height: 35px;

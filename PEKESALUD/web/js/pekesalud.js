@@ -5,7 +5,7 @@
  */
 page('/PEKESALUD/:section', getSeccions);
 page();
-var sx = 980, sy = 650, seccion2, PRUEBA="";
+var sx = 980, sy = 650, seccion2, PRUEBA = "";
 $(document).ready(function () {
     try {
         $(window).trigger("orientationchange");
@@ -25,8 +25,8 @@ $(document).ready(function () {
     }
 });
 
-function getSeccions(obj){
-    seccion2=obj.params.section.toLowerCase();
+function getSeccions(obj) {
+    seccion2 = obj.params.section.toLowerCase();
     getSeccion();
 }
 
@@ -187,29 +187,30 @@ function getMenu(id_modulo, id_grid, nombre_id) {
 
             },
             success: function (data) {
-                var datos = $.parseJSON(data);
-                var botones = "";
-                var funcion;
-                $.each(datos, function (i, v) {
-                    switch (v["nombre"].toLowerCase()) {
-                        case "editar":
-                            funcion = "actualizaDatos";
-                            break;
-                        case "alta":
-                            funcion = "nuevoRegistro";
-                            break;
-                        case "estado":
-                            funcion = "bajaRegistro";
-                            break;
-                    }
-                    botones += "<button onclick='" + funcion + "(\"" + id_grid + "\", \"" + nombre_id + "\");' class='btn-main-edit'>" + v["nombre"] + "</button>";
-                });
-                $(".menu-edit").html(botones);
-                //Crear ul con estructura del menu $scope.buttons = response.data;
+                if(data!=='fail'){
+                    var datos = $.parseJSON(data);
+                    var botones = "";
+                    var funcion;
+                    $.each(datos, function (i, v) {
+                        switch (v["nombre"].toLowerCase()) {
+                            case "editar":
+                                funcion = "actualizaDatos";
+                                break;
+                            case "alta":
+                                funcion = "nuevoRegistro";
+                                break;
+                            case "estado":
+                                funcion = "bajaRegistro";
+                                break;
+                        }
+                        botones += "<button onclick='" + funcion + "(\"" + id_grid + "\", \"" + nombre_id + "\");' class='btn-main-edit'>" + v["nombre"] + "</button>";
+                    });
+                    $(".menu-edit").html(botones);
+                }
             }
         });
     } catch (e) {
-        alert(e + "ddd");
+        alert(e + "get menu");
     }
 }
 
@@ -893,7 +894,7 @@ function cargaGridInstituciones() {
         altRows: true,
         pgbuttons: true,
         ignoreCase: true,
-        width: 700,
+        width: sx - 450,
         caption: "Tabla de instituciones",
         loadComplete: function () {
         }
@@ -1090,7 +1091,8 @@ function modulos() {
 function navegacion(ele) {
     ele = createUrl(ele);
     if (ele !== seccion2) {
-        seccion2 = ele; History.pushState({ seccion2: ele }, 'PEKESALUD', ele); 
+        seccion2 = ele;
+        History.pushState({seccion2: ele}, 'PEKESALUD', ele);
     }
 }
 
@@ -1149,8 +1151,45 @@ function login() {
     }
 }
 function nuevoRegistro(id_grid, id_tabla) {
-
+    switch (id_grid) {
+        case'GridInstituciones':
+            navegacion("Alta_institucion");
+            break;
+    }
 }
+
+$('.btn-alta-instituciones').live('click', function (e){
+    e.preventDefault();
+    try{
+        var nombre=$('#alta-nombre-institucion').val();
+        var rfc=$('#alta-rfc-institucion').val();
+        var clave=$('#alta-clave-institucion').val();
+        var pais=$('#alta-pais-institucion').val();
+        var entidad=$('#alta-entidad-institucion').val();
+        var ciudad=$('#alta-ciudad-institucion').val();
+        var delegacion=$('#alta-delegacion-institucion').val();
+        var colonia=$('#alta-colonia-institucion').val();
+        var cp=$('#alta-cp-institucion').val();
+        var direccion=$('#alta-direccion-institucion').val();
+        var telefono=$('#alta-telefono-institucion').val();
+        var email=$('#alta-email-institucion').val();
+        var web=$('#alta-web-institucion').val();
+        var face=$('#alta-facebook-institucion').val();
+        var lconsult=$('#alta-lconsult-institucion').val();
+        var lpatien=$('#alta-lpatien-institucion').val();
+        if(nombre!=="" && rfc!=="" && clave!=="" && pais!=="" && entidad!=="" && ciudad!=="" && delegacion!=="" && colonia!=="" && cp!=="" && direccion!=="" && telefono!=="" && email!=="" && web!=="" && face!=="" && lconsult!=="" && lpatien!==""){
+            var datos=[];
+            datos={nombre:nombre, rfc:rfc, clave:clave, pais:pais, entidad:entidad, ciudad:ciudad, delegacion:delegacion, colonia:colonia, cp:cp, direccion:direccion, telefono:telefono, email:email, web:web, face:face, lconsult:lconsult, lpatien:lpatien};
+            var url="instituciones/alta_datos.htm";
+            altaDatos(datos, url, "Instituciones");
+        }else{
+            alert("No puede haber datos vacios");
+        }
+    }catch (e){
+        alert(e+" btn alta institucion");
+    }
+});
+
 function bajaRegistro(id_grid, id_tabla) {
     var grid = $("#" + id_grid);
     var fila = grid.jqGrid('getGridParam', "selrow");
@@ -1216,25 +1255,56 @@ function bajaDatos(id, id_grid) {
     }
 }
 
-function getUrlBaja(id, id_grid){
-    switch (id_grid){
+function getUrlBaja(id, id_grid) {
+    switch (id_grid) {
         case'GridAInstitucion':
-            bajarDatos(id, id_grid, "ainstituciones/cambia_estado.htm");
+            bajarDatos(id, id_grid, "ainstituciones/cambia_estado.htm", "Administrador_institucion");
             break;
         case'GridInstituciones':
-            bajarDatos(id, id_grid, "instituciones/cambia_estado.htm");
+            bajarDatos(id, id_grid, "instituciones/cambia_estado.htm", "Instituciones");
             break;
     }
 }
 
-function getUrlEditar(id, id_grid){
-    switch (id_grid){
+function getUrlEditar(id, id_grid) {
+    switch (id_grid) {
         case'GridAInstitucion':
             editarDatos(id, "ainstituciones/obtiene_datos.htm", "Edita_Admin_Institucion");
             break;
         case'GridInstituciones':
             editarDatos(id, "instituciones/obtiene_datos.htm", "Edita_Institucion");
             break;
+    }
+}
+
+function altaDatos(datos, url, sectioncall) {
+    try {
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: datos,
+            beforeSend: function () {
+                load();
+            },
+            complete: function () {
+                closeLoading();
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            success: function (data) {
+                console.log(data);
+                if (data === "ok") {
+                    alert("El registro se ha dado de alta");
+                    location.href = sectioncall;
+                } else {
+                    alert("No se ha podido dar de alta, intente más tarde");
+                }
+            }
+        });
+    } catch (e) {
+        alert(e + " Alta datos");
     }
 }
 
@@ -1258,7 +1328,7 @@ function bajarDatos(id, grid, url, sections) {
                 success: function (data) {
                     if (data === "ok") {
                         alert("El registro ha cambiado de estado correctamente");
-                        location.href=sections;
+                        location.href = sections;
                     } else {
                         alert("No se ha podido dar de baja, intente más tarde");
                     }
@@ -1287,9 +1357,9 @@ function editarDatos(id, url, sectcall) {
             },
             success: function (data) {
                 var datos = $.parseJSON(data);
-                PRUEBA=20;
-                $.when(navegacion(sectcall)).then(function (){
-                    eval(sectcall+'_fill('+data+')');
+                PRUEBA = 20;
+                $.when(navegacion(sectcall)).then(function () {
+                    eval(sectcall + '_fill(' + data + ')');
                 });
             }
         });
@@ -1298,8 +1368,9 @@ function editarDatos(id, url, sectcall) {
     }
 }
 
-function Edita_Institucion_fill(datos){
-    try{
+function Edita_Institucion_fill(datos) {
+    try {
+        $('#edita-id-institucion').val(datos[0]['id_institucion']);
         $('#edita-nombre-institucion').val(datos[0]['nombre']);
         $('#edita-rfc-institucion').val(datos[0]['rfc']);
         $('#edita-clave-institucion').val(datos[0]['clave']);
@@ -1316,18 +1387,71 @@ function Edita_Institucion_fill(datos){
         $('#edita-facebook-institucion').val(datos[0]['facebook']);
         $('#edita-lconsult-institucion').val(datos[0]['limite_consultorios']);
         $('#edita-lpatien-institucion').val(datos[0]['limite_pacientes']);
-    }catch (e){
-        alert(e);
+    } catch (e) {
+        alert(e + "Edita_Institucion_fill");
     }
 }
-function Edita_Admin_Institucion_fill(datos){
+
+$('.btn-edit-instituciones').live('click', function (e) {
+    e.preventDefault();
+    var id = $('#edita-id-institucion').val();
+    var nombre = $('#edita-nombre-institucion').val();
+    var rfc = $('#edita-rfc-institucion').val();
+    var clave = $('#edita-clave-institucion').val();
+    var pais = $('#edita-pais-institucion').val();
+    var entidad = $('#edita-entidad-institucion').val();
+    var ciudad = $('#edita-ciudad-institucion').val();
+    var delegacion = $('#edita-delegacion-institucion').val();
+    var colonia = $('#edita-colonia-institucion').val();
+    var cp = $('#edita-cp-institucion').val();
+    var direccion = $('#edita-direccion-institucion').val();
+    var telefono = $('#edita-telefono-institucion').val();
+    var email = $('#edita-email-institucion').val();
+    var web = $('#edita-web-institucion').val();
+    var face = $('#edita-clave-institucion').val();
+    var lconsult = $('#edita-lconsult-institucion').val();
+    var lpatien = $('#edita-lpatien-institucion').val();
+    var datos = [];
+    try {
+        if (id !== '' && nombre !== '' && rfc !== '' && clave !== '' && pais !== '' && entidad !== '' && ciudad !== '' && delegacion !== '' && colonia !== '' && cp !== '' && direccion !== '' && telefono !== '' && email !== '' && web !== '' && face !== '' && lconsult !== '' && lpatien !== '') {
+            datos = {id: id, nombre: nombre, rfc: rfc, clave: clave, pais: pais, entidad: entidad, ciudad: ciudad, delegacion: delegacion, colonia: colonia, cp: cp, direccion: direccion, telefono: telefono, email: email, web: web, face: face, lconsult: lconsult, lpatien: lpatien};
+            $.ajax({
+                type: "POST",
+                url: "instituciones/edita_datos.htm",
+                async: false,
+                data: datos,
+                beforeSend: function () {
+                    load();
+                },
+                complete: function () {
+                    closeLoading();
+                },
+                error: function (ex) {
+                    alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+                },
+                success: function (data) {
+                    if (data === 'ok') {
+                        alert("Datos actualizados");
+                        location.href = "Instituciones";
+                    } else {
+                        alert("Ha ocurrido un error");
+                    }
+                }
+            });
+        }
+    } catch (e) {
+        alert(e + " btn editar institucines");
+    }
+});
+
+function Edita_Admin_Institucion_fill(datos) {
     console.log(datos);
 }
 
 History.Adapter.bind(window, 'statechange', function () {
     var State = History.getState();
     seccion2 = State.url.substring(State.url.lastIndexOf('/') + 1, State.url.length);
-    if(seccion2!=''){
+    if (seccion2 != '') {
         getSeccion();
     }
 });

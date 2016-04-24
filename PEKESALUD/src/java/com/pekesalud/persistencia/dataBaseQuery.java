@@ -124,7 +124,7 @@ public class dataBaseQuery {
     }
 
     public String exQuery(String query) {
-        String ret = "fail..";
+        String ret = "fail";
         try {
             conexion = con.connect(servidor);
             if (conexion != null) {
@@ -133,7 +133,7 @@ public class dataBaseQuery {
                 ret = "ok";
             }
         } catch (SQLException e) {
-            ret = "fail.";
+            ret = "fail";
         } finally {
             Conexion.close(conexion);
             Conexion.close(sentenciaSQL);

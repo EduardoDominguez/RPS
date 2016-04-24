@@ -134,23 +134,286 @@
     <c:when test="${sec eq 'edita_institucion'}">
         <div class="container-sec container-intituciones-edit flex">
             <div class="container-subsec flex flex-column">
-                <div id="contenedor-edita-institucion">
-                    Nombre: <input type ="text" id="edita-nombre-institucion"/>
-                    RFC: <input type ="text" id="edita-rfc-institucion"/>
-                    Clave: <input type ="text" id="edita-clave-institucion"/>
-                    Pa&iacute;s: <input type ="text" id="edita-pais-institucion"/>
-                    Entidad: <input type ="text" id="edita-entidad-institucion"/>
-                    Ciudad: <input type ="text" id="edita-ciudad-institucion"/>
-                    Delegacion:  <input type ="text" id="edita-delegacion-institucion"/>
-                    Colonia  <input type ="text" id="edita-colonia-institucion"/>
-                    C&oacute;digo postal:  <input type ="text" id="edita-cp-institucion"/>
-                    Direcci&oacute;n:  <input type ="text" id="edita-direccion-institucion"/>
-                    Tel&eacute;fono:  <input type ="text" id="edita-telefono-institucion"/>
-                    email:  <input type ="text" id="edita-email-institucion"/>
-                    Web  <input type ="text" id="edita-web-institucion"/>
-                    Facebook:  <input type ="text" id="edita-facebook-institucion"/>
-                    Consultorios máximos:  <input type ="text" id="edita-lconsult-institucion"/>
-                    Pacientes máximos:  <input type ="text" id="edita-lpatien-institucion"/>
+                <div id="contenedor-edita-institucion" class="flex flex-column">
+                    <div class="container-tbl-main flex flex-row">
+                        <input type="hidden" id="edita-id-institucion"/>
+                        <div class="container-tbl flex flex-column">
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Nombre:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-nombre-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>RFC:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-rfc-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Clave:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-clave-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Pa&iacute;s:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-pais-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Entidad:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-entidad-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Ciudad:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-ciudad-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Delegacion:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-delegacion-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Colonia:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-colonia-institucion"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-tbl flex flex-column">
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>C&oacute;digo postal:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-cp-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Direcci&oacute;n:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-direccion-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Tel&eacute;fono:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-telefono-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>email:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-email-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Web:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-web-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Facebook:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-facebook-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Consultorios m&aacute;ximos: </span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-lconsult-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Pacientes m&aacute;ximos:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="edita-lpatien-institucion"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-edit btn-edit-instituciones">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </c:when>
+    <c:when test="${sec eq 'alta_institucion'}">
+        <div class="container-sec container-intituciones-alta flex">
+            <div class="container-subsec flex flex-column">
+                <div id="contenedor-alta-institucion" class="flex flex-column">
+                    <div class="container-tbl-main flex flex-row">
+                        <div class="container-tbl flex flex-column">
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Nombre:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-nombre-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>RFC:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-rfc-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Clave:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-clave-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Pa&iacute;s:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-pais-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Entidad:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-entidad-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Ciudad:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-ciudad-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Delegacion:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-delegacion-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Colonia:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-colonia-institucion"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-tbl flex flex-column">
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>C&oacute;digo postal:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-cp-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Direcci&oacute;n:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-direccion-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Tel&eacute;fono:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-telefono-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>email:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-email-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Web:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-web-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Facebook:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-facebook-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Consultorios m&aacute;ximos: </span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-lconsult-institucion"/>
+                                </div>
+                            </div>
+                            <div class="tbl-row flex flex-row">
+                                <div class="tbl-row-left">
+                                    <span>Pacientes m&aacute;ximos:</span>
+                                </div>
+                                <div class="tbl-row-right">
+                                    <input type ="text" id="alta-lpatien-institucion"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-alta btn-alta-instituciones">Guardar</button>
                 </div>
             </div>
         </div>

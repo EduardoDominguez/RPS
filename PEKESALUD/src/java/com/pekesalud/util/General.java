@@ -5,6 +5,9 @@
  */
 package com.pekesalud.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -63,6 +66,18 @@ public class General {
         } catch (Exception e) {
             return -1;
         }
+    }
+    
+    public String getDateToday(){
+        String ret="";
+        try{
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date();
+            ret=dateFormat.format(date);
+        }catch(Exception e){
+            ret="0000-00-00 00:00:00";
+        }
+        return ret;
     }
 
 }

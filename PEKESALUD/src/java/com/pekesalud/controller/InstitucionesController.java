@@ -5,6 +5,7 @@
  */
 package com.pekesalud.controller;
 
+import com.pekesalud.bean.Institucion;
 import com.pekesalud.bean.Usuario;
 import static com.pekesalud.controller.AInstitucionController.query;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.*;
 import com.pekesalud.persistencia.dataBaseQuery;
 import com.pekesalud.session.Sesiones;
+import com.pekesalud.util.General;
 import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +35,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class InstitucionesController {
 
     static dataBaseQuery query = new dataBaseQuery();
+    Institucion i = new Institucion();
+    General g= new General();
 
     @RequestMapping(value = "/getInstitutions", method = RequestMethod.POST)
     public @ResponseBody
@@ -88,6 +92,44 @@ public class InstitucionesController {
             ret = e.toString();
         }
         return ret;
+    }
+    
+    @RequestMapping(value = "/edita_datos", method = RequestMethod.POST)
+    public @ResponseBody
+    String editaDatos (HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int id ,@RequestParam(defaultValue = "") String nombre, @RequestParam(defaultValue = "") String rfc, @RequestParam(defaultValue = "") String clave, @RequestParam(defaultValue = "0") int pais, @RequestParam(defaultValue = "0") int entidad, @RequestParam(defaultValue = "0") int ciudad, @RequestParam(defaultValue = "0") int delegacion, @RequestParam(defaultValue = "0") int colonia, @RequestParam(defaultValue = "0") int cp, @RequestParam(defaultValue = "") String direccion, @RequestParam(defaultValue = "") String telefono, @RequestParam(defaultValue = "") String email, @RequestParam(defaultValue = "") String web, @RequestParam(defaultValue = "") String face, @RequestParam(defaultValue = "0") int lconsult, @RequestParam(defaultValue = "0") int lpatien) {
+        String ret ;
+        try {
+            ret = query.exQuery("update tbl_institucion set nombre = '"+nombre+"', rfc = '"+rfc+"', clave = '"+clave+"', id_pais = '"+pais+"', id_entidad = '"+entidad+"', id_ciudad = '"+ciudad+"', id_delegacion = '"+delegacion+"', id_colonia = '"+colonia+"', codigo_postal = '"+cp+"', direccion = '"+direccion+"', telefono = '"+telefono+"', email = '"+email+"', web = '"+web+"', facebook = '"+face+"', limite_consultorios = '"+lconsult+"', limite_pacientes = '"+lpatien+"' where id_institucion = '"+id+"'");
+            return ret;
+        } catch (Exception e) {
+            ret = e.toString();
+        }
+        return ret;
+    }
+        
+    @RequestMapping(value = "/alta_datos", method = RequestMethod.POST)
+    public @ResponseBody
+    String editaDatos (HttpServletRequest request, Model model,@RequestParam(defaultValue = "") String nombre, @RequestParam(defaultValue = "") String rfc, @RequestParam(defaultValue = "") String clave, @RequestParam(defaultValue = "0") int pais, @RequestParam(defaultValue = "0") int entidad, @RequestParam(defaultValue = "0") int ciudad, @RequestParam(defaultValue = "0") int delegacion, @RequestParam(defaultValue = "0") int colonia, @RequestParam(defaultValue = "0") int cp, @RequestParam(defaultValue = "") String direccion, @RequestParam(defaultValue = "") String telefono, @RequestParam(defaultValue = "") String email, @RequestParam(defaultValue = "") String web, @RequestParam(defaultValue = "") String face, @RequestParam(defaultValue = "0") int lconsult, @RequestParam(defaultValue = "0") int lpatien) {
+        String ret ;
+        try {
+            ret = query.exQuery("insert into tbl_institucion (id_institucion, nombre, rfc, clave, id_pais, id_entidad, id_ciudad, id_delegacion, id_colonia, codigo_postal, direccion, telefono, email, web, facebook, fecha_alta, limite_consultorios, estado, limite_pacientes) values ('"+getAutoIncrement()+"' ,'"+nombre+"', '"+rfc+"', '"+clave+"', '"+pais+"', '"+entidad+"', '"+ciudad+"', '"+delegacion+"', '"+colonia+"', '"+cp+"', '"+direccion+"', '"+telefono+"', '"+email+"', '"+web+"', '"+face+"', '"+g.getDateToday()+"','"+lconsult+"', 'A','"+lpatien+"')");
+            return ret;
+        } catch (Exception e) {
+            ret = e.toString();
+        }
+        return ret;
+    }
+    
+    public int getAutoIncrement(){
+        int id_next=0;
+        List<Map> res = new ArrayList<Map>();
+        try{
+            res=query.select("select id_institucion from tbl_institucion order by id_institucion desc limit 1", true);
+            id_next=g.toInt(res.get(0).get("id_institucion").toString())+1;
+        }catch(Exception e){
+            id_next=0;
+        }
+        return id_next;
     }
     
 }
