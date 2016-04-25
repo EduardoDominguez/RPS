@@ -3,33 +3,39 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.pekesalud.bean;
+package com.pekesalud.controller;
 
 import com.pekesalud.persistencia.dataBaseQuery;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  *
- * @author ROGEPC
+ * @author Eduardo Dominguez
  */
+
 @Controller
 @EnableWebMvc
-@RequestMapping(value = "/pacientes")
-public class PacientesController {
+@RequestMapping(value = "/relacion")
+public class RelacionController {
     static dataBaseQuery query = new dataBaseQuery();
-
-    @RequestMapping(value = "/getPacientes", method = RequestMethod.POST)
+    
+    @RequestMapping(value = "/getRelacion", method = RequestMethod.POST)
     public @ResponseBody
-    String getInstitutions(HttpServletRequest request, Model model) {
+    String getTurtores(HttpServletRequest request, Model model) {
         String ret = "";
         try {
-            ret = query.select("select n.id_nutriologo, concat(n.nombre) as nutriologo, c.nombre, n.telefono, n.email, n.fecha_alta,if(n.estado='A', 'Activo', 'Baja') as estado from tbl_nutriologos as n, tbl_consultorio as c where n.id_consultorio=c.id_consultorio");
+                ret = query.select("select * from pekesalud_bd.tbl_relacion where estado ='A'");
         } catch (Exception e) {
             ret = "fail";
         }

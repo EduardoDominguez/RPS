@@ -29,7 +29,7 @@ public class SistemaController {
     String getASistema(HttpServletRequest request, Model model) {
        String ret = "";
         try {
-            ret = query.select("select id_admin_sistema, nombre, telefono, email, fecha_alta,estado from tbl_admin_sistema");
+            ret = query.select("select id_admin_sistema, nombre, telefono, email, fecha_alta, if(estado='A', 'Activo', 'Baja') as estado from tbl_admin_sistema");
         } catch (Exception e) {
             ret = e.toString();
         }

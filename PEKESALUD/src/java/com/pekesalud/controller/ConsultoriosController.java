@@ -34,13 +34,13 @@ public class ConsultoriosController {
             String login_id = session.getAttribute("IdPeke").toString();
             String tipo_user = session.getAttribute("tipoPeke").toString();
             if(tipo_user.equals("s")){
-                ret = query.select("select c.id_consultorio, concat(i.nombre) as institucion, c.nombre, c.email, c.fecha_alta,c.estado from tbl_consultorio as c, tbl_institucion as i where i.id_institucion=c.id_institucion");
+                ret = query.select("select c.id_consultorio, concat(i.nombre) as institucion, c.nombre, c.email, c.fecha_alta, if(c.estado='A', 'Activo', 'Baja') as estado from tbl_consultorio as c, tbl_institucion as i where i.id_institucion=c.id_institucion");
             }else if(tipo_user.equals("i")){
-                ret = query.select("select c.id_consultorio, concat(i.nombre) as institucion, c.nombre, c.email, c.fecha_alta,c.estado from tbl_consultorio as c, tbl_institucion as i, tbl_admin_institucion as ai where i.id_institucion=c.id_institucion and ai.id_institucion=i.id_institucion and ai.id_login = '"+login_id+"'");
+                ret = query.select("select c.id_consultorio, concat(i.nombre) as institucion, c.nombre, c.email, c.fecha_alta, if(c.estado='A', 'Activo', 'Baja') as estado  from tbl_consultorio as c, tbl_institucion as i, tbl_admin_institucion as ai where i.id_institucion=c.id_institucion and ai.id_institucion=i.id_institucion and ai.id_login = '"+login_id+"'");
             }else if(tipo_user.equals("n")){
-                ret = query.select("select c.id_consultorio, concat(i.nombre) as institucion, c.nombre, c.email, c.fecha_alta,c.estado from tbl_consultorio as c, tbl_institucion as i, tbl_nutriologos as n where i.id_institucion=c.id_institucion and n.id_institucion= i.id_institucion and n.id_login = '"+login_id+"'");
+                ret = query.select("select c.id_consultorio, concat(i.nombre) as institucion, c.nombre, c.email, c.fecha_alta, if(c.estado='A', 'Activo', 'Baja') as estado  from tbl_consultorio as c, tbl_institucion as i, tbl_nutriologos as n where i.id_institucion=c.id_institucion and n.id_institucion= i.id_institucion and n.id_login = '"+login_id+"'");
             }else if(tipo_user.equals("t")){
-                ret = query.select("select c.id_consultorio, concat(i.nombre) as institucion, c.nombre, c.email, c.fecha_alta,c.estado from tbl_consultorio as c, tbl_institucion as i, tbl_tutor as t where c.id_institucion=i.id_institucion and t.id_institucion=i.id_institucion and t.id_login= '"+login_id+"'");
+                ret = query.select("select c.id_consultorio, concat(i.nombre) as institucion, c.nombre, c.email, c.fecha_alta, if(c.estado='A', 'Activo', 'Baja') as estado  from tbl_consultorio as c, tbl_institucion as i, tbl_tutor as t where c.id_institucion=i.id_institucion and t.id_institucion=i.id_institucion and t.id_login= '"+login_id+"'");
             }
         } catch (Exception e) {
             ret = "fail";

@@ -44,13 +44,13 @@ public class General {
      *De otro modo devolver ok
      */
     public String estatusConsulta(List<Map> consulta) {
-        if(consulta.get(0).containsKey("fail")){
+        if (consulta.get(0).containsKey("fail")) {
             return "fail";
-        }else if(consulta.get(0).containsKey("fail.")){
+        } else if (consulta.get(0).containsKey("fail.")) {
             return "fail.";
-        }else if(consulta.get(0).containsKey("fail..")){
+        } else if (consulta.get(0).containsKey("fail..")) {
             return "fail..";
-        }else{
+        } else {
             return "ok";
         }
     }
@@ -67,17 +67,34 @@ public class General {
             return -1;
         }
     }
-    
-    public String getDateToday(){
-        String ret="";
-        try{
+
+    public String getDateToday() {
+        String ret = "";
+        try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();
-            ret=dateFormat.format(date);
-        }catch(Exception e){
-            ret="0000-00-00 00:00:00";
+            ret = dateFormat.format(date);
+        } catch (Exception e) {
+            ret = "0000-00-00 00:00:00";
         }
         return ret;
+    }
+
+    /*
+     *Método que convierte a entero una cadena
+     *@param String 
+     *Devuelve un tipo Date
+     */
+    public String formato_fecha(String fecha_p) {
+       String res ="0000-00-00";
+       String [] fecha;
+        try {
+            fecha = fecha_p.split("/");
+            res = fecha[2]+"/"+fecha[1]+"/"+fecha[0];
+        } catch (Exception e) {
+            return res;
+        }
+        return res;
     }
 
 }

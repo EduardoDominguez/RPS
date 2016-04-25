@@ -34,13 +34,13 @@ public class NutriologosController {
             String login_id = session.getAttribute("IdPeke").toString();
             String tipo_user = session.getAttribute("tipoPeke").toString();
             if(tipo_user.equals("s")){
-                ret = query.select("select n.id_nutriologo, concat(n.nombre) as nutriologo, c.nombre, n.telefono, n.email, n.fecha_alta, n.estado from tbl_nutriologos as n, tbl_consultorio as c where n.id_consultorio=c.id_consultorio");
+                ret = query.select("select n.id_nutriologo, concat(n.nombre) as nutriologo, c.nombre, n.telefono, n.email, n.fecha_alta, if(n.estado='A', 'Activo', 'Baja') as estado  from tbl_nutriologos as n, tbl_consultorio as c where n.id_consultorio=c.id_consultorio");
             }else if(tipo_user.equals("i")){
-                ret = query.select("select n.id_nutriologo, concat(n.nombre) as nutriologo, c.nombre, n.telefono, n.email, n.fecha_alta, n.estado from tbl_nutriologos as n, tbl_consultorio as c, tbl_admin_institucion as ai, tbl_institucion as i where n.id_consultorio=c.id_consultorio and c.id_institucion = i.id_institucion and ai.id_institucion = i.id_institucion and ai.id_login= '"+login_id+"'");
+                ret = query.select("select n.id_nutriologo, concat(n.nombre) as nutriologo, c.nombre, n.telefono, n.email, n.fecha_alta, if(n.estado='A', 'Activo', 'Baja') as estado from tbl_nutriologos as n, tbl_consultorio as c, tbl_admin_institucion as ai, tbl_institucion as i where n.id_consultorio=c.id_consultorio and c.id_institucion = i.id_institucion and ai.id_institucion = i.id_institucion and ai.id_login= '"+login_id+"'");
             }else if(tipo_user.equals("n")){
-                ret = query.select("select n.id_nutriologo, concat(n.nombre) as nutriologo, c.nombre, n.telefono, n.email, n.fecha_alta, n.estado from tbl_nutriologos as n, tbl_consultorio as c where n.id_consultorio=c.id_consultorio and n.id_login= '"+login_id+"'");
+                ret = query.select("select n.id_nutriologo, concat(n.nombre) as nutriologo, c.nombre, n.telefono, n.email, n.fecha_alta, if(n.estado='A', 'Activo', 'Baja') as estado from tbl_nutriologos as n, tbl_consultorio as c where n.id_consultorio=c.id_consultorio and n.id_login= '"+login_id+"'");
             }else{
-                ret = query.select("select n.id_nutriologo, concat(n.nombre) as nutriologo, c.nombre, n.telefono, n.email, n.fecha_alta, n.estado from tbl_nutriologos as n, tbl_consultorio as c, tbl_tutor as t where n.id_consultorio=c.id_consultorio and t.id_consultorio=c.id_consultorio and t.id_login= '"+login_id+"'");
+                ret = query.select("select n.id_nutriologo, concat(n.nombre) as nutriologo, c.nombre, n.telefono, n.email, n.fecha_alta, if(n.estado='A', 'Activo', 'Baja') as estado from tbl_nutriologos as n, tbl_consultorio as c, tbl_tutor as t where n.id_consultorio=c.id_consultorio and t.id_consultorio=c.id_consultorio and t.id_login= '"+login_id+"'");
             }
         } catch (Exception e) {
             ret = "fail";

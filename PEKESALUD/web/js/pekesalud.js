@@ -19,6 +19,7 @@ $(document).ready(function () {
         } else {
             sy = document.documentElement.clientHeight;
         }
+        console.log("Cargado!");
         getSeccion();
     } catch (error) {
         alert(error);
@@ -79,32 +80,135 @@ function Section(ctx) {
             getPacientes();
             getMenu('7', "GrigPacientes", "id_paciente");
             break;
-        case'administrador_sistema':
+        case 'administrador_sistema':
             cargarGridASistema();
             getASistema();
             getMenu('5', "GridASistema", "id_admin_sistema");
             break;
-        case'administrador_institucion':
+        case 'administrador_institucion':
             cargarGridAInstitucion();
             getAInstitucion();
             getMenu('6', "GridAInstitucion", "id_admin_institucion");
             break;
-        case'nutriologos':
+        case 'nutriologos':
             cargarGridNutriologo();
             getNutriologos();
             getMenu('3', "GridNutriologo", "id_nutriologo");
             break;
-        case'consultorios':
+        case 'consultorios':
             cargarGridConsultorio();
             getConsultorios();
             getMenu('2', "GridConsultorio", "id_consultorio");
             break;
-        case'tutores':
+        case 'tutores':
             cargarGridTutor();
             getTutores();
             getMenu('4', "GridTutor", "id_tutor");
             break;
+        case 'edita_tutor':
+            carga_relaciones();
+            carga_instituciones();
+            carga_consultorios();
+            carga_ocupacion();
+            carga_estado_civil();
+            break;
+        case 'alta_tutor':
+            carga_relaciones();
+            carga_instituciones();
+            carga_consultorios();
+            carga_ocupacion();
+            carga_estado_civil();
+            break;
+        case 'edita_admin_institucion':
+            carga_instituciones();
+            break;
+        case 'alta_admin_institucion':
+            carga_instituciones();
+            break;
     }
+}
+
+/*Funcion que recupera el catalogo de relaciones dadas de alta*/
+function carga_relaciones() {
+    try {
+        $.post("relacion/getRelacion.htm", "", on_carga_relaciones);
+    } catch (ex) {
+        alert(ex + " carga_relaciones");
+    }
+}
+function on_carga_relaciones(data) {
+    var select = "", datos = $.parseJSON(data);
+    $.each(datos, function (i, v) {
+        select += "<option value ='" + v["id_relacion"] + "' id='" + v["id_relacion"] + "'>" + v["relacion"] + "</option>";
+    });
+    $(".combo-relaciones").append(select);
+}
+
+/*Función que recupera el catalogo de instituciones dadas de alta*/
+function carga_instituciones() {
+    try {
+        $.post("instituciones/getInstitutions.htm", "", on_carga_instituciones);
+    } catch (ex) {
+        alert(ex + " carga_instituciones");
+    }
+}
+function on_carga_instituciones(data) {
+    var select = "", datos = $.parseJSON(data);
+    $.each(datos, function (i, v) {
+        select += "<option value ='" + v["id_institucion"] + "' id='" + v["id_institucion"] + "'>" + v["nombre"] + "</option>";
+    });
+    $(".combo-instituciones").append(select);
+}
+
+/*Función que recupera el catalogo de consultorios dados de alta*/
+function carga_consultorios() {
+    try {
+        $.post("consultorios/getConsultorios.htm", "", on_carga_consultorios);
+    } catch (ex) {
+        alert(ex + " carga_consultorios");
+    }
+}
+
+function on_carga_consultorios(data) {
+    var select = "", datos = $.parseJSON(data);
+    $.each(datos, function (i, v) {
+        select += "<option value ='" + v["id_consultorio"] + "' id='" + v["id_consultorio"] + "'>" + v["nombre"] + "</option>";
+    });
+    $(".combo-consultorios").append(select);
+}
+
+/*Función que recupera el catalogo de ocupaciones dadas de alta*/
+function carga_ocupacion() {
+    try {
+        $.post("ocupacion/getOcupacion.htm", "", on_carga_ocupacion);
+    } catch (ex) {
+        alert(ex + " carga_ocupacion");
+    }
+}
+
+function on_carga_ocupacion(data) {
+    var select = "", datos = $.parseJSON(data);
+    $.each(datos, function (i, v) {
+        select += "<option value ='" + v["id_ocupacion"] + "' id='" + v["id_ocupacion"] + "'>" + v["ocupacion"] + "</option>";
+    });
+    $(".combo-ocupaciones").append(select);
+}
+
+/*Función que recupera el catalogo de estados civiles dados de alta*/
+function carga_estado_civil() {
+    try {
+        $.post("estado_civil/getEstado_civil.htm", "", on_carga_estado_civil);
+    } catch (ex) {
+        alert(ex + " carga_estado_civil");
+    }
+}
+
+function on_carga_estado_civil(data) {
+    var select = "", datos = $.parseJSON(data);
+    $.each(datos, function (i, v) {
+        select += "<option value ='" + v["id_estado_civil"] + "' id='" + v["id_estado_civil"] + "'>" + v["estado_civil"] + "</option>";
+    });
+    $(".combo-estado-civil").append(select);
 }
 
 function getTutores() {
@@ -187,7 +291,7 @@ function getMenu(id_modulo, id_grid, nombre_id) {
 
             },
             success: function (data) {
-                if(data!=='fail'){
+                if (data !== 'fail') {
                     var datos = $.parseJSON(data);
                     var botones = "";
                     var funcion;
@@ -440,7 +544,7 @@ function cargarGridTutor() {
         hidegrid: false,
         altRows: true,
         pgbuttons: true,
-        width: sx,
+        width: sx - 230,
         caption: "Administrador de sistema",
         loadComplete: function () {
         }
@@ -527,7 +631,7 @@ function cargarGridASistema() {
         hidegrid: false,
         altRows: true,
         pgbuttons: true,
-        width: sx,
+        width: sx - 230,
         caption: "Administrador de sistema",
         loadComplete: function () {
         }
@@ -612,7 +716,7 @@ function cargarGridConsultorio() {
         viewrecords: true,
         hidegrid: false,
         altRows: true,
-        width: sx,
+        width: sx - 230,
         pgbuttons: true,
         caption: "Consultorios",
         loadComplete: function () {
@@ -708,7 +812,7 @@ function cargarGridNutriologo() {
         hidegrid: false,
         altRows: true,
         pgbuttons: true,
-        width: sx,
+        width: sx - 230,
         caption: "Administrador de institución",
         loadComplete: function () {
         }
@@ -805,7 +909,7 @@ function cargarGridAInstitucion() {
         hidegrid: false,
         altRows: true,
         pgbuttons: true,
-        width: sx,
+        width: sx - 230,
         caption: "Administrador de institución",
         loadComplete: function () {
         }
@@ -894,7 +998,7 @@ function cargaGridInstituciones() {
         altRows: true,
         pgbuttons: true,
         ignoreCase: true,
-        width: sx - 450,
+        width: sx - 230,
         caption: "Tabla de instituciones",
         loadComplete: function () {
         }
@@ -993,7 +1097,7 @@ function cargarGridPacientes() {
         hidegrid: false,
         altRows: true,
         pgbuttons: true,
-        width: sx,
+        width: sx - 230,
         caption: "Tabla de Pacientes",
         loadComplete: function () {
         }
@@ -1025,7 +1129,7 @@ function cerrarSesion() {
             load();
         },
         complete: function () {
-            closeLoading()
+            closeLoading();
         },
         error: function (ex) {
             alert('Ha ocurrido un error favor de intentar más tarde' + ex);
@@ -1155,38 +1259,45 @@ function nuevoRegistro(id_grid, id_tabla) {
         case'GridInstituciones':
             navegacion("Alta_institucion");
             break;
+        case'GridAInstitucion':
+            navegacion("Alta_admin_institucion");
+            break;
+        case'GridTutor':
+            console.log(id_grid);
+            navegacion("Alta_tutor");
+            break;
     }
 }
 
-$('.btn-alta-instituciones').live('click', function (e){
+$('.btn-alta-instituciones').live('click', function (e) {
     e.preventDefault();
-    try{
-        var nombre=$('#alta-nombre-institucion').val();
-        var rfc=$('#alta-rfc-institucion').val();
-        var clave=$('#alta-clave-institucion').val();
-        var pais=$('#alta-pais-institucion').val();
-        var entidad=$('#alta-entidad-institucion').val();
-        var ciudad=$('#alta-ciudad-institucion').val();
-        var delegacion=$('#alta-delegacion-institucion').val();
-        var colonia=$('#alta-colonia-institucion').val();
-        var cp=$('#alta-cp-institucion').val();
-        var direccion=$('#alta-direccion-institucion').val();
-        var telefono=$('#alta-telefono-institucion').val();
-        var email=$('#alta-email-institucion').val();
-        var web=$('#alta-web-institucion').val();
-        var face=$('#alta-facebook-institucion').val();
-        var lconsult=$('#alta-lconsult-institucion').val();
-        var lpatien=$('#alta-lpatien-institucion').val();
-        if(nombre!=="" && rfc!=="" && clave!=="" && pais!=="" && entidad!=="" && ciudad!=="" && delegacion!=="" && colonia!=="" && cp!=="" && direccion!=="" && telefono!=="" && email!=="" && web!=="" && face!=="" && lconsult!=="" && lpatien!==""){
-            var datos=[];
-            datos={nombre:nombre, rfc:rfc, clave:clave, pais:pais, entidad:entidad, ciudad:ciudad, delegacion:delegacion, colonia:colonia, cp:cp, direccion:direccion, telefono:telefono, email:email, web:web, face:face, lconsult:lconsult, lpatien:lpatien};
-            var url="instituciones/alta_datos.htm";
+    try {
+        var nombre = $('#alta-nombre-institucion').val();
+        var rfc = $('#alta-rfc-institucion').val();
+        var clave = $('#alta-clave-institucion').val();
+        var pais = $('#alta-pais-institucion').val();
+        var entidad = $('#alta-entidad-institucion').val();
+        var ciudad = $('#alta-ciudad-institucion').val();
+        var delegacion = $('#alta-delegacion-institucion').val();
+        var colonia = $('#alta-colonia-institucion').val();
+        var cp = $('#alta-cp-institucion').val();
+        var direccion = $('#alta-direccion-institucion').val();
+        var telefono = $('#alta-telefono-institucion').val();
+        var email = $('#alta-email-institucion').val();
+        var web = $('#alta-web-institucion').val();
+        var face = $('#alta-facebook-institucion').val();
+        var lconsult = $('#alta-lconsult-institucion').val();
+        var lpatien = $('#alta-lpatien-institucion').val();
+        if (nombre !== "" && rfc !== "" && clave !== "" && pais !== "" && entidad !== "" && ciudad !== "" && delegacion !== "" && colonia !== "" && cp !== "" && direccion !== "" && telefono !== "" && email !== "" && web !== "" && face !== "" && lconsult !== "" && lpatien !== "") {
+            var datos = [];
+            datos = {nombre: nombre, rfc: rfc, clave: clave, pais: pais, entidad: entidad, ciudad: ciudad, delegacion: delegacion, colonia: colonia, cp: cp, direccion: direccion, telefono: telefono, email: email, web: web, face: face, lconsult: lconsult, lpatien: lpatien};
+            var url = "instituciones/alta_datos.htm";
             altaDatos(datos, url, "Instituciones");
-        }else{
+        } else {
             alert("No puede haber datos vacios");
         }
-    }catch (e){
-        alert(e+" btn alta institucion");
+    } catch (e) {
+        alert(e + " btn alta institucion");
     }
 });
 
@@ -1195,9 +1306,9 @@ function bajaRegistro(id_grid, id_tabla) {
     var fila = grid.jqGrid('getGridParam', "selrow");
     if (fila) {
         var id = grid.jqGrid('getCell', fila, id_tabla);
-        bajaDatos(id, id_grid);
+        getUrlBaja(id, id_grid);
     } else {
-        alert("Debes seleccionar una fila para poder darla de baja");
+        alert("Debes seleccionar una fila para poder cambiar el estado");
     }
 }
 function actualizaDatos(id_grid, id_tabla) {
@@ -1211,68 +1322,100 @@ function actualizaDatos(id_grid, id_tabla) {
         alert("Debes seleccionar una fila para poder editar");
     }
 }
+
+//function bajaDatos(id, id_grid) {
+//    switch (id_grid) {
+//        case "GridAInstitucion":
+//            getUrlBaja(id, id_grid);
+//            break;
+//        case "GridASistema":
+//            navegacion("Edita_Admin_Sistema");
+//            break;
+//        case "GridNutriologo":
+//            break;
+//        case "GrigPacientes":
+//            break;
+//        case "GridInstituciones":
+//            getUrlBaja(id, id_grid);
+//            break;
+//        case "GridTutor":
+//            break;
+//        case "GridConsultorio":
+//            break;
+//    }
+//}
+
+function getUrlBaja(id, id_grid) {
+    switch (id_grid) {
+        case "GridAInstitucion":
+            bajarDatos(id, id_grid, "ainstituciones/cambia_estado.htm", "Administrador_institucion");
+            break;
+        case "GridASistema":
+            bajarDatos(id, id_grid, "instituciones/cambia_estado.htm", "Administrador_sistema");
+            break;
+        case "GridNutriologo":
+            break;
+        case "GrigPacientes":
+            break;
+        case "GridInstituciones":
+            bajarDatos(id, id_grid, "instituciones/cambia_estado.htm", "Instituciones");
+            break;
+        case "GridTutor":
+            bajarDatos(id, id_grid, "tutores/cambia_estado.htm", "Tutores");
+            break;
+        case "GridConsultorio":
+            break;
+    }
+}
+
 function obtieneDatosActualizar(id, id_grid) {
     switch (id_grid) {
         case "GridAInstitucion":
             getUrlEditar(id, id_grid, "Edita_Admin_Institucion");
             break;
         case "GridASistema":
-            navegacion("Edita_Admin_Sistema");
+            getUrlEditar(id, id_grid, "Edita_Admin_Sistema");
             break;
         case "GridNutriologo":
+            getUrlEditar(id, id_grid, "Edita_Nutriologo");
             break;
         case "GrigPacientes":
+            getUrlEditar(id, id_grid, "Edita_Paciente");
             break;
         case "GridInstituciones":
             getUrlEditar(id, id_grid, "Edita_Institucion");
             break;
         case "GridTutor":
+            getUrlEditar(id, id_grid, "Edita_Tutor");
             break;
         case "GridConsultorio":
+            getUrlEditar(id, id_grid, "Edita_Consultorio");
             break;
     }
 }
 
-function bajaDatos(id, id_grid) {
+function getUrlEditar(id, id_grid, go_to) {
     switch (id_grid) {
-        case "GridAInstitucion":
-            getUrlBaja(id, id_grid);
+        case'GridAInstitucion':
+            editarDatos(id, "ainstituciones/obtiene_datos.htm", go_to);
             break;
-        case "GridASistema":
-            navegacion("Edita_Admin_Sistema");
-            break;
-        case "GridNutriologo":
-            break;
-        case "GrigPacientes":
-            break;
-        case "GridInstituciones":
-            getUrlBaja(id, id_grid);
+        case'GridInstituciones':
+            editarDatos(id, "instituciones/obtiene_datos.htm", go_to);
             break;
         case "GridTutor":
+            editarDatos(id, "tutores/obtiene_datos.htm", go_to);
+            break;
+        case "GridNutriologo":
+            editarDatos(id, "nutriologos/obtiene_datos.htm", go_to);
+            break;
+        case "GrigPacientes":
+            editarDatos(id, "pacientes/obtiene_datos.htm", go_to);
             break;
         case "GridConsultorio":
+            editarDatos(id, "consultorios/obtiene_datos.htm", go_to);
             break;
-    }
-}
-
-function getUrlBaja(id, id_grid) {
-    switch (id_grid) {
-        case'GridAInstitucion':
-            bajarDatos(id, id_grid, "ainstituciones/cambia_estado.htm", "Administrador_institucion");
-            break;
-        case'GridInstituciones':
-            bajarDatos(id, id_grid, "instituciones/cambia_estado.htm", "Instituciones");
-            break;
-    }
-}
-
-function getUrlEditar(id, id_grid) {
-    switch (id_grid) {
-        case'GridAInstitucion':
-            editarDatos(id, "ainstituciones/obtiene_datos.htm", "Edita_Admin_Institucion");
-            break;
-        case'GridInstituciones':
-            editarDatos(id, "instituciones/obtiene_datos.htm", "Edita_Institucion");
+        case "GridASistema":
+            editarDatos(id, "asistema/obtiene_datos.htm", go_to);
             break;
     }
 }
@@ -1309,7 +1452,7 @@ function altaDatos(datos, url, sectioncall) {
 }
 
 function bajarDatos(id, grid, url, sections) {
-    if (confirm("¿Desea el estado de este registro?")) {
+    if (confirm("¿Desea cambiar el estado de este registro?")) {
         try {
             $.ajax({
                 type: "POST",
@@ -1330,7 +1473,7 @@ function bajarDatos(id, grid, url, sections) {
                         alert("El registro ha cambiado de estado correctamente");
                         location.href = sections;
                     } else {
-                        alert("No se ha podido dar de baja, intente más tarde");
+                        alert("No cambiar el estado del registro, intente más tarde");
                     }
                 }
             });
@@ -1356,15 +1499,16 @@ function editarDatos(id, url, sectcall) {
                 alert('Ha ocurrido un error favor de intentar más tarde' + ex);
             },
             success: function (data) {
+                console.log(data);
                 var datos = $.parseJSON(data);
-                PRUEBA = 20;
+                console.log(data);
                 $.when(navegacion(sectcall)).then(function () {
                     eval(sectcall + '_fill(' + data + ')');
                 });
             }
         });
     } catch (e) {
-        alert(e + "datosAInstitucion");
+        alert(e + "EditarDatos");
     }
 }
 
@@ -1444,9 +1588,373 @@ $('.btn-edit-instituciones').live('click', function (e) {
     }
 });
 
+/*Llena campos con datos admin.institucion*/
 function Edita_Admin_Institucion_fill(datos) {
-    console.log(datos);
+    try {
+        console.log(datos);
+        $("#edita-id-admin-institucion").val(datos[0]["id_admin_institucion"]);
+        $("#edita-nombre-admin-institucion").val(datos[0]['nombre']);
+        $("#edita-curp-admin-institucion").val(datos[0]['CURP']);
+        $("#edita-clave-admin-institucion").val(datos[0]['clave']);
+        $("#edita-pais-admin-institucion").val(datos[0]['id_pais']);
+        $("#edita-entidad-admin-institucion").val(datos[0]['id_entidad']);
+        $("#edita-ciudad-admin-institucion").val(datos[0]['id_ciudad']);
+        $("#edita-delegacion-admin-institucion").val(datos[0]['id_delegacion']);
+        $("#edita-colonia-admin-institucion").val(datos[0]['id_colonia']);
+        $("#edita-cp-admin-institucion").val(datos[0]['codigo_postal']);
+        $("#edita-direccion-admin-institucion").val(datos[0]['direccion']);
+        $("#edita-telefono-admin-institucion").val(datos[0]['telefono']);
+        $("#edita-email-admin-institucion").val(datos[0]['email']);
+        $("#edita-face-admin-institucion").val(datos[0]['facebook']);
+        $("#edita-institucion-admin-institucion").val(datos[0]['id_institucion']);
+    } catch (ex) {
+        alert(ex + "Edita_Admin_institucion_fill");
+    }
 }
+
+/*Editar datos de admin instituciones*/
+$('.btn-edit-admin-institucion').live('click', function (e) {
+    e.preventDefault();
+    var id = $('#edita-id-admin-institucion').val();
+    var nombre = $('#edita-nombre-admin-institucion').val();
+    var clave = $('#edita-clave-admin-institucion').val();
+    var pais = $('#edita-pais-admin-institucion').val();
+    var entidad = $('#edita-entidad-admin-institucion').val();
+    var ciudad = $('#edita-ciudad-admin-institucion').val();
+    var delegacion = $('#edita-delegacion-admin-institucion').val();
+    var colonia = $('#edita-colonia-admin-institucion').val();
+    var cp = $('#edita-cp-admin-institucion').val();
+    var direccion = $('#edita-direccion-admin-institucion').val();
+    var telefono = $('#edita-telefono-admin-institucion').val();
+    var email = $('#edita-email-admin-institucion').val();
+    var face = $('#edita-face-admin-institucion').val();
+    var curp = $('#edita-curp-admin-institucion').val();
+    var institucion = $("#edita-institucion-admin-institucion").val();
+    var mensaje = "";
+
+    if (nombre.trim() === "") {
+        mensaje += "Debes capturar un nombre \n";
+    }
+    if (clave.trim() === "") {
+        mensaje += "Debes capturar una clave \n";
+    }
+    if (pais.trim() === "") {
+        mensaje += "Debes capturar un pais \n";
+    }
+    if (entidad.trim() === "") {
+        mensaje += "Debes capturar una entidad \n";
+    }
+    if (ciudad.trim() === "") {
+        mensaje += "Debes capturar una ciudad \n";
+    }
+    if (delegacion.trim() === "") {
+        mensaje += "Debes capturar una delegacion \n";
+    }
+    if (colonia.trim() === "") {
+        mensaje += "Debes capturar una colonia \n";
+    }
+    if (cp.trim() === "") {
+        mensaje += "Debes capturar un codigo postal \n";
+    }
+    if (direccion.trim() === "") {
+        mensaje += "Debes capturar una direccion \n";
+    }
+    if (telefono.trim() === "") {
+        mensaje += "Debes capturar un numero de telefono \n";
+    }
+    if (email.trim() === "") {
+        mensaje += "Debes capturar un email \n";
+    }
+    if (face.trim() === "") {
+        mensaje += "Debes capturar un facebook \n";
+    }
+    if (curp.trim() === "") {
+        mensaje += "Debes capturar un curp \n";
+    }
+    if (institucion.trim() === "0") {
+        mensaje += "Debes capturar una institucion \n";
+    }
+    if (mensaje.trim() !== "") {
+        alert(mensaje);
+    } else {
+        var datos = [];
+        try {
+            datos = {id: id, nombre: nombre, clave: clave, pais: pais, entidad: entidad, ciudad: ciudad, delegacion: delegacion, colonia: colonia, cp: cp, direccion: direccion, telefono: telefono, email: email, face: face, curp: curp, institucion: institucion};
+            $.ajax({
+                type: "POST",
+                url: "ainstituciones/edita_datos.htm",
+                async: false,
+                data: datos,
+                beforeSend: function () {
+                    load();
+                },
+                complete: function () {
+                    closeLoading();
+                },
+                error: function (ex) {
+                    alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+                },
+                success: function (data) {
+                    if (data === 'ok') {
+                        alert("Datos actualizados");
+                        location.href = "Administrador_institucion";
+                    } else {
+                        alert("Ha ocurrido un error");
+                    }
+                }
+            });
+        } catch (e) {
+            alert(e + " btn editar admin institucion");
+        }
+    }
+});
+
+/*Alta administrador institucion*/
+$('.btn-alta-admin-institucion').live('click', function (e) {
+    e.preventDefault();
+    var nombre = $('#alta-nombre-admin-institucion').val();
+    var clave = $('#alta-clave-admin-institucion').val();
+    var pais = $('#alta-pais-admin-institucion').val();
+    var entidad = $('#alta-entidad-admin-institucion').val();
+    var ciudad = $('#alta-ciudad-admin-institucion').val();
+    var delegacion = $('#alta-delegacion-admin-institucion').val();
+    var colonia = $('#alta-colonia-admin-institucion').val();
+    var cp = $('#alta-cp-admin-institucion').val();
+    var direccion = $('#alta-direccion-admin-institucion').val();
+    var telefono = $('#alta-telefono-admin-institucion').val();
+    var email = $('#alta-email-admin-institucion').val();
+    var face = $('#alta-face-admin-institucion').val();
+    var curp = $('#alta-curp-admin-institucion').val();
+    var institucion = $("#alta-institucion-admin-institucion").val();
+    var mensaje = "";
+
+    if (nombre.trim() === "") {
+        mensaje += "Debes capturar un nombre \n";
+    }
+    if (clave.trim() === "") {
+        mensaje += "Debes capturar una clave \n";
+    }
+    if (pais.trim() === "") {
+        mensaje += "Debes capturar un pais \n";
+    }
+    if (entidad.trim() === "") {
+        mensaje += "Debes capturar una entidad \n";
+    }
+    if (ciudad.trim() === "") {
+        mensaje += "Debes capturar una ciudad \n";
+    }
+    if (delegacion.trim() === "") {
+        mensaje += "Debes capturar una delegacion \n";
+    }
+    if (colonia.trim() === "") {
+        mensaje += "Debes capturar una colonia \n";
+    }
+    if (cp.trim() === "") {
+        mensaje += "Debes capturar un codigo postal \n";
+    }
+    if (direccion.trim() === "") {
+        mensaje += "Debes capturar una direccion \n";
+    }
+    if (telefono.trim() === "") {
+        mensaje += "Debes capturar un numero de telefono \n";
+    }
+    if (email.trim() === "") {
+        mensaje += "Debes capturar un email \n";
+    }
+    if (face.trim() === "") {
+        mensaje += "Debes capturar un facebook \n";
+    }
+    if (curp.trim() === "") {
+        mensaje += "Debes capturar un curp \n";
+    }
+    if (institucion.trim() === "0") {
+        mensaje += "Debes capturar una institucion \n";
+    }
+    if (mensaje.trim() !== "") {
+        alert(mensaje);
+    } else {
+        var datos = [];
+        try {
+            datos = {nombre: nombre, clave: clave, pais: pais, entidad: entidad, ciudad: ciudad, delegacion: delegacion, colonia: colonia, cp: cp, direccion: direccion, telefono: telefono, email: email, face: face, curp: curp, institucion: institucion};
+            var url = "ainstituciones/alta_datos.htm";
+            altaDatos(datos, url, "Administrador_institucion");
+            /*Checar que valor mandar al id_login*/
+        } catch (e) {
+            alert(e + " btn alta admin institucion");
+        }
+    }
+});
+
+/*Llena campos con datos del tutor*/
+function Edita_Tutor_fill(datos) {
+    try {
+        console.log(datos);
+        $("#edita-id-tutor").val(datos[0]["id_tutor"]);
+        $("#edita-nombre-tutor").val(datos[0]['nombre']);
+        $("#edita-genero-tutor").val(datos[0]['genero']);
+        $("#edita-fecha-nacimiento-tutor").val(datos[0]['fecha_nacimiento']);
+        $("#edita-ocupacion-tutor").val(datos[0]['id_ocupacion']);
+        $("#edita-institucion-tutor").val(datos[0]['id_institucion']);
+        $("#edita-consultorio-tutor").val(datos[0]['id_consultorio']);
+        $("#edita-estado-civil-tutor").val(datos[0]['id_estado_civil']);
+        $("#edita-relacion-tutor").val(datos[0]['id_ralacion']);//Esta mas escrito en la base de datos dice ralacion 
+        $("#edita-cp-tutor").val(datos[0]['codigo_postal']);
+        $("#edita-telefono-tutor").val(datos[0]['telefono']);
+        $("#edita-fecebook-tutor").val(datos[0]['facebook']);
+    } catch (ex) {
+        alert(ex + "Edita_Tutor_fill");
+    }
+}
+
+/*Editar datos de admin instituciones*/
+$('.btn-edit-tutor').live('click', function (e) {
+    e.preventDefault();
+    var id = $("#edita-id-tutor").val();
+    var nombre = $("#edita-nombre-tutor").val();
+    var genero = $("#edita-genero-tutor").val();
+    var fecha_nacimiento = $("#edita-fecha-nacimiento-tutor").val();
+    var ocupacion = $("#edita-ocupacion-tutor").val();
+    var institucion = $("#edita-institucion-tutor").val();
+    var consultorio = $("#edita-consultorio-tutor").val();
+    var estado_civil = $("#edita-estado-civil-tutor").val();
+    var relacion = $("#edita-relacion-tutor").val();//Esta mas escrito en la base de datos dice ralacion 
+    var cp = $("#edita-cp-tutor").val();
+    var telefono = $("#edita-telefono-tutor").val();
+    var face = $("#edita-fecebook-tutor").val();
+
+    var mensaje = "";
+
+    if (nombre.trim() === "0") {
+        mensaje += "Debes capturar un nombre \n";
+    }
+    if (genero.trim() === "") {
+        mensaje += "Debes capturar un genero \n";
+    }
+    if (fecha_nacimiento.trim() === "") {
+        mensaje += "Debes capturar una fecha de nacimiento \n";
+    }
+    if (ocupacion.trim() === "0") {
+        mensaje += "Debes capturar una ocupacion \n";
+    }
+    if (consultorio.trim() === "0") {
+        mensaje += "Debes capturar un consultorio \n";
+    }
+    if (estado_civil.trim() === "0") {
+        mensaje += "Debes capturar un estado civil \n";
+    }
+    if (relacion.trim() === "0") {
+        mensaje += "Debes capturar una relacion \n";
+    }
+    if (cp.trim() === "") {
+        mensaje += "Debes capturar un codigo postal \n";
+    }
+    if (telefono.trim() === "") {
+        mensaje += "Debes capturar un numero de telefono \n";
+    }
+    if (face.trim() === "") {
+        mensaje += "Debes capturar un facebook \n";
+    }
+    if (institucion.trim() === "0") {
+        mensaje += "Debes capturar una institucion \n";
+    }
+    if (mensaje.trim() !== "") {
+        alert(mensaje);
+    } else {
+        var datos = [];
+        try {
+            datos = {id: id, nombre: nombre, genero: genero, fecha_nacimiento: fecha_nacimiento, ocupacion: ocupacion, institucion: institucion, consultorio: consultorio, estado_civil: estado_civil, cp: cp, relacion: relacion, telefono: telefono, face: face};
+            $.ajax({
+                type: "POST",
+                url: "tutores/edita_datos.htm",
+                async: false,
+                data: datos,
+                beforeSend: function () {
+                    load();
+                },
+                complete: function () {
+                    closeLoading();
+                },
+                error: function (ex) {
+                    alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+                },
+                success: function (data) {
+                    if (data === 'ok') {
+                        alert("Datos actualizados");
+                        location.href = "Tutores";
+                    } else {
+                        alert("Ha ocurrido un error");
+                    }
+                }
+            });
+        } catch (e) {
+            alert(e + " btn editar tutorn");
+        }
+    }
+});
+
+/*Alta tutor*/
+$('.btn-alta-tutor').live('click', function (e) {
+    e.preventDefault();
+    var nombre = $("#alta-nombre-tutor").val();
+    var genero = $("#alta-genero-tutor").val();
+    var fecha_nacimiento = $("#alta-fecha-nacimiento-tutor").val();
+    var ocupacion = $("#alta-ocupacion-tutor").val();
+    var institucion = $("#alta-institucion-tutor").val();
+    var consultorio = $("#alta-consultorio-tutor").val();
+    var estado_civil = $("#alta-estado-civil-tutor").val();
+    var relacion = $("#alta-relacion-tutor").val();//Esta mas escrito en la base de datos dice ralacion 
+    var cp = $("#alta-cp-tutor").val();
+    var telefono = $("#alta-telefono-tutor").val();
+    var face = $("#alta-fecebook-tutor").val();
+    var mensaje = "";
+
+    if (nombre.trim() === "0") {
+        mensaje += "Debes capturar un nombre \n";
+    }
+    if (genero.trim() === "") {
+        mensaje += "Debes capturar un genero \n";
+    }
+    if (fecha_nacimiento.trim() === "") {
+        mensaje += "Debes capturar una fecha de nacimiento \n";
+    }
+    if (ocupacion.trim() === "0") {
+        mensaje += "Debes capturar una ocupacion \n";
+    }
+    if (consultorio.trim() === "0") {
+        mensaje += "Debes capturar un consultorio \n";
+    }
+    if (estado_civil.trim() === "0") {
+        mensaje += "Debes capturar un estado civil \n";
+    }
+    if (relacion.trim() === "0") {
+        mensaje += "Debes capturar una relacion \n";
+    }
+    if (cp.trim() === "") {
+        mensaje += "Debes capturar un codigo postal \n";
+    }
+    if (telefono.trim() === "") {
+        mensaje += "Debes capturar un numero de telefono \n";
+    }
+    if (face.trim() === "") {
+        mensaje += "Debes capturar un facebook \n";
+    }
+    if (institucion.trim() === "0") {
+        mensaje += "Debes capturar una institucion \n";
+    }
+    if (mensaje.trim() !== "") {
+        alert(mensaje);
+    } else {
+        var datos = [];
+        try {
+            datos = {nombre: nombre, genero: genero, fecha_nacimiento: fecha_nacimiento, ocupacion: ocupacion, institucion: institucion, consultorio: consultorio, estado_civil: estado_civil, cp: cp, relacion: relacion, telefono: telefono, face: face};
+            var url = "tutores/alta_datos.htm";
+            altaDatos(datos, url, "Tutores");
+            /*Checar que valor mandar al id_login*/
+        } catch (e) {
+            alert(e + " btn alta tutor");
+        }
+    }
+});
 
 History.Adapter.bind(window, 'statechange', function () {
     var State = History.getState();

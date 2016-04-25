@@ -47,19 +47,31 @@ public class InstitucionesController {
             String login_id = session.getAttribute("IdPeke").toString();
             String tipo_user = session.getAttribute("tipoPeke").toString();
             if(tipo_user.equals("s")){
-                ret = query.select("select id_institucion , nombre, telefono, email, fecha_alta, estado from tbl_institucion");
+                ret = query.select("select id_institucion , nombre, telefono, email, fecha_alta, if(estado='A', 'Activo', 'Baja') as estado  from tbl_institucion");
             }else if(tipo_user.equals("i")){
-                ret = query.select("select i.id_institucion , i.nombre, i.telefono, i.email, i.fecha_alta, i.estado from tbl_institucion as i, tbl_admin_institucion as ai where ai.id_institucion=i.id_institucion and ai.id_login= '"+login_id+"'");
+                ret = query.select("select i.id_institucion , i.nombre, i.telefono, i.email, i.fecha_alta, if(i.estado='A', 'Activo', 'Baja') as estado  from tbl_institucion as i, tbl_admin_institucion as ai where ai.id_institucion=i.id_institucion and ai.id_login= '"+login_id+"'");
             }else if(tipo_user.equals("n")){
-                ret = query.select("select i.id_institucion , i.nombre, i.telefono, i.email, i.fecha_alta, i.estado from tbl_institucion as i,  tbl_nutriologos as n where n.id_institucion= i.id_institucion and n.id_login= '"+login_id+"'");
+                ret = query.select("select i.id_institucion , i.nombre, i.telefono, i.email, i.fecha_alta,if(i.estado='A', 'Activo', 'Baja') as estado  from tbl_institucion as i,  tbl_nutriologos as n where n.id_institucion= i.id_institucion and n.id_login= '"+login_id+"'");
             }else{
-                ret = query.select("select i.id_institucion , i.nombre, i.telefono, i.email, i.fecha_alta, i.estado from tbl_institucion as i, tbl_tutor as t where t.id_institucion= i.id_institucion and t.id_login== '"+login_id+"'");
+                ret = query.select("select i.id_institucion , i.nombre, i.telefono, i.email, i.fecha_alta, if(i.estado='A', 'Activo', 'Baja') as estado from tbl_institucion as i, tbl_tutor as t where t.id_institucion= i.id_institucion and t.id_login== '"+login_id+"'");
             }
         } catch (Exception e) {
             ret = "fail";
         }
         return ret;
     }
+    
+//    @RequestMapping(value = "/getInstituciones", method = RequestMethod.POST)
+//    public @ResponseBody
+//    String getInstituciones(HttpServletRequest request, Model model) {
+//        String ret = "";
+//        try {
+//            ret = query.select("select * from pekesalud_bd.tbl_institucion where estado ='A'");
+//        } catch (Exception e) {
+//            ret = "fail";
+//        }
+//        return ret;
+//    }
     
     @RequestMapping(value = "/cambia_estado", method = RequestMethod.POST)
     public @ResponseBody
