@@ -56,7 +56,7 @@ function getSeccion() {
             }
         });
     } catch (ex) {
-        alert(ex);
+        alert(ex + " get section");
     }
 
 }
@@ -78,7 +78,7 @@ function Section(ctx) {
         case 'pacientes':
             cargarGridPacientes();
             getPacientes();
-            getMenu('7', "GrigPacientes", "id_paciente");
+            getMenu('7', "GridPaciente", "id_paciente");
             break;
         case 'administrador_sistema':
             cargarGridASistema();
@@ -99,6 +99,9 @@ function Section(ctx) {
             cargarGridConsultorio();
             getConsultorios();
             getMenu('2', "GridConsultorio", "id_consultorio");
+            break;
+        case'edita_consultorio':
+            carga_instituciones();
             break;
         case 'tutores':
             cargarGridTutor();
@@ -125,7 +128,60 @@ function Section(ctx) {
         case 'alta_admin_institucion':
             carga_instituciones();
             break;
+        case'alta_consultorio':
+            carga_instituciones();
+            break;
+        case'edita_nutriologo':
+            carga_instituciones();
+            carga_consultorios();
+            break;
+        case'alta_nutriologo':
+            carga_instituciones();
+            carga_consultorios();
+            break;
+        case'edita_paciente':
+            carga_instituciones();
+            carga_consultorios();
+            carga_tutores();
+            carga_educativo();
+            break;
+        case'alta_paciente':
+            carga_instituciones();
+            carga_consultorios();
+            carga_tutores();
+            carga_educativo();
+            break;
     }
+}
+
+function carga_educativo() {
+    try {
+        $.post("educativo/getEducativo.htm", "", on_carga_educativo);
+    } catch (ex) {
+        alert(ex + " carga_educativo");
+    }
+}
+function on_carga_educativo(data) {
+    var select = "", datos = $.parseJSON(data);
+    $.each(datos, function (i, v) {
+        select += "<option value ='" + v["id_nivel_educativo"] + "' id='" + v["id_nivel_educativo"] + "'>" + v["nivel_educativo"] + "</option>";
+    });
+    $(".combo-educativo").append(select);
+}
+
+function carga_tutores() {
+    try {
+        $.post("tutores/getTutor.htm", "", on_carga_tutores);
+    } catch (ex) {
+        alert(ex + " carga_tutores");
+    }
+}
+function on_carga_tutores(data) {
+    var select = "", datos = $.parseJSON(data);
+    $.each(datos, function (i, v) {
+        select += "<option value ='" + v["id_tutor"] + "' id='" + v["id_tutor"] + "'>" + v["nombre"] + "</option>";
+    });
+    $(".combo-tutores").append(select);
 }
 
 /*Funcion que recupera el catalogo de relaciones dadas de alta*/
@@ -427,6 +483,34 @@ function getASistema() {
     }
 }
 
+function getPacientes() {
+    try {
+        var url = "pacientes/getPacientes.htm";
+        $.ajax({
+            type: "POST",
+            url: url,
+            async: false,
+            data: {},
+            beforeSend: function () {
+
+            },
+            error: function (ex) {
+                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+            },
+            complete: function (ex, e) {
+
+            },
+            success: function (data) {
+                var datos = $.parseJSON(data);
+                fillGrids(datos, "GridPaciente");
+                //Crear ul con estructura del menu $scope.buttons = response.data;
+            }
+        });
+    } catch (e) {
+        alert(e);
+    }
+}
+
 function getUsuarios() {
     try {
         var url = "usuarios/getUsuarios.htm";
@@ -447,35 +531,6 @@ function getUsuarios() {
             success: function (data) {
                 var datos = $.parseJSON(data);
                 fillGrids(datos, "GridUsuarios");
-            }
-        });
-    } catch (e) {
-        alert(e);
-    }
-}
-
-function getPacientes() {
-    try {
-        var url = "pacientes/getPacientes.htm";
-        $.ajax({
-            type: "POST",
-            url: url,
-            async: false,
-            data: {},
-            beforeSend: function () {
-
-            },
-            error: function (ex) {
-                alert('Ha ocurrido un error favor de intentar más tarde' + ex);
-            },
-            complete: function (ex, e) {
-
-            },
-            success: function (data) {
-                console.log(data);
-                var datos = $.parseJSON(data);
-                fillGrids(datos, "GridPacientes");
-                //Crear ul con estructura del menu $scope.buttons = response.data;
             }
         });
     } catch (e) {
@@ -1016,7 +1071,7 @@ function cargaGridInstituciones() {
 function cargarGridPacientes() {
     var paginador;
     //Creando la Tabla
-    $("#GridPacientes").jqGrid({
+    $("#GridPaciente").jqGrid({
         datatype: "local",
         height: 'auto',
         rowNum: 10,
@@ -1091,19 +1146,19 @@ function cargarGridPacientes() {
                 }
             }
         ],
-        pager: "#PagerPacientes",
+        pager: "#PagerPaciente",
         sortorder: "asc",
         viewrecords: true,
         hidegrid: false,
         altRows: true,
         pgbuttons: true,
         width: sx - 230,
-        caption: "Tabla de Pacientes",
+        caption: "Pacientes",
         loadComplete: function () {
         }
     });
-    paginador = $("#GridPacientes").getGridParam('pager');
-    jQuery("#GridPacientes").navGrid(paginador, {
+    paginador = $("#GridPaciente").getGridParam('pager');
+    jQuery("#GridPaciente").navGrid(paginador, {
         edit: false,
         add: false,
         del: false,
@@ -1263,12 +1318,136 @@ function nuevoRegistro(id_grid, id_tabla) {
             navegacion("Alta_admin_institucion");
             break;
         case'GridTutor':
-            console.log(id_grid);
             navegacion("Alta_tutor");
             break;
+        case'GridConsultorio':
+            navegacion("Alta_Consultorio");
+            break;
+        case'GridNutriologo':
+            navegacion("Alta_Nutriologo");
+            break;
+        case'GridASistema':
+            navegacion("Alta_admin_sistema");
+            break;
+        case'GridPaciente':
+            navegacion("Alta_paciente");
+            break;
+
     }
 }
 
+$('.btn-alta-pacientes').live('click', function (e) {
+    e.preventDefault();
+    try {
+        var id_tutor = $("#alta-tutor-pacientes").val();
+        var id_institucion = $("#alta-institucion-pacientes").val();
+        var id_consultorio = $("#alta-consultorio-pacientes").val();
+        var nombre = $("#alta-nombre-pacientes").val();
+        var nick = $("#alta-nick-pacientes").val();
+        var foto = $("#alta-foto-pacientes").val();
+        var genero = $("#alta-genero-pacientes").val();
+        var nacimiento = $("#alta-nacimieto-pacientes").val();
+        var estatura = $("#alta-estatura-pacientes").val();
+        var peso = $("#alta-peso-pacientes").val();
+        var grado = $("#alta-grado-pacientes").val();
+        var face = $("#alta-facebook-pacientes").val();
+        if(id_tutor.trim()!=="" && id_institucion.trim()!=="" && id_consultorio.trim()!=="" && nombre.trim()!=="" && nick.trim()!=="" && genero.trim()!=="" && nacimiento.trim()!=="" && estatura.trim()!=="" && peso.trim()!=="" && grado.trim()!==""){
+            var datos=[];
+            datos={id_tutor:id_tutor, id_institucion:id_institucion, id_consultorio:id_consultorio, nombre:nombre, nick_name:nick, fotografia:foto, genero:genero, fecha_nacimiento:nacimiento, estatura_actual:estatura, peso_actual:peso, id_nivel_educativo:grado, facebook:face};
+            var url = "pacientes/alta_datos.htm";
+            altaDatos(datos, url, "Pacientes");
+        }
+    } catch (e) {
+        alert(e + " btn alta paciente");
+    }
+});
+$('.btn-alta-admin-sistema').live('click', function (e) {
+    e.preventDefault();
+    try {
+        var nombre = $("#alta-nombre-admin-sistema").val();
+        var curp = $("#alta-curp-admin-sistema").val();
+        var clave = $("#alta-clave-admin-sistema").val();
+        var pais = $("#alta-pais-admin-sistema").val();
+        var entidad = $("#alta-entidad-admin-sistema").val();
+        var ciudad = $("#alta-ciudad-admin-sistema").val();
+        var delegacion = $("#alta-delegacion-admin-sistema").val();
+        var colonia = $("#alta-colonia-admin-sistema").val();
+        var cp = $("#alta-cp-admin-sistema").val();
+        var direccion = $("#alta-direccion-admin-sistema").val();
+        var telefono = $("#alta-telefono-admin-sistema").val();
+        var email = $("#alta-email-admin-sistema").val();
+        var face = $("#alta-face-admin-sistema").val();
+        var usr = $("#alta-user-admin-sistema").val();
+        var pass = $("#alta-pass-admin-sistema").val();
+        if (nombre.trim() !== "" && curp.trim() !== "" && clave.trim() !== "" && pais.trim() !== "" && entidad.trim() !== "" && ciudad.trim() !== "" && delegacion.trim() !== "" && colonia.trim() !== "" && cp.trim() !== "" && direccion.trim() !== "" && telefono.trim() !== "" && email.trim() !== "" && usr.trim() !== "" && pass.trim() !== "") {
+            var datos = [];
+            datos = {nombre: nombre, curp: curp, clave: clave, pais: pais, entidad: entidad, ciudad: ciudad, delegacion: delegacion, colonia: colonia, cp: cp, direccion: direccion, telefono: telefono, email: email, face: face, usr: usr, pass: pass};
+            var url = "sistema/alta_datos.htm";
+            altaDatos(datos, url, "Administrador_sistema");
+        }
+    } catch (e) {
+        alert(e + "btn alta admin sistem");
+    }
+});
+$('.btn-alta-nutriologo').live('click', function (e) {
+    e.preventDefault();
+    try {
+        var id_institucion = $('#alta-institucion-nutriologo').val();
+        var id_consultorio = $('#alta-consultorio-nutriologo').val();
+        var nombre = $('#alta-nombre-nutriologo').val();
+        var curp = $('#alta-curp-nutriologo').val();
+        var clave = $('#alta-clave-nutriologo').val();
+        var pais = $('#alta-pais-nutriologo').val();
+        var entidad = $('#alta-entidad-nutriologo').val();
+        var ciudad = $('#alta-ciudad-nutriologo').val();
+        var delegacion = $('#alta-delegacion-nutriologo').val();
+        var colonia = $('#alta-colonia-nutriologo').val();
+        var cp = $('#alta-cp-nutriologo').val();
+        var direccion = $('#alta-direccion-nutriologo').val();
+        var telefono = $('#alta-telefono-nutriologo').val();
+        var email = $('#alta-email-nutriologo').val();
+        var facebook = $('#alta-face-nutriologo').val();
+        var usr = $('#alta-user-nutriologo').val();
+        var pass = $('#alta-pass-nutriologo').val();
+        if (id_institucion.trim() !== "" && id_consultorio.trim() !== "" && nombre.trim() !== "" && curp.trim() !== "" && clave.trim() !== "" && pais.trim() !== "" && entidad.trim() !== "" && ciudad.trim() !== "" && delegacion.trim() !== "" && colonia.trim() !== "" && cp.trim() !== "" && direccion.trim() !== "" && telefono.trim() !== "" && email.trim() !== "" && usr.trim() !== "" && pass.trim() !== "") {
+            var datos = [];
+            datos = {id_institucion: id_institucion, id_consultorio: id_consultorio, nombre: nombre, curp: curp, clave: clave, pais: pais, entidad: entidad, ciudad: ciudad, delegacion: delegacion, colonia: colonia, cp: cp, direccion: direccion, telefono: telefono, email: email, face: facebook, usr: usr, pass: pass};
+            var url = "nutriologos/alta_datos.htm";
+            altaDatos(datos, url, "Nutriologos");
+        }
+    } catch (e) {
+        alert(e + " btn alta nutriologo");
+    }
+});
+
+$('.btn-alta-consultorio').live('click', function (e) {
+    e.preventDefault();
+    try {
+        var id_institucion = $('#alta-institucion-consultorio').val();
+        var nombre = $('#alta-nombre-consultorio').val();
+        var rfc = $('#alta-rfc-consultorio').val();
+        var clave = $('#alta-clave-consultorio').val();
+        var pais = $('#alta-pais-consultorio').val();
+        var entidad = $('#alta-entidad-consultorio').val();
+        var ciudad = $('#alta-ciudad-consultorio').val();
+        var delegacion = $('#alta-delegacion-consultorio').val();
+        var colonia = $('#alta-colonia-consultorio').val();
+        var cp = $('#alta-cp-consultorio').val();
+        var direccion = $('#alta-direccion-consultorio').val();
+        var telefono = $('#alta-telefono-consultorio').val();
+        var email = $('#alta-email-consultorio').val();
+        var web = $('#alta-web-consultorio').val();
+        var face = $('#alta-face-consultorio').val();
+        if (id_institucion.trim() !== "" && nombre.trim() !== "" && rfc.trim() !== "" && clave.trim() !== "" && pais.trim() !== "" && entidad.trim() !== "" && ciudad.trim() !== "" && delegacion.trim() !== "" && colonia.trim() !== "" && cp.trim() !== "" && direccion.trim() !== "" && telefono.trim() !== "" && email.trim() !== "" && web.trim() !== "" && face.trim() !== "") {
+            var datos = [];
+            datos = {id_institucion: id_institucion, nombre: nombre, rfc: rfc, clave: clave, pais: pais, entidad: entidad, ciudad: ciudad, delegacion: delegacion, colonia: colonia, cp: cp, direccion: direccion, telefono: telefono, email: email, web: web, face: face};
+            var url = "consultorios/alta_datos.htm";
+            altaDatos(datos, url, "Consultorios");
+        }
+    } catch (e) {
+        alert(e + " btn alta consultorio");
+    }
+});
 $('.btn-alta-instituciones').live('click', function (e) {
     e.preventDefault();
     try {
@@ -1350,12 +1529,11 @@ function getUrlBaja(id, id_grid) {
         case "GridAInstitucion":
             bajarDatos(id, id_grid, "ainstituciones/cambia_estado.htm", "Administrador_institucion");
             break;
-        case "GridASistema":
-            bajarDatos(id, id_grid, "instituciones/cambia_estado.htm", "Administrador_sistema");
-            break;
         case "GridNutriologo":
+            bajarDatos(id, id_grid, "nutriologos/cambia_estado.htm", "Nutriologos");
             break;
-        case "GrigPacientes":
+        case "GridPaciente":
+            bajarDatos(id, id_grid, "pacientes/cambia_estado.htm", "Pacientes");
             break;
         case "GridInstituciones":
             bajarDatos(id, id_grid, "instituciones/cambia_estado.htm", "Instituciones");
@@ -1364,6 +1542,10 @@ function getUrlBaja(id, id_grid) {
             bajarDatos(id, id_grid, "tutores/cambia_estado.htm", "Tutores");
             break;
         case "GridConsultorio":
+            bajarDatos(id, id_grid, "consultorios/cambia_estado.htm", "Consultorios");
+            break;
+        case "GridASistema":
+            bajarDatos(id, id_grid, "sistema/cambia_estado.htm", "Administrador_sistema");
             break;
     }
 }
@@ -1379,7 +1561,7 @@ function obtieneDatosActualizar(id, id_grid) {
         case "GridNutriologo":
             getUrlEditar(id, id_grid, "Edita_Nutriologo");
             break;
-        case "GrigPacientes":
+        case "GridPaciente":
             getUrlEditar(id, id_grid, "Edita_Paciente");
             break;
         case "GridInstituciones":
@@ -1408,14 +1590,14 @@ function getUrlEditar(id, id_grid, go_to) {
         case "GridNutriologo":
             editarDatos(id, "nutriologos/obtiene_datos.htm", go_to);
             break;
-        case "GrigPacientes":
+        case "GridPaciente":
             editarDatos(id, "pacientes/obtiene_datos.htm", go_to);
             break;
         case "GridConsultorio":
             editarDatos(id, "consultorios/obtiene_datos.htm", go_to);
             break;
         case "GridASistema":
-            editarDatos(id, "asistema/obtiene_datos.htm", go_to);
+            editarDatos(id, "sistema/obtiene_datos.htm", go_to);
             break;
     }
 }
@@ -1435,13 +1617,14 @@ function altaDatos(datos, url, sectioncall) {
             },
             error: function (ex) {
                 alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+                console.log(ex);
             },
             success: function (data) {
-                console.log(data);
                 if (data === "ok") {
                     alert("El registro se ha dado de alta");
                     location.href = sectioncall;
                 } else {
+                    console.log(data);
                     alert("No se ha podido dar de alta, intente más tarde");
                 }
             }
@@ -1452,6 +1635,7 @@ function altaDatos(datos, url, sectioncall) {
 }
 
 function bajarDatos(id, grid, url, sections) {
+    console.log(url);
     if (confirm("¿Desea cambiar el estado de este registro?")) {
         try {
             $.ajax({
@@ -1469,10 +1653,12 @@ function bajarDatos(id, grid, url, sections) {
                     alert('Ha ocurrido un error favor de intentar más tarde' + ex);
                 },
                 success: function (data) {
+                    console.log(data);
                     if (data === "ok") {
                         alert("El registro ha cambiado de estado correctamente");
                         location.href = sections;
                     } else {
+                        console.log(data);
                         alert("No cambiar el estado del registro, intente más tarde");
                     }
                 }
@@ -1511,6 +1697,168 @@ function editarDatos(id, url, sectcall) {
         alert(e + "EditarDatos");
     }
 }
+
+function Edita_Consultorio_fill(datos) {
+    try {
+        console.log(datos);
+        setTimeout(function () {
+            $('#edita-id-consultorio').val(datos[0]['id_consultorio']);
+            $('#edita-institucion-consultorio').val(datos[0]['id_institucion']);
+            $('#edita-nombre-consultorio').val(datos[0]['nombre']);
+            $('#edita-rfc-consultorio').val(datos[0]['rfc']);
+            $('#edita-clave-consultorio').val(datos[0]['clave']);
+            $('#edita-pais-consultorio').val(datos[0]['id_pais']);
+            $('#edita-entidad-consultorio').val(datos[0]['id_entidad']);
+            $('#edita-ciudad-consultorio').val(datos[0]['id_ciudad']);
+            $('#edita-delegacion-consultorio').val(datos[0]['id_delegacion']);
+            $('#edita-colonia-consultorio').val(datos[0]['id_colonia']);
+            $('#edita-cp-consultorio').val(datos[0]['codigo_postal']);
+            $('#edita-direccion-consultorio').val(datos[0]['direccion']);
+            $('#edita-telefono-consultorio').val(datos[0]['telefono']);
+            $('#edita-email-consultorio').val(datos[0]['email']);
+            $('#edita-web-consultorio').val(datos[0]['web']);
+            $('#edita-face-consultorio').val(datos[0]['facebook']);
+        }, 300);
+    } catch (e) {
+        alert(e + " edita consultorios fill");
+    }
+}
+
+function Edita_Nutriologo_fill(datos) {
+    try {
+        console.log(datos);
+        setTimeout(function () {
+            $('#edita-id-nutriologo').val(datos[0]['id_nutriologo']);
+            $('#edita-institucion-nutriologo').val(datos[0]['id_institucion']);
+            $('#edita-consultorio-nutriologo').val(datos[0]['id_consultorio']);
+            $('#edita-nombre-nutriologo').val(datos[0]['nombre']);
+            $('#edita-curp-nutriologo').val(datos[0]['CURP']);
+            $('#edita-clave-nutriologo').val(datos[0]['clave']);
+            $('#edita-pais-nutriologo').val(datos[0]['id_pais']);
+            $('#edita-entidad-nutriologo').val(datos[0]['id_entidad']);
+            $('#edita-ciudad-nutriologo').val(datos[0]['id_ciudad']);
+            $('#edita-delegacion-nutriologo').val(datos[0]['id_delegacion']);
+            $('#edita-colonia-nutriologo').val(datos[0]['id_colonia']);
+            $('#edita-cp-nutriologo').val(datos[0]['codigo_postal']);
+            $('#edita-direccion-nutriologo').val(datos[0]['direccion']);
+            $('#edita-telefono-nutriologo').val(datos[0]['telefono']);
+            $('#edita-email-nutriologo').val(datos[0]['email']);
+            $('#edita-face-nutriologo').val(datos[0]['facebook']);
+            $('#edita-user-nutriologo').val(datos[0]['login']);
+            $('#edita-pass-nutriologo').val(datos[0]['password']);
+        }, 300);
+    } catch (e) {
+        alert(e + " edita consultorios fill");
+    }
+}
+
+$('.btn-edit-nutriologo').live('click', function (e) {
+    e.preventDefault()
+    try {
+        var id_nutriologo = $('#edita-id-nutriologo').val();
+        var id_institucion = $('#edita-institucion-nutriologo').val();
+        var id_consultorio = $('#edita-consultorio-nutriologo').val();
+        var nombre = $('#edita-nombre-nutriologo').val();
+        var curp = $('#edita-curp-nutriologo').val();
+        var clave = $('#edita-clave-nutriologo').val();
+        var pais = $('#edita-pais-nutriologo').val();
+        var entidad = $('#edita-entidad-nutriologo').val();
+        var ciudad = $('#edita-ciudad-nutriologo').val();
+        var delegacion = $('#edita-delegacion-nutriologo').val();
+        var colonia = $('#edita-colonia-nutriologo').val();
+        var cp = $('#edita-cp-nutriologo').val();
+        var direccion = $('#edita-direccion-nutriologo').val();
+        var telefono = $('#edita-telefono-nutriologo').val();
+        var email = $('#edita-email-nutriologo').val();
+        var facebook = $('#edita-face-nutriologo').val();
+        var usuario = $('#edita-user-nutriologo').val();
+        var password = $('#edita-pass-nutriologo').val();
+        if (id_nutriologo.trim() !== "" && id_institucion.trim() !== "" && id_consultorio.trim() !== "" && nombre.trim() !== "" && curp.trim() !== "" && clave.trim() !== "" && pais.trim() !== "" && entidad.trim() !== "" && ciudad.trim() !== "" && delegacion.trim() !== "" && colonia.trim() !== "" && cp.trim() !== "" && direccion.trim() !== "" && telefono.trim() !== "" && email.trim() !== "" && usuario.trim() !== "" && password.trim() !== "") {
+            var datos = [];
+            datos = {id_institucion: id_institucion, id_consultorio: id_consultorio, nombre: nombre, curp: curp, clave: clave, pais: pais, entidad: entidad, ciudad: ciudad, delegacion: delegacion, colonia: colonia, cp: cp, direccion: direccion, telefono: telefono, email: email, face: facebook, usr: usuario, pass: password, id_nutriologo: id_nutriologo};
+            $.ajax({
+                type: "POST",
+                url: "nutriologos/edita_datos.htm",
+                async: false,
+                data: datos,
+                beforeSend: function () {
+                    load();
+                },
+                complete: function () {
+                    closeLoading();
+                },
+                error: function (ex) {
+                    alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+                },
+                success: function (data) {
+                    if (data === 'ok') {
+                        alert("Datos actualizados");
+                        location.href = "Nutriologos";
+                    } else {
+                        console.log(data);
+                        alert("Ha ocurrido un error");
+                    }
+                }
+            });
+        }
+    } catch (e) {
+        alert(e + " btn edita nutriologo");
+    }
+});
+
+$('.btn-edit-consultorio').live('click', function (e) {
+    e.preventDefault();
+    try {
+        var id = $('#edita-id-consultorio').val();
+        var institucion = $('#edita-institucion-consultorio').val();
+        var nombre = $('#edita-nombre-consultorio').val();
+        var rfc = $('#edita-rfc-consultorio').val();
+        var clave = $('#edita-clave-consultorio').val();
+        var pais = $('#edita-pais-consultorio').val();
+        var entidad = $('#edita-entidad-consultorio').val();
+        var ciudad = $('#edita-ciudad-consultorio').val();
+        var delegacion = $('#edita-delegacion-consultorio').val();
+        var colonia = $('#edita-colonia-consultorio').val();
+        var cp = $('#edita-cp-consultorio').val();
+        var direccion = $('#edita-direccion-consultorio').val();
+        var telefono = $('#edita-telefono-consultorio').val();
+        var email = $('#edita-email-consultorio').val();
+        var web = $('#edita-web-consultorio').val();
+        var face = $('#edita-face-consultorio').val();
+
+        var datos = [];
+        if (face.trim() !== "" && id.trim() !== "" && institucion.trim() !== "" && nombre.trim() !== "" && rfc.trim() !== "" && clave.trim() !== "" && pais.trim() !== "" && entidad.trim() !== "" && ciudad.trim() !== "" && delegacion.trim() !== "" && colonia.trim() !== "" && cp.trim() !== "" && direccion.trim() !== "" && telefono.trim() !== "" && email.trim() !== "" && web.trim() !== "") {
+            datos = {id: id, institucion: institucion, nombre: nombre, rfc: rfc, clave: clave, pais: pais, entidad: entidad, ciudad: ciudad, delegacion: delegacion, colonia: colonia, cp: cp, direccion: direccion, telefono: telefono, email: email, web: web, face: face};
+            $.ajax({
+                type: "POST",
+                url: "consultorios/edita_datos.htm",
+                async: false,
+                data: datos,
+                beforeSend: function () {
+                    load();
+                },
+                complete: function () {
+                    closeLoading();
+                },
+                error: function (ex) {
+                    alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+                },
+                success: function (data) {
+                    if (data === 'ok') {
+                        alert("Datos actualizados");
+                        location.href = "Consultorios";
+                    } else {
+                        alert("Ha ocurrido un error");
+                    }
+                }
+            });
+        } else {
+            alert('Los datos no pueden estar vacios');
+        }
+    } catch (e) {
+        alert(e + " btn edita consultorio");
+    }
+});
 
 function Edita_Institucion_fill(datos) {
     try {
@@ -1552,7 +1900,7 @@ $('.btn-edit-instituciones').live('click', function (e) {
     var telefono = $('#edita-telefono-institucion').val();
     var email = $('#edita-email-institucion').val();
     var web = $('#edita-web-institucion').val();
-    var face = $('#edita-clave-institucion').val();
+    var face = $('#edita-facebook-institucion').val();
     var lconsult = $('#edita-lconsult-institucion').val();
     var lpatien = $('#edita-lpatien-institucion').val();
     var datos = [];
@@ -1611,6 +1959,150 @@ function Edita_Admin_Institucion_fill(datos) {
         alert(ex + "Edita_Admin_institucion_fill");
     }
 }
+
+function Edita_Admin_Institucion_fill(datos) {
+    try {
+        console.log(datos);
+        $("#edita-id-admin-institucion").val(datos[0]["id_admin_institucion"]);
+        $("#edita-nombre-admin-institucion").val(datos[0]['nombre']);
+        $("#edita-curp-admin-institucion").val(datos[0]['CURP']);
+        $("#edita-clave-admin-institucion").val(datos[0]['clave']);
+        $("#edita-pais-admin-institucion").val(datos[0]['id_pais']);
+        $("#edita-entidad-admin-institucion").val(datos[0]['id_entidad']);
+        $("#edita-ciudad-admin-institucion").val(datos[0]['id_ciudad']);
+        $("#edita-delegacion-admin-institucion").val(datos[0]['id_delegacion']);
+        $("#edita-colonia-admin-institucion").val(datos[0]['id_colonia']);
+        $("#edita-cp-admin-institucion").val(datos[0]['codigo_postal']);
+        $("#edita-direccion-admin-institucion").val(datos[0]['direccion']);
+        $("#edita-telefono-admin-institucion").val(datos[0]['telefono']);
+        $("#edita-email-admin-institucion").val(datos[0]['email']);
+        $("#edita-face-admin-institucion").val(datos[0]['facebook']);
+        $("#edita-institucion-admin-institucion").val(datos[0]['id_institucion']);
+    } catch (ex) {
+        alert(ex + "Edita_Admin_institucion_fill");
+    }
+}
+
+function Edita_Paciente_fill(datos) {
+    try {
+        setTimeout(function () {
+            $("#edita-id-paciente").val(datos[0]["id_paciente"]);
+            $("#edita-tutor-pacientes").val(datos[0]["id_tutor"]);
+            $("#edita-institucion-pacientes").val(datos[0]['id_institucion']);
+            $("#edita-consultorio-pacientes").val(datos[0]['id_consultorio']);
+            $("#edita-nombre-pacientes").val(datos[0]['nombre']);
+            $("#edita-nick-pacientes").val(datos[0]['nick_name']);
+            $("#edita-foto-pacientes").val(datos[0]['fotografia']);
+            $("#edita-genero-pacientes").val(datos[0]['genero']);
+            $("#edita-nacimieto-pacientes").val(datos[0]['fecha_nacimiento']);
+            $("#edita-estatura-pacientes").val(datos[0]['estatura_actual']);
+            $("#edita-peso-pacientes").val(datos[0]['peso_actual']);
+            $("#edita-grado-pacientes").val(datos[0]['id_nivel_educativo']);
+            $("#edita-facebook-pacientes").val(datos[0]['facebook']);
+        }, 300);
+    } catch (ex) {
+        alert(ex + "Edita_Paciente_fill");
+    }
+}
+
+$('.btn-edita-pacientes').live('click', function (e) {
+    e.preventDefault();
+    try {
+        var id_paciente = $("#edita-id-paciente").val();
+        var id_tutor = $("#edita-tutor-pacientes").val();
+        var id_institucion = $("#edita-institucion-pacientes").val();
+        var id_consultorio = $("#edita-consultorio-pacientes").val();
+        var nombre = $("#edita-nombre-pacientes").val();
+        var nick = $("#edita-nick-pacientes").val();
+        var foto = $("#edita-foto-pacientes").val();
+        var genero = $("#edita-genero-pacientes").val();
+        var nacimiento = $("#edita-nacimieto-pacientes").val();
+        var estatura = $("#edita-estatura-pacientes").val();
+        var peso = $("#edita-peso-pacientes").val();
+        var grado = $("#edita-grado-pacientes").val();
+        var face = $("#edita-facebook-pacientes").val();
+        var datos = [];
+        if (id_paciente.trim() !== "" && id_tutor.trim() !== "" && id_institucion.trim() !== "" && id_consultorio.trim() !== "" && nombre.trim() !== "" && genero.trim() !== "" && nacimiento.trim() !== "" && estatura.trim() !== "" && grado.trim() !== "") {
+            datos = {id_paciente: id_paciente, id_tutor: id_tutor, id_institucion: id_institucion, id_consultorio: id_consultorio, nombre: nombre, nick: nick, foto: foto, genero: genero, nacimiento: nacimiento, estatura: estatura, peso: peso, grado: grado, face: face};
+            $.ajax({
+                type: "POST",
+                url: "pacientes/edita_datos.htm",
+                async: false,
+                data: datos,
+                beforeSend: function () {
+                    load();
+                },
+                complete: function () {
+                    closeLoading();
+                },
+                error: function (ex) {
+                    alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+                },
+                success: function (data) {
+                    if (data === 'ok') {
+                        alert("Datos actualizados");
+                        location.href = "Pacientes";
+                    } else {
+                        alert("Ha ocurrido un error");
+                    }
+                }
+            });
+        }
+
+    } catch (e) {
+        alert(e + " btn edita pacientes");
+    }
+});
+
+$('.btn-edit-admin-sistema').live('click', function (e) {
+    e.preventDefault();
+    try {
+        var id_admon = $("#edita-id-admin-sistema").val();
+        var nombre = $("#edita-nombre-admin-sistema").val();
+        var curp = $("#edita-curp-admin-sistema").val();
+        var clave = $("#edita-clave-admin-sistema").val();
+        var pais = $("#edita-pais-admin-sistema").val();
+        var entidad = $("#edita-entidad-admin-sistema").val();
+        var ciudad = $("#edita-ciudad-admin-sistema").val();
+        var delegacion = $("#edita-delegacion-admin-sistema").val();
+        var colonia = $("#edita-colonia-admin-sistema").val();
+        var cp = $("#edita-cp-admin-sistema").val();
+        var direccion = $("#edita-direccion-admin-sistema").val();
+        var telefono = $("#edita-telefono-admin-sistema").val();
+        var email = $("#edita-email-admin-sistema").val();
+        var face = $("#edita-face-admin-sistema").val();
+        var usr = $("#edita-user-admin-sistema").val();
+        var pass = $("#edita-pass-admin-sistema").val();
+        if (id_admon !== '' && nombre !== '' && curp !== '' && clave !== '' && pais !== '' && entidad !== '' && ciudad !== '' && delegacion !== '' && colonia !== '' && cp !== '' && direccion !== '' && telefono !== '' && email !== '') {
+            datos = {id_admon: id_admon, nombre: nombre, curp: curp, clave: clave, pais: pais, entidad: entidad, ciudad: ciudad, delegacion: delegacion, colonia: colonia, cp: cp, direccion: direccion, telefono: telefono, email: email, face: face, usr: usr, pass: pass};
+            $.ajax({
+                type: "POST",
+                url: "sistema/edita_datos.htm",
+                async: false,
+                data: datos,
+                beforeSend: function () {
+                    load();
+                },
+                complete: function () {
+                    closeLoading();
+                },
+                error: function (ex) {
+                    alert('Ha ocurrido un error favor de intentar más tarde' + ex);
+                },
+                success: function (data) {
+                    if (data === 'ok') {
+                        alert("Datos actualizados");
+                        location.href = "Administrador_sistema";
+                    } else {
+                        alert("Ha ocurrido un error");
+                    }
+                }
+            });
+        }
+    } catch (e) {
+        alert(e + " edit admin institucion");
+    }
+});
 
 /*Editar datos de admin instituciones*/
 $('.btn-edit-admin-institucion').live('click', function (e) {

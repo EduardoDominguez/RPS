@@ -3,13 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Eduardo%20Dominguez/Desktop/RPS/PEKESALUD/web/js/pekesalud.js</file>
-            <file>file:/C:/Users/Eduardo%20Dominguez/Desktop/RPS/PEKESALUD/src/java/com/pekesalud/bean/PacientesController.java</file>
-            <file>file:/C:/Users/Eduardo%20Dominguez/Desktop/RPS/PEKESALUD/web/WEB-INF/jsp/index.jsp</file>
-            <file>file:/C:/Users/Eduardo%20Dominguez/Desktop/RPS/PEKESALUD/src/java/com/pekesalud/controller/AInstitucionController.java</file>
-            <file>file:/C:/Users/Eduardo%20Dominguez/Desktop/RPS/PEKESALUD/web/css/pekesalud.css</file>
-            <file>file:/C:/Users/Eduardo%20Dominguez/Desktop/RPS/PEKESALUD/web/WEB-INF/jsp/content.jsp</file>
-            <file>file:/C:/Users/Eduardo%20Dominguez/Desktop/RPS/PEKESALUD/src/java/com/pekesalud/controller/loginController.java</file>
+            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/src/java/com/pekesalud/controller/PacientesController.java</file>
+            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/web/js/pekesalud.js</file>
+            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/web/js/page.js</file>
+            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/src/java/com/pekesalud/controller/ConsultoriosController.java</file>
+            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/web/WEB-INF/jsp/index.jsp</file>
+            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/web/WEB-INF/jsp/content.jsp</file>
+            <file>file:/C:/Users/ROGEPC/Documents/NetBeansProjects/PEKESALUD_2/RPS/PEKESALUD/web/WEB-INF/jsp/login.jsp</file>
         </group>
     </open-files>
 </project-private>

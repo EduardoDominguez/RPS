@@ -23,6 +23,7 @@ import com.pekesalud.bean.Login;
 import com.pekesalud.bean.Modulos;
 import com.pekesalud.bean.Nutriologo;
 import com.pekesalud.bean.Tutor;
+import static com.pekesalud.controller.InstitucionesController.query;
 import com.pekesalud.util.General;
 import java.sql.SQLException;
 
@@ -251,6 +252,18 @@ public class loginController {
             res = "fail";
         }
         return res;
+    }
+    
+    public int loginAutoIncrement(){
+        int ret=0;
+        List<Map> res = new ArrayList<Map>();
+        try{
+            res=query.select("select id_login from tbl_login order by id_login desc limit 1", true);
+            ret=g.toInt(res.get(0).get("id_login").toString())+1;
+        }catch(Exception e){
+        
+        }
+        return ret;
     }
 
 }
