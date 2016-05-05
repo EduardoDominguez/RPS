@@ -2056,6 +2056,7 @@ $('.btn-edita-pacientes').live('click', function (e) {
     }
 });
 
+
 $('.btn-edit-admin-sistema').live('click', function (e) {
     e.preventDefault();
     try {
