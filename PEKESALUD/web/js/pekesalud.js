@@ -16,7 +16,7 @@ $(document).ready(function () {
         }
         if (window.innerHeight) {
             sy = window.innerHeight;
-        } else {
+        } else { 
             sy = document.documentElement.clientHeight;
         }
         console.log("Cargado!");
@@ -1960,24 +1960,26 @@ function Edita_Admin_Institucion_fill(datos) {
     }
 }
 
-function Edita_Admin_Institucion_fill(datos) {
+function Edita_Admin_Sistema_fill(datos) {
     try {
         console.log(datos);
-        $("#edita-id-admin-institucion").val(datos[0]["id_admin_institucion"]);
-        $("#edita-nombre-admin-institucion").val(datos[0]['nombre']);
-        $("#edita-curp-admin-institucion").val(datos[0]['CURP']);
-        $("#edita-clave-admin-institucion").val(datos[0]['clave']);
-        $("#edita-pais-admin-institucion").val(datos[0]['id_pais']);
-        $("#edita-entidad-admin-institucion").val(datos[0]['id_entidad']);
-        $("#edita-ciudad-admin-institucion").val(datos[0]['id_ciudad']);
-        $("#edita-delegacion-admin-institucion").val(datos[0]['id_delegacion']);
-        $("#edita-colonia-admin-institucion").val(datos[0]['id_colonia']);
-        $("#edita-cp-admin-institucion").val(datos[0]['codigo_postal']);
-        $("#edita-direccion-admin-institucion").val(datos[0]['direccion']);
-        $("#edita-telefono-admin-institucion").val(datos[0]['telefono']);
-        $("#edita-email-admin-institucion").val(datos[0]['email']);
-        $("#edita-face-admin-institucion").val(datos[0]['facebook']);
-        $("#edita-institucion-admin-institucion").val(datos[0]['id_institucion']);
+        $("#edita-id-admin-sistema").val(datos[0]["id_admin_sistema"]);
+        $("#edita-nombre-admin-sistema").val(datos[0]['nombre']);
+        $("#edita-curp-admin-sistema").val(datos[0]['CURP']);
+        $("#edita-clave-admin-sistema").val(datos[0]['clave']);
+        $("#edita-pais-admin-sistema").val(datos[0]['id_pais']);
+        $("#edita-entidad-admin-sistema").val(datos[0]['id_entidad']);
+        $("#edita-ciudad-admin-sistema").val(datos[0]['id_ciudad']);
+        $("#edita-delegacion-admin-sistema").val(datos[0]['id_delegacion']);
+        $("#edita-colonia-admin-sistema").val(datos[0]['id_colonia']);
+        $("#edita-cp-admin-sistema").val(datos[0]['codigo_postal']);
+        $("#edita-direccion-admin-sistema").val(datos[0]['direccion']);
+        $("#edita-telefono-admin-sistema").val(datos[0]['telefono']);
+        $("#edita-email-admin-sistema").val(datos[0]['email']);
+        $("#edita-face-admin-sistema").val(datos[0]['facebook']);
+        $("#edita-institucion-admin-sistema").val(datos[0]['id_institucion']);
+        $("#edita-user-admin-sistema").val(datos[0]['login']);
+        $("#edita-pass-admin-sistema").val(datos[0]['password']);
     } catch (ex) {
         alert(ex + "Edita_Admin_institucion_fill");
     }
